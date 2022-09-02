@@ -2,7 +2,7 @@
 |-------------|----------------|----------------|
 | Domain      |                |                |
 | App         |                |                |
-| Renderer    |                |                |
+| Renderer    | Diana Batoon   | batoondian     |
 | Persistency |                |                |
 | Recorder    | Christopher Sa | sachri         |
 | Fuzz        |                |                |
