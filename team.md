@@ -5,4 +5,4 @@
 | Renderer    |                    |                |
 | Persistency | Gideon Wilkins     | wilkingide     |
 | Recorder    | Christopher Sa     | sachri         |
-| Fuzz        |                    |                |
+| Fuzz        | Gavin Lim          | limgavi        |
