@@ -3,6 +3,6 @@
 | Domain      |                |                |
 | App         | Molly Henry    | henrymoll      |
 | Renderer    |                |                |
-| Persistency |                |                |
+| Persistency | Gideon Wilkins | wilkingide     |
 | Recorder    | Christopher Sa | sachri         |
 | Fuzz        |                |                |
