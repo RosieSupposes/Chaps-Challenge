@@ -1,7 +1,7 @@
 | Module      | Team Member    | GitLab Account |
 |-------------|----------------|----------------|
 | Domain      |                |                |
-| App         |                |                |
+| App         | Molly Henry    | henrymoll      |
 | Renderer    |                |                |
 | Persistency |                |                |
 | Recorder    | Christopher Sa | sachri         |
