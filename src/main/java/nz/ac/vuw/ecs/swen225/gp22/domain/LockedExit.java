@@ -7,6 +7,9 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * @author Abdulrahman Asfari
  */
 public class LockedExit extends Tile{
+    /** Used for tile functionality that depends on the player. */
+    private final Observer<Player> playerObserver;
+
     /**
      * Default constructor, sets the position and color of the tile, and 
      * obstructiveness to true. An observer is also added to the player so
@@ -17,11 +20,18 @@ public class LockedExit extends Tile{
      */
     public LockedExit(Maze.Point tilePos){
         super(tilePos, true);
-        Maze.player.addObserver(player -> {
+
+        playerObserver = player -> {
             setObstructive(!Maze.collectedAllTreasures());
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
             }
-        });
+        };
+        Maze.player.addObserver(playerObserver);
+    }
+
+    @Override
+    public void deleteTile(){ 
+        Maze.player.removeObserver(playerObserver);
     }
 }

@@ -7,6 +7,9 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * @author Abdulrahman Asfari
  */
 public class Treasure extends Tile{
+    /** Used for tile functionality that depends on the player. */
+    private final Observer<Player> playerObserver;
+
     /**
      * Default constructor, sets the position the tile, and 
      * obstructiveness to false. An observer is also added to the player so
@@ -17,11 +20,18 @@ public class Treasure extends Tile{
      */
     public Treasure(Maze.Point tilePos){
         super(tilePos, false);
-        Maze.player.addObserver(player -> {
+        
+        playerObserver = player -> {
             if(player.getPos().equals(tilePos)){
                 Maze.collectTreasure();
                 Maze.resetTile(tilePos);
             }
-        });
+        };
+        Maze.player.addObserver(playerObserver);
+    }
+
+    @Override
+    public void deleteTile(){ 
+        Maze.player.removeObserver(playerObserver);
     }
 }

@@ -7,6 +7,9 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * @author Abdulrahman Asfari
  */
 public class LockedDoor extends ColorableTile{
+    /** Used for tile functionality that depends on the player. */
+    private final Observer<Player> playerObserver;
+
     /**
      * Default constructor, sets the position and color of the tile, and 
      * obstructiveness to true. An observer is also added to the player so
@@ -19,12 +22,19 @@ public class LockedDoor extends ColorableTile{
      */
     public LockedDoor(Maze.Point tilePos, Color color){
         super(tilePos, true, color);
-        Maze.player.addObserver(player -> {
+        
+        playerObserver = player -> {
             setObstructive(!player.hasKey(color));
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
                 Maze.player.consumeKey(color);
             }
-        });
+        };
+        Maze.player.addObserver(playerObserver);
+    }
+
+    @Override
+    public void deleteTile(){ 
+        Maze.player.removeObserver(playerObserver);
     }
 }

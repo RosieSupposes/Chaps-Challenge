@@ -55,6 +55,7 @@ public class Maze{
      */
     public static void setTile(Point point, Tile tile){
         if(!point.isValid()) return; // BAD THINGS
+        getTile(point).deleteTile();
         tileMap[point.x()][point.y()] = tile;      
     }
 
@@ -64,8 +65,7 @@ public class Maze{
      * @param point Point to reset.
      */
     public static void resetTile(Point point){
-        if(!point.isValid()) return; // BAD THINGS
-        tileMap[point.x()][point.y()] = new Air(point);  
+        setTile(point, new Air(point));
     }
 
     /** Reduce the number of treasures left by 1. */

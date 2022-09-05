@@ -35,4 +35,7 @@ public abstract class Tile{
      * @param obstructive The new value of the {@link #obstructive} field.
      */
     public void setObstructive(boolean obstructive){ this.obstructive = obstructive; }
+
+    /** Called when a tile is removed or replaced. */
+    public void deleteTile(){ }
 }
