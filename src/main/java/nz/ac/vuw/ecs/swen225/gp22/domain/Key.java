@@ -1,6 +1,21 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+/**
+ * Represents a tile with a key on it, which the player
+ * can pick up by walking onto the tile.
+ * 
+ * @author Abdulrahman Asfari
+ */
 public class Key extends ColorableTile{
+    /**
+     * Default constructor, sets the position and color of the tile, and 
+     * obstructiveness to false. An observer is also added to the player so
+     * that when they are on this tile, it is reset and a key is added 
+     * to the player inventory. 
+     * 
+     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param color {@link Color} to set the color field to. ({@link ColorableTile#color see here})
+     */
     public Key(Maze.Point tilePos, Color color){
         super(tilePos, false, color);
         Maze.player.addObserver(player -> {
