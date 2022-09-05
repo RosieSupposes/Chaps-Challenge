@@ -7,7 +7,7 @@ import java.util.Objects;
  * As such, it is accessed by other packages to query the game state for specific tiles 
  * or perform operations on the player.
  * 
- * @author Abdulrahman Asfari
+ * @author Abdulrahman Asfari 300475089
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -29,6 +29,7 @@ public class Maze{
      * @param dimensions The size of the {@link #tileMap map}.
      * @param treasures The number of treasures on the {@link #tileMap map}.
      */
+    @DevMarkers.NeedsPrecons
     public static void generateMap(Point dimensions, int treasures){
         if(treasures < 0 || dimensions.x() < 0 || dimensions.y() < 0) return; // BAD THINGS
         tileMap = new Tile[dimensions.x()][dimensions.y()];
@@ -42,6 +43,7 @@ public class Maze{
      * @param point The position of the {@link Tile tile}.
      * @return Tile object at the given position.
      */
+    @DevMarkers.NeedsPrecons
     public static Tile getTile(Point point){
         if(!point.isValid()) return null; // BAD THINGS
         return tileMap[point.x()][point.y()];      
@@ -53,6 +55,7 @@ public class Maze{
      * @param point The position the {@link Tile tile} will be at.
      * @param tile The {@link Tile tile} to add to the {@link #tileMap tilemap}.
      */
+    @DevMarkers.NeedsPrecons
     public static void setTile(Point point, Tile tile){
         if(!point.isValid()) return; // BAD THINGS
         getTile(point).deleteTile();
@@ -69,6 +72,7 @@ public class Maze{
     }
 
     /** Reduce the number of treasures left by 1. */
+    @DevMarkers.NeedsPrecons
     public static void collectTreasure(){
         if(treasuresLeft <= 0) return; // BAD THINGS
         treasuresLeft--;

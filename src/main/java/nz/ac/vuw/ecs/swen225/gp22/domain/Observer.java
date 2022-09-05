@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * A functional interface, instances of it will be attached to 
  * an {@link Observable}, which will call the update method.
  * 
- * @author Abdulrahman Asfari 
+ * @author Abdulrahman Asfari 300475089
  */
 @FunctionalInterface
 public interface Observer<S extends Observable<S>>{

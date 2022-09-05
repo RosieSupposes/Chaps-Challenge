@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Template for entities in a level, including the player. 
  * Any entities are observable.
  * 
- * @author Abdulrahman Asfari 
+ * @author Abdulrahman Asfari 300475089
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -46,6 +46,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * 
      * @param direction Direction to move the entity in.
      */
+    @DevMarkers.NeedsPrecons
     public void move(Direction direction){
         Maze.Point newPos = entityPos.add(direction);
         if(Maze.getTile(newPos).isObstructive()) return; // BAD THINGS

@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents a tile with a key on it, which the player
  * can pick up by walking onto the tile.
  * 
- * @author Abdulrahman Asfari
+ * @author Abdulrahman Asfari 300475089
  */
 public class Key extends ColorableTile{
     /** Used for tile functionality that depends on the player. */

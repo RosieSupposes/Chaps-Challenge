@@ -3,8 +3,10 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
 /**
  * Template for tiles that has fields and methods that all tiles will need.
  * 
- * @author Abdulrahman Asfari
+ * @author Abdulrahman Asfari 300475089
  */
+@DevMarkers.WIP("Make tiles observable and add compatibility for subclasses.")
+@DevMarkers.WIP("Remove final keyword from tilePos, add a setter.")
 public abstract class Tile{
     /** The position of the tile on the {@link Maze#tileMap tilemap}. */
     private final Maze.Point tilePos;

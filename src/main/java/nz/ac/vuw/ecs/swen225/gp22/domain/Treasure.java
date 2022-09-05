@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents a tile with a treasure on it, which the player
  * can pick up by walking onto the tile.
  * 
- * @author Abdulrahman Asfari
+ * @author Abdulrahman Asfari 300475089
  */
 public class Treasure extends Tile{
     /** Used for tile functionality that depends on the player. */
@@ -20,7 +20,7 @@ public class Treasure extends Tile{
      */
     public Treasure(Maze.Point tilePos){
         super(tilePos, false);
-        
+
         playerObserver = player -> {
             if(player.getPos().equals(tilePos)){
                 Maze.collectTreasure();
