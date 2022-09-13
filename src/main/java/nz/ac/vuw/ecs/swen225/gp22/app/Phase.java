@@ -1,42 +1,20 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * Phase has constructors to build all the different windows
  *
- * @author henrymoll
+ * @author Molly Henry, 300562038
+ * @version 1.2
  */
 public class Phase extends JPanel {
     private Base base; //base the phase is being added to
 
-    private final Runnable startAction = () -> {
-        base.levelOnePhase();
-    };
-    private final Runnable pauseAction = () -> {
-        System.out.println("Pause");
-    };
-    private final Runnable loadAction = () -> {
-        System.out.println("Load");
-    };
-    private final Runnable saveAction = () -> {
-        System.out.println("Save");
-    };
-    private final Runnable replayAction = () -> {
-        System.out.println("Replay");
-    };
-    private final Runnable newLevelOneAction = () -> {
-        System.out.println("New Level One");
-    };
-    private final Runnable newLevelTwoAction = () -> {
-        System.out.println("New Level Two");
-    };
-    private final Runnable exitAction = () -> {
-        System.out.println("Exit");
-        base.runClosePhase();
-        System.exit(0);
-    };
+
 
     /**
      * For creating the menu window
@@ -68,9 +46,9 @@ public class Phase extends JPanel {
      * @param b      add to this base
      * @param person chap player
      */
-    Phase(Base b, int person) { //run level one, int to be replaced with Chap character
+    Phase(Base b, Player person) { //run level one, int to be replaced with Chap character
         this.base = b;
-
+        JPanel v = new JPanel(); //TODO put renderer viewport here
         base.setJMenuBar(menuBarForGame());
     }
 
@@ -78,10 +56,10 @@ public class Phase extends JPanel {
      * For creating level two window
      *
      * @param b       add to this base
-     * @param person  chap player
-     * @param person2 other actor
+     * @param player  chap player
+     * @param gummybear other actor
      */
-    Phase(Base b, int person, int person2) { //run level two, int to be replaced with Chap + Actor
+    Phase(Base b, Player player, Player gummybear) { //run level two, int to be replaced with Chap + Actor
 
     }
 
@@ -97,7 +75,7 @@ public class Phase extends JPanel {
 
         JMenuItem pause = new JMenuItem("Pause");
         pause.setMaximumSize(new Dimension(menuItemWidth, 30));
-        pause.addActionListener(e -> pauseAction.run());
+        pause.addActionListener(e -> base.pauseAction.run());
         menuBar.add(pause);
         base.addComponent(pause);
 
@@ -105,12 +83,12 @@ public class Phase extends JPanel {
         newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
 
         JMenuItem levelOne = new JMenuItem("Level One");
-        levelOne.addActionListener(e -> newLevelOneAction.run());
+        levelOne.addActionListener(e -> base.newLevelOneAction.run());
         newLevel.add(levelOne);
         base.addComponent(levelOne);
 
         JMenuItem levelTwo = new JMenuItem("Level Two");
-        levelTwo.addActionListener(e -> newLevelTwoAction.run());
+        levelTwo.addActionListener(e -> base.newLevelTwoAction.run());
         newLevel.add(levelTwo);
         base.addComponent(levelTwo);
 
@@ -119,19 +97,19 @@ public class Phase extends JPanel {
 
         JMenuItem save = new JMenuItem("Save");
         save.setMaximumSize(new Dimension(menuItemWidth, 30));
-        save.addActionListener(e -> saveAction.run());
+        save.addActionListener(e -> base.saveAction.run());
         menuBar.add(save);
         base.addComponent(save);
 
         JMenuItem load = new JMenuItem("Load");
         load.setMaximumSize(new Dimension(menuItemWidth, 30));
-        load.addActionListener(e -> loadAction.run());
+        load.addActionListener(e -> base.loadAction.run());
         menuBar.add(load);
         base.addComponent(load);
 
         JMenuItem exit = new JMenuItem("Exit");
         exit.setMaximumSize(new Dimension(menuItemWidth, 30));
-        exit.addActionListener(e -> exitAction.run());
+        exit.addActionListener(e -> base.exitAction.run());
         menuBar.add(exit);
         base.addComponent(exit);
 
@@ -195,7 +173,7 @@ public class Phase extends JPanel {
         c.gridy++;
 
         JButton start = new JButton("Start");
-        start.addActionListener(e -> startAction.run());
+        start.addActionListener(e -> base.startAction.run());
         buttons.add(start, c);
         base.addComponent(start);
 
@@ -203,7 +181,7 @@ public class Phase extends JPanel {
         buttons.add(vertSpace, c);
 
         JButton load = new JButton("Load");
-        load.addActionListener(e -> loadAction.run());
+        load.addActionListener(e -> base.loadAction.run());
         c.gridy++;
         buttons.add(load, c);
         base.addComponent(load);
@@ -228,7 +206,7 @@ public class Phase extends JPanel {
         buttons.add(vertSpace, c);
 
         JButton replay = new JButton("Replay");
-        replay.addActionListener(e -> replayAction.run());
+        replay.addActionListener(e -> base.replayAction.run());
         c.gridy++;
         buttons.add(replay, c);
         base.addComponent(replay);

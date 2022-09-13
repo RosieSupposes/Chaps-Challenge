@@ -1,5 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -7,7 +11,16 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Molly Henry, 300562038
+ * @version 1.3
+ */
 public class Base extends JFrame {
+    private Runnable closePhase = () -> {
+        for (JComponent component : this.components) {
+            remove(component);
+        }
+    };
     public final int TILE_SIZE = 60;
     public final int NUM_GAME_TILE = 9;
     public final int SIDEBAR_WIDTH = 5 * TILE_SIZE;
@@ -17,11 +30,34 @@ public class Base extends JFrame {
 
     private List<JComponent> components = new ArrayList<>();
 
-    private final Runnable closePhase = () -> {
-        for (JComponent component : this.components) {
-            remove(component);
-        }
+    public final Runnable startAction = () -> levelPhase(true);
+    public final Runnable pauseAction = () -> {
+        System.out.println("Pause");
     };
+    public final Runnable unPauseAction = () -> {
+        System.out.println("Un Pause");
+    };
+    public final Runnable loadAction = () -> {
+        System.out.println("Load");
+    };
+    public final Runnable saveAction = () -> {
+        System.out.println("Save");
+    };
+    public final Runnable replayAction = () -> {
+        System.out.println("Replay");
+    };
+    public final Runnable newLevelOneAction = () -> {
+        System.out.println("New Level One");
+    };
+    public final Runnable newLevelTwoAction = () -> {
+        System.out.println("New Level Two");
+    };
+    public final Runnable exitAction = () -> {
+        System.out.println("Exit");
+        closePhase.run();
+        System.exit(0);
+    };
+
 
     Base() {
         assert SwingUtilities.isEventDispatchThread();
@@ -39,47 +75,62 @@ public class Base extends JFrame {
         });
     }
 
-    public void changePhase(Phase p){
-        closePhase.run();
-        add(BorderLayout.CENTER,p);
-        components.add(p);
+    public void movePlayer(Entity.Direction dir) {
+        System.out.println("Move: " + dir);
     }
 
-//    public Runnable getClosePhase(){
-//        return closePhase;
-//    }
-
-    public void runClosePhase(){
+    public void runClosePhase() {
         closePhase.run();
         components.clear();
     }
 
-//    public List<JComponent> components(){
-//        return components;
-//    }
-
-    public void addComponent(JComponent jc){
+    public void addComponent(JComponent jc) {
         components.add(jc);
     }
 
     private void startPhase() {
         Phase menu = new Phase(this);
-        add(menu);
+        add(BorderLayout.CENTER, menu);
         components.add(menu);
-
     }
 
-    public void levelOnePhase() {
+    public void levelPhase(boolean isLevelOne) {
         closePhase.run();
         components.clear();
 
-        Phase levelOne = new Phase(this,0);
-        components.add(levelOne);
+        //set up the viewport and the timer
+        Phase level;
+        if (isLevelOne) {
+            level = new Phase(this,
+                    new Player(new Maze.Point(0, 0), Entity.Direction.Up));
+        } else {
+            level = new Phase(this,
+                    new Player(new Maze.Point(0, 0), Entity.Direction.Up),
+                    new Player(new Maze.Point(1, 1), Entity.Direction.Down));
+        }
+        Phase finalLevel = level;
+        finalLevel.addKeyListener(new Controller(this));
+        finalLevel.setFocusable(true);
+
+        Timer timer = new Timer(34, unused -> {
+            assert SwingUtilities.isEventDispatchThread();
+            //p.model().ping(); //TODO ping everything
+            finalLevel.repaint(); //draws game
+        });
+
+        closePhase = () -> {
+            timer.stop();
+            remove(finalLevel);
+        };
+
+        add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
+        setPreferredSize(getSize());//to keep the current size
+        pack();                     //after pack
+        finalLevel.requestFocus();//need to be after pack
+        timer.start();
+
+        components.add(finalLevel);
         pack();
-    }
-
-    private void levelTwoPhase() {
-
     }
 
     private void pausePhase() {
@@ -89,32 +140,4 @@ public class Base extends JFrame {
     private void repeatPhase() {
 
     }
-
-
-
-//    private void phaseOne() {
-//        setPhase(Phase.level1(this::phaseTwo, this::phaseZero));
-//    }
-
-//    private void setPhase(Phase p) {
-//        //set up the viewport and the timer
-//        Viewport v = new Viewport(p.model());
-//        v.addKeyListener(p.controller());
-//        v.setFocusable(true);
-//        Timer timer = new Timer(34, unused -> {
-//            assert SwingUtilities.isEventDispatchThread();
-//            p.model().ping();
-//            v.repaint();
-//        });
-//        closePhase.run();//close phase before adding any element of the new phase
-//        closePhase = () -> {
-//            timer.stop();
-//            remove(v);
-//        };
-//        add(BorderLayout.CENTER, v);//add the new phase viewport
-//        setPreferredSize(getSize());//to keep the current size
-//        pack();                     //after pack
-//        v.requestFocus();//need to be after pack
-//        timer.start();
-//    }
 }

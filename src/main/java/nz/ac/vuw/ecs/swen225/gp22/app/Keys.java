@@ -8,12 +8,19 @@ import java.util.Map;
 
 class Keys implements KeyListener {
     private final Map<Integer, Runnable> actionsPressed = new HashMap<>();
+    private final Map<Integer, Runnable> actionsCtrlReleased = new HashMap<>();
     private final Map<Integer, Runnable> actionsReleased = new HashMap<>();
 
+    public void setAction(int keyCode, Runnable onPressed, boolean ctrlDown) {
+        if (ctrlDown) {
+            actionsCtrlReleased.put(keyCode, onPressed);
+        } else {
+            actionsReleased.put(keyCode, onPressed);
+        }
+    }
 
-    public void setAction(int keyCode, Runnable onPressed, Runnable onReleased) {
+    public void setAction(int keyCode, Runnable onPressed) {
         actionsPressed.put(keyCode, onPressed);
-        actionsReleased.put(keyCode, onReleased);
     }
 
     @Override
@@ -30,7 +37,13 @@ class Keys implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         assert SwingUtilities.isEventDispatchThread();
-        actionsReleased.getOrDefault(e.getKeyCode(), () -> {
-        }).run();
+        if (e.isControlDown()) {
+            actionsCtrlReleased.getOrDefault(e.getKeyCode(), () -> {
+            }).run();
+        } else {
+            actionsReleased.getOrDefault(e.getKeyCode(), () -> {
+            }).run();
+        }
+
     }
 }
