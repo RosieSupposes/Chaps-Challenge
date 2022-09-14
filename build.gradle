@@ -4,7 +4,7 @@ plugins {
     id 'application'
     id 'java'
     id 'jacoco'
-    id 'com.github.spotbugs' version '5.0.9'
+    id 'com.github.spotbugs' version '4.8.0'
 }
 
 group 'nz.ac.vuw.ecs.swen225.gp22'
