@@ -3,7 +3,8 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
 /**
  * Template for tiles that has fields and methods that all tiles will need.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.3
  */
 @DevMarkers.WIP("Make tiles observable and add compatibility for subclasses.")
 @DevMarkers.WIP("Remove final keyword from tilePos, add a setter.")

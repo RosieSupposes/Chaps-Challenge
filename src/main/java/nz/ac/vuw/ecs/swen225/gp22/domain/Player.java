@@ -7,7 +7,8 @@ import java.util.List;
  * The entity that will be controller by user input, this functions just like
  * a base {@link Entity} but with an inventory to hold keys.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.2
  */
 public class Player extends Entity<Player>{
     /** Stores all the keys that the player has. */

@@ -4,7 +4,8 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents a tile with a treasure on it, which the player
  * can pick up by walking onto the tile.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.3
  */
 public class Treasure extends Tile{
     /** Used for tile functionality that depends on the player. */

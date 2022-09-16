@@ -7,7 +7,8 @@ import java.util.List;
  * A class can extend this so an instance of it
  * can be observed by {@link Observer} objects. 
  *  
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.2
  */
 public abstract class Observable<S extends Observable<S>>{
     /** Contains a list of the {@link Observer} objects that are monitoring this object. */

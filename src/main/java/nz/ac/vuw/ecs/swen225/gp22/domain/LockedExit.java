@@ -4,7 +4,8 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents a tile which the player can only walk
  * on if they have collected all the treasures.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.3
  */
 public class LockedExit extends Tile{
     /** Used for tile functionality that depends on the player. */

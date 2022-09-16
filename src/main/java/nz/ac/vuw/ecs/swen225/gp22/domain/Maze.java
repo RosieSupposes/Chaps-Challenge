@@ -7,7 +7,8 @@ import java.util.Objects;
  * As such, it is accessed by other packages to query the game state for specific tiles 
  * or perform operations on the player.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.3
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -30,6 +31,7 @@ public class Maze{
      * @param treasures The number of treasures on the {@link #tileMap map}.
      */
     @DevMarkers.NeedsPrecons
+    @DevMarkers.WIP("Autofill tiles to ground.")
     public static void generateMap(Point dimensions, int treasures){
         if(treasures < 0 || dimensions.x() < 0 || dimensions.y() < 0) return; // BAD THINGS
         tileMap = new Tile[dimensions.x()][dimensions.y()];
