@@ -4,16 +4,16 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents an empty tile.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.2
+ * @version 1.3
  */
-public class Air extends Tile{
+public class Ground extends Tile{
     /**
      * Default constructor, sets the position of the tile,
      * and obstructiveness to false.
      * 
      * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
      */
-    public Air(Maze.Point tilePos){
+    public Ground(Maze.Point tilePos){
         super(tilePos, false);
     }
 }

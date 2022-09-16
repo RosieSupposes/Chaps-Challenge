@@ -35,7 +35,13 @@ public class Maze{
     public static void generateMap(Point dimensions, int treasures){
         if(treasures < 0 || dimensions.x() < 0 || dimensions.y() < 0) return; // BAD THINGS
         tileMap = new Tile[dimensions.x()][dimensions.y()];
+        for(int x = 0; x < dimensions.x; x++){
+            for(int y = 0; y < dimensions.y; y++){
+                tileMap[x][y] = new Ground(new Point(x, y));
+            }
+        }
         treasuresLeft = treasures;
+        player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
     }
 
@@ -59,7 +65,7 @@ public class Maze{
      */
     @DevMarkers.NeedsPrecons
     public static void setTile(Point point, Tile tile){
-        if(!point.isValid()) return; // BAD THINGS
+        if(!point.isValid() || tile == null) return; // BAD THINGS
         getTile(point).deleteTile();
         tileMap[point.x()][point.y()] = tile;      
     }
@@ -70,7 +76,7 @@ public class Maze{
      * @param point Point to reset.
      */
     public static void resetTile(Point point){
-        setTile(point, new Air(point));
+        setTile(point, new Ground(point));
     }
 
     /** Reduce the number of treasures left by 1. */
