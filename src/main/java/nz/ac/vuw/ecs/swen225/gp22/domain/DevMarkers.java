@@ -68,7 +68,7 @@ public class DevMarkers{
     /** Allows {@link WIP} to be repeatable. */
     @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
-    private @interface WIPList{ DevMarkers.WIP[] value(); }
+    protected @interface WIPList{ DevMarkers.WIP[] value(); }
 
     /** 
      * Used to test interactions between objects whilst creating
