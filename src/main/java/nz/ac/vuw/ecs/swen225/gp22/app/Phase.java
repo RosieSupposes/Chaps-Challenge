@@ -14,8 +14,6 @@ import java.awt.*;
 public class Phase extends JPanel {
     private Base base; //base the phase is being added to
 
-
-
     /**
      * For creating the menu window
      *
@@ -154,7 +152,7 @@ public class Phase extends JPanel {
      *
      * @return panel with buttons on it
      */
-    public JPanel buttonPanelForMenu() {
+    private JPanel buttonPanelForMenu() {
         JPanel buttons = new JPanel();
         buttons.setBackground(Color.GREEN);
         buttons.setPreferredSize(new Dimension(3 * base.TILE_SIZE, 2 * base.TILE_SIZE));

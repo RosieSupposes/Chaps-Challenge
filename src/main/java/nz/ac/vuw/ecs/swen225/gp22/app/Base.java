@@ -89,9 +89,11 @@ public class Base extends JFrame {
     }
 
     private void startPhase() {
-        Phase menu = new Phase(this);
+        PhasePanel menu = new PhasePanel(new MenuMainPanel(this),new MenuSidePanel());
+        //Phase menu = new Phase(this);
         add(BorderLayout.CENTER, menu);
         components.add(menu);
+        components.addAll(menu.getAllComponents());
     }
 
     public void levelPhase(boolean isLevelOne) {
