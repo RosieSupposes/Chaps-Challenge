@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Player;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,18 +45,24 @@ public class Base extends JFrame {
     };
     public final Runnable replayAction = () -> {
         System.out.println("Replay");
+        replayPhase();
     };
     public final Runnable newLevelOneAction = () -> {
         System.out.println("New Level One");
+        levelPhase(true);
     };
     public final Runnable newLevelTwoAction = () -> {
         System.out.println("New Level Two");
+        levelPhase(false);
     };
     public final Runnable exitAction = () -> {
         System.out.println("Exit");
         closePhase.run();
         System.exit(0);
     };
+    private int timeMS = 0;
+    private int timeSec = 0;
+    private Timer timer = new Timer(20,null);
 
 
     Base() {
@@ -82,6 +88,7 @@ public class Base extends JFrame {
     public void runClosePhase() {
         closePhase.run();
         components.clear();
+        timer.stop();
     }
 
     public void addComponent(JComponent jc) {
@@ -97,49 +104,65 @@ public class Base extends JFrame {
     }
 
     public void levelPhase(boolean isLevelOne) {
-        closePhase.run();
-        components.clear();
+        runClosePhase();
 
         //set up the viewport and the timer
-        Phase level;
+        PhasePanel level;
         if (isLevelOne) {
-            level = new Phase(this,
-                    new Player(new Maze.Point(0, 0), Entity.Direction.Up));
+            JPanel game = new JPanel(); //TODO link to actual game window
+            game.setBackground(Color.MAGENTA);
+
+            JPanel side = new JPanel();
+            side.setBackground(Color.CYAN);
+
+            level = new PhasePanel(game, side);
         } else {
-            level = new Phase(this,
-                    new Player(new Maze.Point(0, 0), Entity.Direction.Up),
-                    new Player(new Maze.Point(1, 1), Entity.Direction.Down));
+            JPanel game = new JPanel();
+            game.setBackground(Color.RED);
+
+            JPanel side = new JPanel();
+            side.setBackground(Color.CYAN);
+
+            level = new PhasePanel(game, side);
         }
-        Phase finalLevel = level;
+        PhasePanel finalLevel = level;
         finalLevel.addKeyListener(new Controller(this));
         finalLevel.setFocusable(true);
 
-        Timer timer = new Timer(34, unused -> {
+        timer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
             //p.model().ping(); //TODO ping everything
             finalLevel.repaint(); //draws game
+            timeMS+=20;
+            if(timeMS%1000 == 0){
+                System.out.println(timeSec++);
+            }
         });
 
-        closePhase = () -> {
-            timer.stop();
-            remove(finalLevel);
-        };
+        runClosePhase();
 
         add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
+        setJMenuBar(new GameMenuBar(this));
         setPreferredSize(getSize());//to keep the current size
         pack();                     //after pack
         finalLevel.requestFocus();//need to be after pack
         timer.start();
 
         components.add(finalLevel);
-        pack();
     }
 
     private void pausePhase() {
 
     }
 
-    private void repeatPhase() {
+    private void replayPhase() {
+        runClosePhase();
+        Player playerWindow = new Player();
+        add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
+        setPreferredSize(getSize());//to keep the current size
+        pack();                     //after pack
+        playerWindow.requestFocus();//need to be after pack
 
+        components.add(playerWindow);
     }
 }
