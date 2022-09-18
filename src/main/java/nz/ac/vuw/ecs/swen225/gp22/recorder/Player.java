@@ -5,19 +5,21 @@ import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
 import java.util.List;
 
 /**
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.8
+ * @version 1.9
  */
 public class Player extends JPanel {
   private final Base base;
   private List<Action> actions;
   private JSlider scrubber;
+  private boolean isPlaying = false;
+  private boolean isRewinding = false;
+  private int speed = 1;
 
   /**
    * Create a new player.
@@ -36,12 +38,11 @@ public class Player extends JPanel {
    * Set up the player.
    */
   private void setup() {
-    // Create components
     JPanel gamePanel = new JPanel();
     gamePanel.setPreferredSize(new Dimension(800, 400));
     gamePanel.setBackground(Color.BLACK);
 
-    JButton stepBack = new PlaybackButton("Step Back", this::stepBack);
+    JButton stepBack = new PlaybackButton("Step Back", () -> scrubber.setValue(scrubber.getValue() - 1));
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
     scrubber.setPreferredSize(new Dimension(550, 25));
@@ -60,12 +61,14 @@ public class Player extends JPanel {
       if (actions != null) scrubber.setMaximum(actions.size());
     });
 
-    JButton stepForward = new PlaybackButton("Step Forward", this::stepForward);
+    JButton stepForward = new PlaybackButton("Step Forward", () -> scrubber.setValue(scrubber.getValue() + 1));
 
     JButton rewind = new PlaybackButton("Rewind", this::rewind);
     JButton play = new PlaybackButton("Play", this::play);
-    JButton pause = new PlaybackButton("Pause", this::pause);
-    JButton forward = new PlaybackButton("Fast-Forward", this::forward);
+    JButton pause = new PlaybackButton("Pause", () -> {
+      isPlaying = false;
+      isRewinding = false;
+    });
 
 
     JPanel speedPanel = new JPanel() {
@@ -76,10 +79,7 @@ public class Player extends JPanel {
         JLabel speedLabel = new JLabel("Speed");
 
         JSpinner speed = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
-        speed.addChangeListener(e -> {
-          JSpinner source = (JSpinner) e.getSource();
-          setSpeed((int) source.getValue());
-        });
+        speed.addChangeListener(e -> Player.this.speed = (int) ((JSpinner) e.getSource()).getValue());
 
         add(speedLabel, BorderLayout.WEST);
         add(speed, BorderLayout.EAST);
@@ -97,7 +97,6 @@ public class Player extends JPanel {
     add(rewind);
     add(play);
     add(pause);
-    add(forward);
     add(speedPanel);
 
     setPreferredSize(new Dimension(800, 520));
@@ -133,53 +132,44 @@ public class Player extends JPanel {
   }
 
   /**
-   * Step back one action.
-   */
-  private void stepBack() {
-    System.out.println("Step back");
-  }
-
-  /**
-   * Step forward one action.
-   */
-  private void stepForward() {
-    System.out.println("Step forward");
-  }
-
-  /**
    * Rewind.
    */
   private void rewind() {
-    System.out.println("Rewind");
+    isRewinding = true;
+    isPlaying = false;
+    new Thread(() -> {
+      for (int i = scrubber.getValue(); i >= 0; i--) {
+        System.out.println(actions.get(i));
+        scrubber.setValue(i);
+        try {
+          Thread.sleep(1000 / speed);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        if (!isRewinding) break;
+      }
+      isRewinding = false;
+    }).start();
   }
 
   /**
-   * Play.
+   * Play the recording.
    */
   private void play() {
-    System.out.println("Play");
-  }
-
-  /**
-   * Pause.
-   */
-  private void pause() {
-    System.out.println("Pause");
-  }
-
-  /**
-   * Fast-forward.
-   */
-  private void forward() {
-    System.out.println("Forward");
-  }
-
-  /**
-   * Set the speed.
-   *
-   * @param speed the speed to set
-   */
-  private void setSpeed(int speed) {
-    System.out.println("Setting speed to " + speed);
+    isPlaying = true;
+    isRewinding = false;
+    new Thread(() -> {
+      for (int i = scrubber.getValue(); i < actions.size(); i++) {
+        System.out.println(actions.get(i));
+        scrubber.setValue(i);
+        try {
+          Thread.sleep(1000 / speed);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        if (!isPlaying) break;
+      }
+      isPlaying = false;
+    }).start();
   }
 }
