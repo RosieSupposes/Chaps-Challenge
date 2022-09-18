@@ -8,7 +8,7 @@ import java.util.List;
  * can be observed by {@link Observer} objects. 
  *  
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public abstract class Observable<S extends Observable<S>>{
     /** Contains a list of the {@link Observer} objects that are monitoring this object. */
@@ -23,6 +23,7 @@ public abstract class Observable<S extends Observable<S>>{
         if(observer == null) throw new IllegalArgumentException("Given observer is null");
         if(observers.contains(observer)) throw new IllegalArgumentException("Observer is already attached to this object.");
         observers.add(observer);
+        assert observers.contains(observer) : "Observer not added.";
     }
 
     /** 
@@ -34,6 +35,7 @@ public abstract class Observable<S extends Observable<S>>{
         if(observer == null) throw new IllegalArgumentException("Given observer is null");
         if(!observers.contains(observer)) throw new IllegalArgumentException("Observer is not attached to this object."); 
         observers.remove(observer);
+        assert !observers.contains(observer) : "Observer not removed.";
     }
 
     /** 

@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.4
+ * @version 1.5
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -52,7 +52,8 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Maze.Point newPos = entityPos.add(direction);
         if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
-        entityPos = newPos; 
+        setPos(newPos);
+        assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
         updateObservers(); 
     }
 

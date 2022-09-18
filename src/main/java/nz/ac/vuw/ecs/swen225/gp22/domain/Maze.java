@@ -8,7 +8,7 @@ import java.util.Objects;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.4
+ * @version 1.5
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -65,8 +65,10 @@ public class Maze{
         if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
         if(tile == null) throw new IllegalArgumentException("Given tile does not exist.");
         if(!tile.getPos().equals(point)) throw new IllegalArgumentException("Tile position does not match the point it is being set to.");
-        getTile(point).deleteTile();
-        tileMap[point.x()][point.y()] = tile;      
+        Tile oldTile = getTile(point);
+        oldTile.deleteTile();
+        tileMap[point.x()][point.y()] = tile;     
+        assert Maze.getTile(point) != oldTile : "Tile has not been removed from the map."; 
     }
 
     /** 
@@ -77,6 +79,7 @@ public class Maze{
     public static void resetTile(Point point){
         if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
         setTile(point, new Ground(point));
+        assert getTile(point) instanceof Ground : "Tile not reset properly.";
     }
 
     /** Reduce the number of treasures left by 1. */
