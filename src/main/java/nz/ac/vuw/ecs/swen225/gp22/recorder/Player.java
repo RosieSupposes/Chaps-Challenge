@@ -5,7 +5,6 @@ import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public class Player extends JPanel {
       }
     });
 
-    JButton home = new PlaybackButton("Home", base::startPhase);
+    JButton home = new PlaybackButton("Home", base::menuScreen);
 
     JButton load = new PlaybackButton("Load",  ()->{
       load();
