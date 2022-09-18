@@ -8,6 +8,7 @@ import java.util.List;
 public class GameMenuBar extends JMenuBar {
 
     List<JComponent> components = new ArrayList<>();
+    int menuItemWidth;
     Base base;
 
     public GameMenuBar(Base base){
@@ -16,8 +17,23 @@ public class GameMenuBar extends JMenuBar {
     }
 
     public void setMenuBarForGame() {
-        int menuItemWidth = Main.GAME_WINDOW_SIZE / 5;
+        menuItemWidth = Main.GAME_WINDOW_SIZE / 6;
+        addHomeButton();
+    }
 
+    private void addHomeButton(){
+        JMenuItem home = new JMenuItem("Home");
+        home.setMaximumSize(new Dimension(menuItemWidth, 30));
+        home.addActionListener(e -> base.startPhase());
+        this.add(home);
+        components.add(home);
+    }
+
+    /**
+     * Adds buttons to the menu bar that are only relevant to the game window.
+     * Pause, New - level 1, level 2, Save
+     */
+    public void addGameButtons(){
         JMenuItem pause = new JMenuItem("Pause");
         pause.setMaximumSize(new Dimension(menuItemWidth, 30));
         pause.addActionListener(e -> base.pauseAction.run());
@@ -45,13 +61,17 @@ public class GameMenuBar extends JMenuBar {
         save.addActionListener(e -> base.saveAction.run());
         this.add(save);
         components.add(save);
+    }
 
+    public void addLoadButton(){
         JMenuItem load = new JMenuItem("Load");
         load.setMaximumSize(new Dimension(menuItemWidth, 30));
         load.addActionListener(e -> base.loadAction.run());
         this.add(load);
         components.add(load);
+    }
 
+    public void addExitButton(){
         JMenuItem exit = new JMenuItem("Exit");
         exit.setMaximumSize(new Dimension(menuItemWidth, 30));
         exit.addActionListener(e -> base.exitAction.run());

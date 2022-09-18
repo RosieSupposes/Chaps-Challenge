@@ -16,27 +16,12 @@ import java.util.List;
  * @version 1.3
  */
 public class Base extends JFrame {
-    private Runnable closePhase = () -> {
-        for (JComponent component : this.components) {
-            remove(component);
-        }
-    };
-    public final int TILE_SIZE = 60;
-    public final int NUM_GAME_TILE = 9;
-    public final int SIDEBAR_WIDTH = 5 * TILE_SIZE;
-    public final int WINDOW_HEIGHT = NUM_GAME_TILE * TILE_SIZE;
-    public final int GAME_WINDOW_SIZE = WINDOW_HEIGHT;
-    public final int WINDOW_WIDTH = NUM_GAME_TILE * TILE_SIZE + SIDEBAR_WIDTH;
-
-    private List<JComponent> components = new ArrayList<>();
-
+    private final List<JComponent> components = new ArrayList<>();
     public final Runnable startAction = () -> levelPhase(true);
-    public final Runnable pauseAction = () -> {
-        System.out.println("Pause");
-    };
-    public final Runnable unPauseAction = () -> {
-        System.out.println("Un Pause");
-    };
+    private int timeMS = 0;
+    private int timeSec = 0;
+    private Timer timer = new Timer(20,null);
+
     public final Runnable loadAction = () -> {
         System.out.println("Load");
     };
@@ -57,26 +42,34 @@ public class Base extends JFrame {
     };
     public final Runnable exitAction = () -> {
         System.out.println("Exit");
-        closePhase.run();
+        runClosePhase();
         System.exit(0);
     };
-    private int timeMS = 0;
-    private int timeSec = 0;
-    private Timer timer = new Timer(20,null);
 
+    public final Runnable pauseAction = () -> {
+        System.out.println("Pause");
+        pausePhase();
+    };
+
+    public final Runnable unPauseAction = () -> {
+        System.out.println("Un Pause");
+        unPause();
+    };
 
     Base() {
         assert SwingUtilities.isEventDispatchThread();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         startPhase();
+
         setVisible(true);
         setResizable(false);
-        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT));
         pack();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                closePhase.run();
+                runClosePhase();
             }
         });
     }
@@ -86,7 +79,9 @@ public class Base extends JFrame {
     }
 
     public void runClosePhase() {
-        closePhase.run();
+        for (JComponent component : this.components) {
+            remove(component);
+        }
         components.clear();
         timer.stop();
     }
@@ -95,12 +90,16 @@ public class Base extends JFrame {
         components.add(jc);
     }
 
-    private void startPhase() {
+    public void startPhase() {
+        runClosePhase();
+        setJMenuBar(null);
+
         PhasePanel menu = new PhasePanel(new MenuMainPanel(this),new MenuSidePanel());
-        //Phase menu = new Phase(this);
         add(BorderLayout.CENTER, menu);
         components.add(menu);
         components.addAll(menu.getAllComponents());
+
+        pack();
     }
 
     public void levelPhase(boolean isLevelOne) {
@@ -118,13 +117,14 @@ public class Base extends JFrame {
             level = new PhasePanel(game, side);
         } else {
             JPanel game = new JPanel();
-            game.setBackground(Color.RED);
+            game.setBackground(Color.ORANGE);
 
             JPanel side = new JPanel();
-            side.setBackground(Color.CYAN);
+            side.setBackground(Color.PINK);
 
             level = new PhasePanel(game, side);
         }
+
         PhasePanel finalLevel = level;
         finalLevel.addKeyListener(new Controller(this));
         finalLevel.setFocusable(true);
@@ -138,25 +138,33 @@ public class Base extends JFrame {
                 System.out.println(timeSec++);
             }
         });
-
-        runClosePhase();
-
-        add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
-        setJMenuBar(new GameMenuBar(this));
-        setPreferredSize(getSize());//to keep the current size
-        pack();                     //after pack
-        finalLevel.requestFocus();//need to be after pack
         timer.start();
 
+        add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
         components.add(finalLevel);
+        GameMenuBar gameMenuBar = new GameMenuBar(this);
+        gameMenuBar.addGameButtons();
+        gameMenuBar.addLoadButton();
+        gameMenuBar.addExitButton();
+        setJMenuBar(gameMenuBar);
+
+        pack();                     //after pack
+        finalLevel.requestFocus();  //need to be after pack
     }
 
     private void pausePhase() {
+        //runClosePhase();
+        timer.stop();
+        //pack();
+    }
 
+    private void unPause(){
+        timer.start();
     }
 
     private void replayPhase() {
         runClosePhase();
+
         Player playerWindow = new Player();
         add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
         setPreferredSize(getSize());//to keep the current size
