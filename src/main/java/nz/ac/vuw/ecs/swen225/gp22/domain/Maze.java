@@ -31,7 +31,6 @@ public class Maze{
      * @param treasures The number of treasures on the {@link #tileMap map}.
      */
     @DevMarkers.NeedsPrecons
-    @DevMarkers.WIP("Autofill tiles to ground.")
     public static void generateMap(Point dimensions, int treasures){
         if(treasures < 0 || dimensions.x() < 0 || dimensions.y() < 0) return; // BAD THINGS
         tileMap = new Tile[dimensions.x()][dimensions.y()];
@@ -65,7 +64,7 @@ public class Maze{
      */
     @DevMarkers.NeedsPrecons
     public static void setTile(Point point, Tile tile){
-        if(!point.isValid() || tile == null) return; // BAD THINGS
+        if(!point.isValid() || tile == null) return; // BAD THINGS or if tile pos is wrong
         getTile(point).deleteTile();
         tileMap[point.x()][point.y()] = tile;      
     }
