@@ -1,23 +1,27 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.util.List;
 
 /**
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.4
+ * @version 1.7
  */
 public class Player extends JPanel {
+  private List<Action> actions;
+  private JSlider scrubber;
 
   /**
    * Create a new player.
    */
   public Player() {
     assert SwingUtilities.isEventDispatchThread();
-
+    load();
     setup();
     setVisible(true);
   }
@@ -33,19 +37,21 @@ public class Player extends JPanel {
 
     JButton stepBack = new PlaybackButton("Step Back", this::stepBack);
 
-    JSlider slider = new JSlider();
-    slider.setPreferredSize(new Dimension(550, 25));
-    slider.addChangeListener(e -> {
+    scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
+    scrubber.setPreferredSize(new Dimension(550, 25));
+    scrubber.setValue(0);
+    scrubber.addChangeListener(e -> {
       JSlider source = (JSlider) e.getSource();
       if (!source.getValueIsAdjusting()) {
         scrub(source.getValue());
       }
     });
 
-    JButton load = new PlaybackButton("Load",  () -> {
-      JFileChooser fileChooser = new JFileChooser();
-      fileChooser.showOpenDialog(this);
-      load(fileChooser.getSelectedFile());
+    JButton home = new JButton("Home");
+
+    JButton load = new PlaybackButton("Load",  ()->{
+      load();
+      if (actions != null) scrubber.setMaximum(actions.size());
     });
 
     JButton stepForward = new PlaybackButton("Step Forward", this::stepForward);
@@ -78,8 +84,9 @@ public class Player extends JPanel {
     setLayout(new FlowLayout());
     add(gamePanel);
     add(stepBack);
-    add(slider);
+    add(scrubber);
     add(stepForward);
+    add(home);
     add(load);
     add(rewind);
     add(play);
@@ -92,11 +99,22 @@ public class Player extends JPanel {
 
   /**
    * Load a file.
-   *
-   * @param file the file to load
    */
-  private void load(File file) {
-    System.out.println("Loading " + file);
+  private void load() {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Select a recording to play");
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Replay File (xml)", "xml");
+    fileChooser.setFileFilter(filter);
+    fileChooser.showOpenDialog(this);
+
+    // only load if a file was selected
+    if (fileChooser.getSelectedFile() != null) {
+      Parser parser = new Parser(fileChooser.getSelectedFile());
+      int level = parser.getLevel();
+      actions = parser.getActions();
+      System.out.println(level);
+    }
   }
 
   /**
