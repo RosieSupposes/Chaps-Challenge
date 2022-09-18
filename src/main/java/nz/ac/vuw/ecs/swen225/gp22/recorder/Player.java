@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -10,17 +12,21 @@ import java.util.List;
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.7
+ * @version 1.8
  */
 public class Player extends JPanel {
+  private final Base base;
   private List<Action> actions;
   private JSlider scrubber;
 
   /**
    * Create a new player.
+   *
+   * @param base The base jFrame.
    */
-  public Player() {
+  public Player(Base base) {
     assert SwingUtilities.isEventDispatchThread();
+    this.base = base;
     load();
     setup();
     setVisible(true);
@@ -47,7 +53,7 @@ public class Player extends JPanel {
       }
     });
 
-    JButton home = new JButton("Home");
+    JButton home = new PlaybackButton("Home", base::startPhase);
 
     JButton load = new PlaybackButton("Load",  ()->{
       load();
