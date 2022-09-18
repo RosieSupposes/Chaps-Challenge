@@ -7,10 +7,9 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * @version 1.3
  */
 @DevMarkers.WIP("Make tiles observable and add compatibility for subclasses.")
-@DevMarkers.WIP("Remove final keyword from tilePos, add a setter.")
 public abstract class Tile{
     /** The position of the tile on the {@link Maze#tileMap tilemap}. */
-    private final Maze.Point tilePos;
+    private Maze.Point tilePos;
 
     /** This represents whether or not an {@link Entity} can walk onto the tile. */
     private boolean obstructive;
@@ -22,7 +21,7 @@ public abstract class Tile{
      * @param obstructive Boolean to set the obstructive field to. ({@link #obstructive see here})
      */
     public Tile(Maze.Point tilePos, boolean obstructive){
-        this.tilePos = tilePos;
+        setPos(tilePos);
         this.obstructive = obstructive;
     }
 
@@ -31,6 +30,16 @@ public abstract class Tile{
 
     /** @return The {@link #obstructive obstructiveness} of the tile. */
     public boolean isObstructive(){ return obstructive; }
+
+    /**
+     * Sets the {@link #tilePos position} of the tile.
+     * 
+     * @param pos {@link Maze.Point Point} that represents the tile's new position.
+     */
+    public void setPos(Maze.Point pos){ 
+        if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
+        tilePos = pos; 
+    }
 
     /**
      * Updates the {@link #obstructive obstructiveness} of this tile.
