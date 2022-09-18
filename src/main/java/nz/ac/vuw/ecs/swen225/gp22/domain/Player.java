@@ -8,7 +8,7 @@ import java.util.List;
  * a base {@link Entity} but with an inventory to hold keys.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.2
+ * @version 1.3
  */
 public class Player extends Entity<Player>{
     /** Stores all the keys that the player has. */
@@ -32,9 +32,8 @@ public class Player extends Entity<Player>{
      * 
      * @param color {@link ColorableTile.Color Color} of the key. 
      */
-    @DevMarkers.NeedsPrecons
     public void addKey(ColorableTile.Color color){
-        if(color == null) return; // BAD BAD
+        if(color == null) throw new IllegalArgumentException("Given color is null.");
         collectedKeys.add(color);
         updateObservers();
     }
@@ -44,9 +43,9 @@ public class Player extends Entity<Player>{
      * 
      * @param color {@link ColorableTile.Color Color} of the key.
      */
-    @DevMarkers.NeedsPrecons
     public void consumeKey(ColorableTile.Color color){
-        if(!collectedKeys.contains(color)) return; // BAD BAD
+        if(color == null) throw new IllegalArgumentException("Given color is null.");
+        if(!collectedKeys.contains(color)) throw new IllegalArgumentException("Player does not have this key.");
         collectedKeys.remove(color);
         updateObservers();
     }

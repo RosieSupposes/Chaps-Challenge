@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.2
+ * @version 1.4
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -38,8 +38,8 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * @param facingDir {@link Direction} to set the direction field to. ({@link #facingDir see here})
      */
     public Entity(Maze.Point entityPos, Direction facingDir){
-        this.entityPos = entityPos;
-        this.facingDir = facingDir;
+        setPos(entityPos);
+        setDir(facingDir);
     }
 
     /**
@@ -47,10 +47,11 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * 
      * @param direction Direction to move the entity in.
      */
-    @DevMarkers.NeedsPrecons
     public void move(Direction direction){
+        if(direction == null) throw new IllegalArgumentException("Given direction is null");
         Maze.Point newPos = entityPos.add(direction);
-        if(Maze.getTile(newPos).isObstructive()) return; // BAD THINGS
+        if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
+        if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
         entityPos = newPos; 
         updateObservers(); 
     }
@@ -74,12 +75,18 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * 
      * @param pos {@link Maze.Point Point} that represents the entity's new position.
      */
-    public void setPos(Maze.Point pos){ entityPos = pos; }
+    public void setPos(Maze.Point pos){ 
+        if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
+        entityPos = pos; 
+    }
 
     /**
      * Sets the {@link #facingDir direction} the entity is facing.
      * 
      * @param dir The new {@link Direction direction} of the entity. 
      */
-    public void setDir(Direction dir){ facingDir = dir; }
+    public void setDir(Direction dir){ 
+        if(dir == null) throw new IllegalArgumentException("Given direction is null");
+        facingDir = dir; 
+    }
 }

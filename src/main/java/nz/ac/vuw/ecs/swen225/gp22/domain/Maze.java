@@ -8,7 +8,7 @@ import java.util.Objects;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -30,9 +30,9 @@ public class Maze{
      * @param dimensions The size of the {@link #tileMap map}.
      * @param treasures The number of treasures on the {@link #tileMap map}.
      */
-    @DevMarkers.NeedsPrecons
     public static void generateMap(Point dimensions, int treasures){
-        if(treasures < 0 || dimensions.x() < 0 || dimensions.y() < 0) return; // BAD THINGS
+        if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
+        if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
         tileMap = new Tile[dimensions.x()][dimensions.y()];
         for(int x = 0; x < dimensions.x; x++){
             for(int y = 0; y < dimensions.y; y++){
@@ -50,9 +50,8 @@ public class Maze{
      * @param point The position of the {@link Tile tile}.
      * @return Tile object at the given position.
      */
-    @DevMarkers.NeedsPrecons
     public static Tile getTile(Point point){
-        if(!point.isValid()) return null; // BAD THINGS
+        if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
         return tileMap[point.x()][point.y()];      
     }
     
@@ -62,9 +61,10 @@ public class Maze{
      * @param point The position the {@link Tile tile} will be at.
      * @param tile The {@link Tile tile} to add to the {@link #tileMap tilemap}.
      */
-    @DevMarkers.NeedsPrecons
     public static void setTile(Point point, Tile tile){
-        if(!point.isValid() || tile == null) return; // BAD THINGS or if tile pos is wrong
+        if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
+        if(tile == null) throw new IllegalArgumentException("Given tile does not exist.");
+        if(!tile.getPos().equals(point)) throw new IllegalArgumentException("Tile position does not match the point it is being set to.");
         getTile(point).deleteTile();
         tileMap[point.x()][point.y()] = tile;      
     }
@@ -75,13 +75,13 @@ public class Maze{
      * @param point Point to reset.
      */
     public static void resetTile(Point point){
+        if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
         setTile(point, new Ground(point));
     }
 
     /** Reduce the number of treasures left by 1. */
-    @DevMarkers.NeedsPrecons
     public static void collectTreasure(){
-        if(treasuresLeft <= 0) return; // BAD THINGS
+        if(treasuresLeft <= 0) throw new IllegalStateException("No treasure to collect.");
         treasuresLeft--;
     }
 
@@ -104,6 +104,7 @@ public class Maze{
          * @return Point object representing the sum of the two points.
          */
         public Point add(Point point){
+            if(point == null) throw new IllegalArgumentException("Given point is null");
             return new Point(x + point.x(),y + point.y());
         }
 
@@ -114,6 +115,7 @@ public class Maze{
          * @return Point object representing the sum of the point and direction.
          */
         public Point add(Entity.Direction dir){
+            if(dir == null) throw new IllegalArgumentException("Given direction is null");
             return add(new Point(dir.posChange.x(), dir.posChange.y()));
         }
 

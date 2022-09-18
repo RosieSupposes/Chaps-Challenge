@@ -6,7 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Maze.Point;
  * Template for {@link Tile} objects that need a color property.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.2
+ * @version 1.3
  */
 public abstract class ColorableTile extends Tile{
     /** Enum with values that represent all valid colors. */
@@ -29,6 +29,7 @@ public abstract class ColorableTile extends Tile{
      */
     public ColorableTile(Point tilePos, boolean obstructive, Color color){
         super(tilePos, obstructive);
+        if(color == null) throw new IllegalArgumentException("Given color is null.");
         this.color = color;
     }
 
