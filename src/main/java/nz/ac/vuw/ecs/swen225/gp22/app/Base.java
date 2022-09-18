@@ -164,12 +164,7 @@ public class Base extends JFrame {
 
     private void replayPhase() {
         runClosePhase();
-<<<<<<< HEAD
         Player playerWindow = new Player(this);
-=======
-
-        Player playerWindow = new Player();
->>>>>>> app-module
         add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
         setPreferredSize(getSize());//to keep the current size
         pack();                     //after pack
