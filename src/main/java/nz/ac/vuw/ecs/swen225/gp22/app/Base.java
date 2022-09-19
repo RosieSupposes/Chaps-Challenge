@@ -23,6 +23,7 @@ public class Base extends JFrame {
     private int timeSec = 0; //current game time in seconds
     private Timer timer = new Timer(20, null); //timer for game, 20ms refresh rate
 
+    GameMenuBar currentMenuBar;
     /**
      * Begin program here. Run menu phase.
      */
@@ -76,6 +77,8 @@ public class Base extends JFrame {
         //runClosePhase();
         System.out.println("Pause");
         timer.stop();
+        if(currentMenuBar == null){return;}
+        currentMenuBar.setPause();
         //pack();
     }
 
@@ -85,6 +88,8 @@ public class Base extends JFrame {
     public void unPause() {
         System.out.println("Un Pause");
         timer.start();
+        if(currentMenuBar == null){return;}
+        currentMenuBar.setUnPause();
     }
 
     /**
@@ -133,6 +138,8 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
+        //TODO tell domain
+        //TODO tell recorder
     }
 
     /**
@@ -184,12 +191,14 @@ public class Base extends JFrame {
         finalLevel.addKeyListener(new Controller(this));
         finalLevel.setFocusable(true);
 
+        timeSec = 0;
         timer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
-            //p.model().ping(); //TODO ping everything
+            //p.model().ping(); //TODO ping everything in domain
             finalLevel.repaint(); //draws game
             timeMS += 20;
             if (timeMS % 1000 == 0) {
+                //TODO tell viewport current time
                 System.out.println(timeSec++);
             }
         });
@@ -197,11 +206,11 @@ public class Base extends JFrame {
 
         add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
         components.add(finalLevel);
-        GameMenuBar gameMenuBar = new GameMenuBar(this);
-        gameMenuBar.addGameButtons();
-        gameMenuBar.addLoadButton();
-        gameMenuBar.addExitButton();
-        setJMenuBar(gameMenuBar);
+        currentMenuBar = new GameMenuBar(this);
+        currentMenuBar.addGameButtons();
+        currentMenuBar.addLoadButton();
+        currentMenuBar.addExitButton();
+        setJMenuBar(currentMenuBar);
 
         pack();                     //after pack
         finalLevel.requestFocus();  //need to be after pack
