@@ -11,9 +11,14 @@ import java.awt.*;
  */
 public class MenuMainPanel extends JPanel {
     Base base; //actions go to this base JFrame
+    Color col = new Color(220, 170, 200);
+    Dimension buttonGap = new Dimension(10, 10);
+    Dimension halfButtonSize = new Dimension(75, 30);
+    Dimension fullButtonSize = new Dimension(halfButtonSize.width * 2 + buttonGap.width, halfButtonSize.height);
 
     /**
      * Creates menu panel, connecting base actions to buttons on panel
+     *
      * @param base current base
      */
     public MenuMainPanel(Base base) {
@@ -41,6 +46,7 @@ public class MenuMainPanel extends JPanel {
 
     /**
      * Creates title for menu page
+     *
      * @return JLabel for title
      */
     private JLabel titlePanelForMenu() {
@@ -51,80 +57,63 @@ public class MenuMainPanel extends JPanel {
 
     /**
      * button panel for menu
+     *
      * @return panel with buttons on it
      */
     private JPanel buttonPanelForMenu() {
         JPanel buttons = new JPanel();
         buttons.setBackground(Color.GREEN);
-        buttons.setPreferredSize(new Dimension(3 * Main.TILE_SIZE, 2 * Main.TILE_SIZE));
+        buttons.setPreferredSize(new Dimension(3 * Main.TILE_SIZE, 3 * Main.TILE_SIZE));
 
-        //base.addComponent(buttons);
         buttons.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
-        Dimension vertSpace = new Dimension(0, 7);
-        Dimension horizSpace = new Dimension(10, 0);
-        Dimension buttonSize = new Dimension(75, 30);
 
         c.gridx = 0;
         c.gridy = 0;
         //column 1, x = 0
-        buttons.add(Box.createRigidArea(vertSpace), c);
+        buttons.add(Box.createRigidArea(buttonGap), c);
         c.gridy++;
 
-        JButton start = new JButton("Start");
-        start.addActionListener(e -> base.startGame());
+        GameButton start = new GameButton("Start", col, halfButtonSize, e -> base.startGame());
         buttons.add(start, c);
-        start.setPreferredSize(buttonSize);
-        //base.addComponent(start);
 
         c.gridy++;
-        buttons.add(Box.createRigidArea(vertSpace), c);
+        buttons.add(Box.createRigidArea(buttonGap), c); //vert
 
-        JButton load = new JButton("Load");
-        load.addActionListener(e -> base.loadGame());
-        load.setPreferredSize(buttonSize);
+        GameButton load = new GameButton("Load", col, halfButtonSize, e -> base.loadGame());
         c.gridy++;
         buttons.add(load, c);
-        //base.addComponent(load);
 
         //column 2, blank space
         c.gridx++;
         c.gridy = 0;
-        buttons.add(Box.createRigidArea(horizSpace), c);
+        buttons.add(Box.createRigidArea(buttonGap), c); //horiz
 
         //column 3
         c.gridx++;
         c.gridy = 0;
 
-        buttons.add(Box.createRigidArea(vertSpace), c);
+        buttons.add(Box.createRigidArea(buttonGap), c); //vert
         c.gridy++;
 
         JLabel info = new JLabel("Info");
         buttons.add(info, c);
-        //base.addComponent(info);
 
         c.gridy++;
-        buttons.add(Box.createRigidArea(vertSpace), c);
+        buttons.add(Box.createRigidArea(buttonGap), c); //vert
 
-        JButton replay = new JButton("Replay");
-        replay.addActionListener(e -> base.replayPhase());
-        replay.setPreferredSize(buttonSize);
+        GameButton replay = new GameButton("Replay", col, halfButtonSize, e -> base.replayPhase());
         c.gridy++;
         buttons.add(replay, c);
-        //base.addComponent(replay);
 
         c.gridy++;
         c.gridx = 0;
-        buttons.add(Box.createRigidArea(vertSpace), c);
+        buttons.add(Box.createRigidArea(buttonGap), c); //vert
 
         c.gridwidth = 3;
-        JButton exit = new JButton("Exit");
-        exit.addActionListener(e -> base.exitGame());
-        exit.setPreferredSize(new Dimension(buttonSize.width * 2 + horizSpace.width, buttonSize.height));
         c.gridy++;
+        GameButton exit = new GameButton("Exit", col, fullButtonSize, e -> base.exitGame());
         buttons.add(exit, c);
-        //base.addComponent(replay);
 
         return buttons;
     }
