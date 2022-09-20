@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,5 +94,10 @@ public class GameMenuBar extends JMenuBar {
 
     public List<JComponent> getAllComponents() {
         return components;
+    }
+
+    public void changeKeyListener(KeyListener keyListener){
+        this.removeKeyListener(this.getKeyListeners()[0]);
+        this.addKeyListener(keyListener);
     }
 }

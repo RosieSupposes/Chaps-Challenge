@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
  * Base is the base window that all actions occur on.
  *
  * @author Molly Henry, 300562038
- * @version 1.4
+ * @version 1.5
  */
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>(); //all JComponents in current window, for removing
@@ -23,7 +24,11 @@ public class Base extends JFrame {
     private int timeSec = 0; //current game time in seconds
     private Timer timer = new Timer(20, null); //timer for game, 20ms refresh rate
 
+    private Controller controller;
     GameMenuBar currentMenuBar;
+
+    JPanel currentPanel; //for setting keylistener on
+
     /**
      * Begin program here. Run menu phase.
      */
@@ -77,8 +82,12 @@ public class Base extends JFrame {
         //runClosePhase();
         System.out.println("Pause");
         timer.stop();
-        if(currentMenuBar == null){return;}
+        if (currentMenuBar == null) {
+            return;
+        }
         currentMenuBar.setPause();
+
+        changeKeyListener(new Controller(this, true));
         //pack();
     }
 
@@ -88,8 +97,12 @@ public class Base extends JFrame {
     public void unPause() {
         System.out.println("Un Pause");
         timer.start();
-        if(currentMenuBar == null){return;}
+        if (currentMenuBar == null) {
+            return;
+        }
         currentMenuBar.setUnPause();
+
+        changeKeyListener(new Controller(this, false));
     }
 
     /**
@@ -112,6 +125,7 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
+        //TODO ask persistency
         System.out.println("Load");
     }
 
@@ -119,6 +133,7 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
+        //TODO tell persistency
         System.out.println("Save");
     }
 
@@ -138,8 +153,12 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
-        //TODO tell domain
-        //TODO tell recorder
+        try {
+            //Maze.player.move(dir); TODO when player isn't null, uncomment this line
+        } catch (IllegalArgumentException e) {
+            //TODO make player face dir in Maze
+        }
+        //TODO tell recorder, should ask domain if item picked up/door interacted with?
     }
 
     /**
@@ -150,6 +169,10 @@ public class Base extends JFrame {
         setJMenuBar(null);
 
         PhasePanel menu = new PhasePanel(new MenuMainPanel(this), new MenuSidePanel());
+
+        currentPanel = menu;
+        changeKeyListener(new Controller(this));
+
         add(BorderLayout.CENTER, menu);
         components.add(menu);
         components.addAll(menu.getAllComponents());
@@ -188,8 +211,9 @@ public class Base extends JFrame {
         }
 
         PhasePanel finalLevel = level;
-        finalLevel.addKeyListener(new Controller(this));
-        finalLevel.setFocusable(true);
+
+        currentPanel = finalLevel;
+        changeKeyListener(new Controller(this, false));
 
         timeSec = 0;
         timer = new Timer(20, unused -> {
@@ -214,5 +238,13 @@ public class Base extends JFrame {
 
         pack();                     //after pack
         finalLevel.requestFocus();  //need to be after pack
+    }
+
+    public void changeKeyListener(KeyListener keyListener) {
+        if (currentPanel.getKeyListeners().length > 0) {
+            currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);
+        }
+        currentPanel.addKeyListener(keyListener);
+        currentPanel.setFocusable(true);
     }
 }
