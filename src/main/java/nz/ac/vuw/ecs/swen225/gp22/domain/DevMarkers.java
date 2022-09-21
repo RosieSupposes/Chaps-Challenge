@@ -27,7 +27,8 @@ import java.util.stream.Collectors;
  * This file also acts as a testing ground for features that have not yet been 
  * fully implemented and thus do not benefit from a unit test.
  * 
- * @author Abdulrahman Asfari 300475089 
+ * @author Abdulrahman Asfari, 300475089 
+ * @version 1.2
  */
 public class DevMarkers{
     /** Determines whether or not custom annotations will be printed at runtime. */
