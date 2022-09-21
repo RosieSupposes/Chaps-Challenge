@@ -4,7 +4,8 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents a tile which will give the player
  * additional information if they are on it.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.3
  */
 public class InfoField extends Tile{
     /** The text that will be displayed if the player is on this tile. */
@@ -18,6 +19,7 @@ public class InfoField extends Tile{
      */
     public InfoField(Maze.Point tilePos, String infoText){
         super(tilePos, false);
+        if(infoText == null) throw new IllegalArgumentException("Given text is null.");
         this.infoText = infoText;
     }
 
