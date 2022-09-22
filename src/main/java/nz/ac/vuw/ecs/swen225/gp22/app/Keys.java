@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Molly Henry
  * @version 1.2
  */
-class Keys implements KeyListener {
+public class Keys implements KeyListener {
     private final Map<Integer, Runnable> actionsPressed = new HashMap<>();
     private final Map<Integer, Runnable> actionsCtrlReleased = new HashMap<>();
     private final Map<Integer, Runnable> actionsReleased = new HashMap<>();
