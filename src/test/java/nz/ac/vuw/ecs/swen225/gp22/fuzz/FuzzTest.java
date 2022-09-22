@@ -12,6 +12,7 @@ import java.awt.AWTException;
 import java.awt.event.KeyEvent;
 import nz.ac.vuw.ecs.swen225.gp22.app.*;
 
+
 /**
  * Class for Fuzz Testing
  * 
@@ -97,7 +98,7 @@ public class FuzzTest {
             e.printStackTrace();
         }
     }
-
+    
     @Test
     public void fuzzTests() {
         assertTimeout(Duration.ofSeconds(60), () -> test1());
