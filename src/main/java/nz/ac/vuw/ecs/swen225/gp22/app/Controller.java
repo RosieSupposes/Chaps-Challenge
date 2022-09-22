@@ -18,7 +18,7 @@ public class Controller extends Keys {
      *
      * @param b
      */
-    Controller(Base b) {
+    public Controller(Base b) {
         this.b = b;
         constantCommand();
     }
@@ -29,7 +29,7 @@ public class Controller extends Keys {
      * @param b base which commands get run on
      * @param paused is the game paused?
      */
-    Controller(Base b, boolean paused) {
+    public Controller(Base b, boolean paused) {
         this.b = b;
         constantCommand();
         setAction(KeyEvent.VK_S, b::saveGame, true); //ctrl s
