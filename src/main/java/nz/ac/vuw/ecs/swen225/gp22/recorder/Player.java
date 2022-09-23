@@ -54,7 +54,7 @@ public class Player extends JPanel {
       }
     });
 
-    JButton home = new PlaybackButton("Home", base::startPhase);
+    JButton home = new PlaybackButton("Home", base::menuScreen);
 
     JButton load = new PlaybackButton("Load",  ()->{
       load();

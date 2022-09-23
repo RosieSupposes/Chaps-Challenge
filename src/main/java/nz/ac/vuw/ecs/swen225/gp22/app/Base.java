@@ -1,66 +1,39 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Base is the base window that all actions occur on.
+ *
  * @author Molly Henry, 300562038
- * @version 1.3
+ * @version 1.5
  */
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
-    public final Runnable startAction = () -> levelPhase(true);
     private int timeMS = 0;
     private int timeSec = 0;
-    private Timer timer = new Timer(20,null);
+    private Timer gameTimer = new Timer(20, null);
+    GameMenuBar currentMenuBar;
 
-    public final Runnable loadAction = () -> {
-        System.out.println("Load");
-    };
-    public final Runnable saveAction = () -> {
-        System.out.println("Save");
-    };
-    public final Runnable replayAction = () -> {
-        System.out.println("Replay");
-        replayPhase();
-    };
-    public final Runnable newLevelOneAction = () -> {
-        System.out.println("New Level One");
-        levelPhase(true);
-    };
-    public final Runnable newLevelTwoAction = () -> {
-        System.out.println("New Level Two");
-        levelPhase(false);
-    };
-    public final Runnable exitAction = () -> {
-        System.out.println("Exit");
-        runClosePhase();
-        System.exit(0);
-    };
+    JPanel currentPanel; //for setting keylistener on
 
-    public final Runnable pauseAction = () -> {
-        System.out.println("Pause");
-        pausePhase();
-    };
-
-    public final Runnable unPauseAction = () -> {
-        System.out.println("Un Pause");
-        unPause();
-    };
-
-    Base() {
+    /**
+     * Begin program here. Run menu phase.
+     */
+    public Base() {
         assert SwingUtilities.isEventDispatchThread();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        startPhase();
+        menuScreen();
 
         setVisible(true);
         setResizable(false);
@@ -74,27 +47,129 @@ public class Base extends JFrame {
         });
     }
 
-    public void movePlayer(Entity.Direction dir) {
-        System.out.println("Move: " + dir);
-    }
-
+    /**
+     * remove all components in window, clears list and stops timer
+     */
     public void runClosePhase() {
         for (JComponent component : this.components) {
             remove(component);
         }
         components.clear();
-        timer.stop();
+        gameTimer.stop();
     }
 
-    public void addComponent(JComponent jc) {
-        components.add(jc);
+    /**
+     * When you click start button, check for last save file
+     * and run the level
+     */
+    public void startGame() {
+        //TODO check for last save file - Persistency
+
+        if (false) { //if file exists
+            //Load save file
+        } else {
+            newLevelPhase(true); //new level one
+        }
     }
 
-    public void startPhase() {
+    /**
+     * pauses game
+     */
+    public void pause() {
+        //runClosePhase();
+        System.out.println("Pause");
+        gameTimer.stop();
+        if (currentMenuBar == null) {
+            return;
+        }
+        currentMenuBar.setPause();
+
+        changeKeyListener(new Controller(this, true));
+        //pack();
+    }
+
+    /**
+     * un-pauses game
+     */
+    public void unPause() {
+        System.out.println("Un Pause");
+        gameTimer.start();
+        if (currentMenuBar == null) {
+            return;
+        }
+        currentMenuBar.setUnPause();
+
+        changeKeyListener(new Controller(this, false));
+    }
+
+    /**
+     * Creates and runs replayer window
+     */
+    public void replayPhase() {
+        System.out.println("Replay");
+        runClosePhase();
+
+        Player playerWindow = new Player(this);
+        add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
+        setPreferredSize(getSize());//to keep the current size
+        pack();                     //after pack
+        playerWindow.requestFocus();//need to be after pack
+
+        components.add(playerWindow);
+    }
+
+    /**
+     * load a game from file
+     */
+    public void loadGame() {
+        //TODO ask persistency
+        System.out.println("Load");
+    }
+
+    /**
+     * save the current game
+     */
+    public void saveGame() {
+        //TODO tell persistency
+        System.out.println("Save");
+    }
+
+    /**
+     * exit the game
+     */
+    public void exitGame() {
+        System.out.println("Exit");
+        runClosePhase();
+        System.exit(0);
+    }
+
+    /**
+     * When key is pressed, move player and tell recorder
+     *
+     * @param dir direction player moves
+     */
+    public void movePlayer(Entity.Direction dir) {
+        System.out.println("Move: " + dir);
+        try {
+            //Maze.player.move(dir); TODO when player isn't null, uncomment this line
+        } catch (IllegalArgumentException e) {
+            //TODO make player face dir in Maze
+        }
+        //TODO tell recorder, should ask domain if item picked up/door interacted with?
+    }
+
+    /**
+     * Run and display menu
+     */
+    public void menuScreen() {
         runClosePhase();
         setJMenuBar(null);
 
-        PhasePanel menu = new PhasePanel(new MenuMainPanel(this),new MenuSidePanel());
+        PhasePanel menu = new PhasePanel(new MenuMainPanel(this), new MenuSidePanel());
+
+        currentPanel = menu;
+        changeKeyListener(new Controller(this));
+
         add(BorderLayout.CENTER, menu);
         components.add(menu);
         components.addAll(menu.getAllComponents());
@@ -102,12 +177,18 @@ public class Base extends JFrame {
         pack();
     }
 
-    public void levelPhase(boolean isLevelOne) {
+    /**
+     * Create, run and draw new level
+     *
+     * @param isLevelOne true for making level one
+     */
+    public void newLevelPhase(boolean isLevelOne) {
         runClosePhase();
 
         //set up the viewport and the timer
         PhasePanel level;
         if (isLevelOne) {
+            System.out.println("New Level One");
             JPanel game = new JPanel(); //TODO link to actual game window
             game.setBackground(Color.MAGENTA);
 
@@ -116,6 +197,7 @@ public class Base extends JFrame {
 
             level = new PhasePanel(game, side);
         } else {
+            System.out.println("New Level Two");
             JPanel game = new JPanel();
             game.setBackground(Color.ORANGE);
 
@@ -126,50 +208,40 @@ public class Base extends JFrame {
         }
 
         PhasePanel finalLevel = level;
-        finalLevel.addKeyListener(new Controller(this));
-        finalLevel.setFocusable(true);
 
-        timer = new Timer(20, unused -> {
+        currentPanel = finalLevel;
+        changeKeyListener(new Controller(this, false));
+
+        timeSec = 0;
+        gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
-            //p.model().ping(); //TODO ping everything
+            //p.model().ping(); //TODO ping everything in domain
             finalLevel.repaint(); //draws game
-            timeMS+=20;
-            if(timeMS%1000 == 0){
+            timeMS += 20;
+            if (timeMS % 1000 == 0) {
+                //TODO tell viewport current time
                 System.out.println(timeSec++);
             }
         });
-        timer.start();
+        gameTimer.start();
 
         add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
         components.add(finalLevel);
-        GameMenuBar gameMenuBar = new GameMenuBar(this);
-        gameMenuBar.addGameButtons();
-        gameMenuBar.addLoadButton();
-        gameMenuBar.addExitButton();
-        setJMenuBar(gameMenuBar);
+        currentMenuBar = new GameMenuBar(this);
+        currentMenuBar.addGameButtons();
+        currentMenuBar.addLoadButton();
+        currentMenuBar.addExitButton();
+        setJMenuBar(currentMenuBar);
 
         pack();                     //after pack
         finalLevel.requestFocus();  //need to be after pack
     }
 
-    private void pausePhase() {
-        //runClosePhase();
-        timer.stop();
-        //pack();
-    }
-
-    private void unPause(){
-        timer.start();
-    }
-
-    private void replayPhase() {
-        runClosePhase();
-        Player playerWindow = new Player(this);
-        add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
-        setPreferredSize(getSize());//to keep the current size
-        pack();                     //after pack
-        playerWindow.requestFocus();//need to be after pack
-
-        components.add(playerWindow);
+    public void changeKeyListener(KeyListener keyListener) {
+        if (currentPanel.getKeyListeners().length > 0) {
+            currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);
+        }
+        currentPanel.addKeyListener(keyListener);
+        currentPanel.setFocusable(true);
     }
 }
