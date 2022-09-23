@@ -18,13 +18,10 @@ import java.util.List;
  * @version 1.5
  */
 public class Base extends JFrame {
-    private final List<JComponent> components = new ArrayList<>(); //all JComponents in current window, for removing
-    //    public final Runnable startAction = () -> levelPhase(true);
-    private int timeMS = 0; //game time in milliseconds
-    private int timeSec = 0; //current game time in seconds
-    private Timer timer = new Timer(20, null); //timer for game, 20ms refresh rate
-
-    private Controller controller;
+    private final List<JComponent> components = new ArrayList<>();
+    private int timeMS = 0;
+    private int timeSec = 0;
+    private Timer gameTimer = new Timer(20, null);
     GameMenuBar currentMenuBar;
 
     JPanel currentPanel; //for setting keylistener on
@@ -58,7 +55,7 @@ public class Base extends JFrame {
             remove(component);
         }
         components.clear();
-        timer.stop();
+        gameTimer.stop();
     }
 
     /**
@@ -81,7 +78,7 @@ public class Base extends JFrame {
     public void pause() {
         //runClosePhase();
         System.out.println("Pause");
-        timer.stop();
+        gameTimer.stop();
         if (currentMenuBar == null) {
             return;
         }
@@ -96,7 +93,7 @@ public class Base extends JFrame {
      */
     public void unPause() {
         System.out.println("Un Pause");
-        timer.start();
+        gameTimer.start();
         if (currentMenuBar == null) {
             return;
         }
@@ -216,7 +213,7 @@ public class Base extends JFrame {
         changeKeyListener(new Controller(this, false));
 
         timeSec = 0;
-        timer = new Timer(20, unused -> {
+        gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
             //p.model().ping(); //TODO ping everything in domain
             finalLevel.repaint(); //draws game
@@ -226,7 +223,7 @@ public class Base extends JFrame {
                 System.out.println(timeSec++);
             }
         });
-        timer.start();
+        gameTimer.start();
 
         add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
         components.add(finalLevel);
