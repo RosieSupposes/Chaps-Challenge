@@ -34,13 +34,13 @@ public class Maze{
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
         tileMap = new Tile[dimensions.x()][dimensions.y()];
-        for(int x = 0; x < dimensions.x; x++){
-            for(int y = 0; y < dimensions.y; y++){
+        for(int x = 0; x < dimensions.x(); x++){
+            for(int y = 0; y < dimensions.y(); y++){
                 tileMap[x][y] = new Ground(new Point(x, y));
             }
         }
         treasuresLeft = treasures;
-        player = new Player(new Point(0, 0), Entity.Direction.Down);
+        if(player == null) player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
     }
 
@@ -136,7 +136,7 @@ public class Maze{
 
         /** @return Whether or not the point exists on the {@link Maze#tileMap tilemap}. */
         public boolean isValid(){
-            return x > 0 && x < tileMap.length && y > 0 && y < tileMap[0].length;
+            return x >= 0 && x < tileMap.length && y >= 0 && y < tileMap[0].length;
         }
         
         @Override
