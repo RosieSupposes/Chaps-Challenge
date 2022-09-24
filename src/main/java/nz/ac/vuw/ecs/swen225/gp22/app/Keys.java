@@ -6,7 +6,13 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
-class Keys implements KeyListener {
+/**
+ * To map key events to actions
+ *
+ * @author Molly Henry
+ * @version 1.2
+ */
+public class Keys implements KeyListener {
     private final Map<Integer, Runnable> actionsPressed = new HashMap<>();
     private final Map<Integer, Runnable> actionsCtrlReleased = new HashMap<>();
     private final Map<Integer, Runnable> actionsReleased = new HashMap<>();
