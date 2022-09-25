@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,6 @@ public class GameMenuBar extends JMenuBar {
     List<JComponent> components = new ArrayList<>(); //all components on window
     int menuItemWidth; //width of buttons
     Base base; //base JFrame to connect actions to
-    Color col = new Color(220, 180, 240);
     GameMenuItem pause;
 
     /**
@@ -23,14 +21,14 @@ public class GameMenuBar extends JMenuBar {
         this.base = base;
         menuItemWidth = Main.GAME_WINDOW_SIZE / 6;
         addHomeButton();
-        this.setBackground(col);
+        this.setBackground(Main.BUTTON_COLOR);
     }
 
     /**
      * Adds home button to this JMenuBar
      */
     private void addHomeButton() {
-        GameMenuItem home = new GameMenuItem("Home", e -> base.menuScreen(), col, menuItemWidth);
+        GameMenuItem home = new GameMenuItem("Home", e -> base.menuScreen(), menuItemWidth);
         this.add(home);
         components.add(home);
     }
@@ -56,48 +54,43 @@ public class GameMenuBar extends JMenuBar {
      * Pause, New - level 1, level 2, Save
      */
     public void addGameButtons() {
-        pause = new GameMenuItem("Pause", e -> base.pause(), col, menuItemWidth);
+        pause = new GameMenuItem("Pause", e -> base.pause(), menuItemWidth);
         this.add(pause);
         components.add(pause);
 
         JMenu newLevel = new JMenu("New");
-        newLevel.setBackground(col);
+        newLevel.setBackground(Main.BUTTON_COLOR);
         newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
 
-        GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newLevelPhase(true), col);
+        GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newLevelPhase(true));
         newLevel.add(levelOne);
         components.add(levelOne);
 
-        GameMenuItem levelTwo = new GameMenuItem("Level Two", e -> base.newLevelPhase(false), col);
+        GameMenuItem levelTwo = new GameMenuItem("Level Two", e -> base.newLevelPhase(false));
         newLevel.add(levelTwo);
         components.add(levelTwo);
 
         this.add(newLevel);
         components.add(newLevel);
 
-        GameMenuItem save = new GameMenuItem("Save", e -> base.saveGame(), col, menuItemWidth);
+        GameMenuItem save = new GameMenuItem("Save", e -> base.saveGame(), menuItemWidth);
         this.add(save);
         components.add(save);
     }
 
     public void addLoadButton() {
-        GameMenuItem load = new GameMenuItem("Load", e -> base.loadGame(), col, menuItemWidth);
+        GameMenuItem load = new GameMenuItem("Load", e -> base.loadGame(), menuItemWidth);
         this.add(load);
         components.add(load);
     }
 
     public void addExitButton() {
-        GameMenuItem exit = new GameMenuItem("Exit", e -> base.exitGame(), col, menuItemWidth);
+        GameMenuItem exit = new GameMenuItem("Exit", e -> base.exitGame(), menuItemWidth);
         this.add(exit);
         components.add(exit);
     }
 
     public List<JComponent> getAllComponents() {
         return components;
-    }
-
-    public void changeKeyListener(KeyListener keyListener){
-        this.removeKeyListener(this.getKeyListeners()[0]);
-        this.addKeyListener(keyListener);
     }
 }
