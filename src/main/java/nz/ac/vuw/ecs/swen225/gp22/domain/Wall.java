@@ -4,7 +4,8 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents a wall, the main tile that will
  * obstruct the player.
  * 
- * @author Abdulrahman Asfari 300475089
+ * @author Abdulrahman Asfari, 300475089
+ * @version 1.2
  */
 public class Wall extends Tile{
     /**
