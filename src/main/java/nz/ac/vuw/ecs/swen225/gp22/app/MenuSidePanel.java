@@ -14,7 +14,14 @@ public class MenuSidePanel extends JPanel {
      * Side panel for menu
      */
     public MenuSidePanel() {
-        this.add(new JLabel("HELLO??"));
+        this.add(new JLabel("Ctrl + 1 --> New Level One"));
+        this.add(new JLabel("Ctrl + 2 --> New Level Two"));
+        this.add(new JLabel("Ctrl + R --> Resume Last Game"));
+        this.add(new JLabel("Ctrl + X --> Exit Game"));
+        this.add(new JLabel("Ctrl + S --> Save Game"));
+        this.add(new JLabel("Space --> Pause Game"));
+        this.add(new JLabel("Esc --> Un-Pause Game"));
+        this.add(new JLabel("W,A,S,D --> Move Player"));
         this.setPreferredSize(new Dimension(Main.SIDEBAR_WIDTH, Main.WINDOW_HEIGHT));
         this.setBackground(Color.YELLOW);
     }

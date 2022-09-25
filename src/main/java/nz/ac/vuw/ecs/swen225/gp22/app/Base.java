@@ -122,7 +122,7 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
-        //TODO ask persistency
+        //Load.load game() TODO wait for persistency
         System.out.println("Load");
     }
 
@@ -187,6 +187,7 @@ public class Base extends JFrame {
 
         //set up the viewport and the timer
         PhasePanel level;
+        JLabel timeLabel = new JLabel("Time: 0");
         if (isLevelOne) {
             System.out.println("New Level One");
             JPanel game = new JPanel(); //TODO link to actual game window
@@ -194,6 +195,7 @@ public class Base extends JFrame {
 
             JPanel side = new JPanel();
             side.setBackground(Color.CYAN);
+            side.add(timeLabel);
 
             level = new PhasePanel(game, side);
         } else {
@@ -203,6 +205,7 @@ public class Base extends JFrame {
 
             JPanel side = new JPanel();
             side.setBackground(Color.PINK);
+            side.add(timeLabel);
 
             level = new PhasePanel(game, side);
         }
@@ -221,6 +224,7 @@ public class Base extends JFrame {
             if (timeMS % 1000 == 0) {
                 //TODO tell viewport current time
                 System.out.println(timeSec++);
+                timeLabel.setText("Time: " + timeSec);
             }
         });
         gameTimer.start();
