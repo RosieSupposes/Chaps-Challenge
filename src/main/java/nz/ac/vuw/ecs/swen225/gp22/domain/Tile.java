@@ -4,9 +4,8 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Template for tiles that has fields and methods that all tiles will need.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
-@DevMarkers.WIP("Make tiles observable and add compatibility for subclasses.")
 public abstract class Tile{
     /** The position of the tile on the {@link Maze#tileMap tilemap}. */
     private Maze.Point tilePos;
