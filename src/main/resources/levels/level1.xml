@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<maze>
+    <mapInfo>
+        <width>16</width>
+        <height>16</height>
+        <treasures>4</treasures>
+        <nextLevel>"Level2"</nextLevel>
+    </mapInfo>
+    <player x="8" y="8" direction="Down"/>
+    <tiles>
+        <tile ID="info" x="8" y="9">
+            <text>helpful stuff, you can't walk through walls, keys open doors</text>
+        </tile>
+        <tile ID="wall" x="6" y="8"/>
+        <tile ID="wall" x="10" y="8"/>
+        <tile ID="treasure" x="0" y="0"/>
+        <tile ID="treasure" x="1" y="0"/>
+        <tile ID="treasure" x="2" y="0"/>
+        <tile ID="treasure" x="3" y="0"/>
+    </tiles>
+</maze>
