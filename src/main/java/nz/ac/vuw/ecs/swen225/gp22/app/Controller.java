@@ -49,9 +49,9 @@ public class Controller extends Keys {
 
     private void constantCommand() {
         setAction(KeyEvent.VK_X, b::exitGame, true); //ctrl X
-        setAction(KeyEvent.VK_R, b::replayPhase, true); //ctrl r
-        setAction(KeyEvent.VK_1, () -> b.newLevelPhase(true), true); //ctrl 1
-        setAction(KeyEvent.VK_2, () -> b.newLevelPhase(false), true); //ctrl 2
+        setAction(KeyEvent.VK_R, b::loadGame, true); //ctrl r
+        setAction(KeyEvent.VK_1, () -> b.newGame(1), true); //ctrl 1
+        setAction(KeyEvent.VK_2, () -> b.newGame(2), true); //ctrl 2
 
     }
 
