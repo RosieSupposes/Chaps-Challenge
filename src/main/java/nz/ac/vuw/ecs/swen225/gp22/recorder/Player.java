@@ -17,6 +17,7 @@ public class Player extends JPanel {
   private final Base base;
   private List<Action> actions;
   private JSlider scrubber;
+  private int currentAction = 0;
   private boolean isPlaying = false;
   private boolean isRewinding = false;
   private int speed = 1;
@@ -106,7 +107,7 @@ public class Player extends JPanel {
    * Load a file.
    */
   private void load() {
-    JFileChooser fileChooser = new JFileChooser();
+    JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir") + "\\src\\main\\resources\\recordings");
     fileChooser.setDialogTitle("Select a recording to play");
     fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Replay File (xml)", "xml");
@@ -128,7 +129,19 @@ public class Player extends JPanel {
    * @param position the position to scrub to
    */
   private void scrub(int position) {
-    System.out.println("Scrubbing to " + position);
+    if (actions == null) return;
+    if (position > currentAction) {
+      // scrub forward
+      for (int i = currentAction; i < position; i++) {
+        actions.get(i).execute();
+      }
+    } else if (position < currentAction) {
+      // scrub backward
+      for (int i = currentAction; i > position; i--) {
+        actions.get(i).undo();
+      }
+    }
+    currentAction = position;
   }
 
   /**
@@ -139,14 +152,8 @@ public class Player extends JPanel {
     isPlaying = false;
     new Thread(() -> {
       for (int i = scrubber.getValue(); i >= 0; i--) {
-        System.out.println(actions.get(i));
-        scrubber.setValue(i);
-        try {
-          Thread.sleep(1000 / speed);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        if (!isRewinding) break;
+        actions.get(i).undo();
+        if (progress(i, isRewinding)) break;
       }
       isRewinding = false;
     }).start();
@@ -160,16 +167,28 @@ public class Player extends JPanel {
     isRewinding = false;
     new Thread(() -> {
       for (int i = scrubber.getValue(); i < actions.size(); i++) {
-        System.out.println(actions.get(i));
-        scrubber.setValue(i);
-        try {
-          Thread.sleep(1000 / speed);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        if (!isPlaying) break;
+        actions.get(i).execute();
+        if (progress(i, isPlaying)) break;
       }
       isPlaying = false;
     }).start();
+  }
+
+  /**
+   * Used for playing and rewinding.
+   *
+   * @param i The current action.
+   * @param isProgressing If the player is progressing.
+   * @return True if the player should stop progressing.
+   */
+  private boolean progress(int i, boolean isProgressing) {
+    scrubber.setValue(i);
+    currentAction = i;
+    try {
+      Thread.sleep(1000 / speed);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    return !isProgressing;
   }
 }

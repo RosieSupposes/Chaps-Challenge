@@ -1,10 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
+import org.dom4j.Element;
+
 /**
  * Interface for actions that can be recorded.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.2
  */
 public interface Action {
 
@@ -23,5 +25,5 @@ public interface Action {
    *
    * @return the XML representation of the action
    */
-  String toXML();
+  Element toXML();
 }
