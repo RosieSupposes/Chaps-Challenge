@@ -11,12 +11,12 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 public record MoveAction(String direction, int steps) implements Action {
   @Override
   public void execute() {
-
+    System.out.println("Move " + steps + " steps " + direction);
   }
 
   @Override
   public void undo() {
-
+    System.out.println("Undo move " + steps + " steps " + direction);
   }
 
   @Override
