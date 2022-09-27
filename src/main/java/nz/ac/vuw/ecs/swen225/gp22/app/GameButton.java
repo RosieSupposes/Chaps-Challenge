@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 public class GameButton extends JButton {
     public GameButton(String name, Dimension dim, ActionListener action){
-        //TODO update all Base buttons to use this class
         super(name);
         this.setBackground(Main.BUTTON_COLOR);
         this.setPreferredSize(dim);
