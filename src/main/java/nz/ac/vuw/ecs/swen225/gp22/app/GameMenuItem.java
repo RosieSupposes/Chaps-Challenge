@@ -6,17 +6,17 @@ import java.awt.event.ActionListener;
 
 public class GameMenuItem extends JMenuItem {
 
-    public GameMenuItem(String name, ActionListener actionList, Color col, int width){
+    public GameMenuItem(String name, ActionListener actionList, int width){
         super(name);
         this.setMaximumSize(new Dimension(width,30));
         this.addActionListener(actionList);
-        this.setBackground(col);
+        this.setBackground(Main.BUTTON_COLOR);
     }
 
-    public GameMenuItem(String name, ActionListener actionList, Color col){
+    public GameMenuItem(String name, ActionListener actionList){
         super(name);
         this.addActionListener(actionList);
-        this.setBackground(col);
+        this.setBackground(Main.BUTTON_COLOR);
     }
 
     public void changeActionListener(ActionListener action){
