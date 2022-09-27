@@ -1,7 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
+import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.MoveAction;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,13 +20,14 @@ import java.util.List;
  * Base is the base window that all actions occur on.
  *
  * @author Molly Henry, 300562038
- * @version 1.5
+ * @version 1.6
  */
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
     private int timeSec = 0;
     private Timer gameTimer = new Timer(20, null);
+    private Recorder recorder;
     GameMenuBar currentMenuBar;
 
     JPanel currentPanel; //for setting keylistener on
@@ -64,11 +70,10 @@ public class Base extends JFrame {
      */
     public void startGame() {
         //TODO check for last save file - Persistency
-
         if (false) { //if file exists
-            //Load save file
+            //Load.defaultSave(); //TODO make persistency run default save
         } else {
-            newLevelPhase(true); //new level one
+            newGame(1);
         }
     }
 
@@ -85,7 +90,7 @@ public class Base extends JFrame {
         currentMenuBar.setPause();
 
         changeKeyListener(new Controller(this, true));
-        //pack();
+        //TODO learn how to make pop up windows!
     }
 
     /**
@@ -100,6 +105,7 @@ public class Base extends JFrame {
         currentMenuBar.setUnPause();
 
         changeKeyListener(new Controller(this, false));
+        //TODO close popup window
     }
 
     /**
@@ -110,6 +116,7 @@ public class Base extends JFrame {
         runClosePhase();
 
         Player playerWindow = new Player(this);
+
         add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
         setPreferredSize(getSize());//to keep the current size
         pack();                     //after pack
@@ -122,16 +129,39 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
-        //Load.load game() TODO wait for persistency
+        Load.resumeGame(); //TODO ask persistency for time of loaded game
+        loadLevel(0,0);
+
+        //TODO when recorder has ability to start recording from middle of game, tell recorder
+
         System.out.println("Load");
+    }
+
+    public void newGame(int lvl) {
+        System.out.println("New level" + lvl);
+        Load.loadLevel("level"+1); //TODO change 1 to lvl when level2.xml exists
+        loadLevel(0, 0);
+        recorder = new Recorder(lvl);
     }
 
     /**
      * save the current game
      */
     public void saveGame() {
-        //TODO tell persistency
+        Save.saveGame("test-save-file"); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
+    }
+
+    public void finishLevel() {
+        System.out.println("Level finished");
+        recorder.save();
+
+        //TODO make pop up
+        // - if level one say "congrats" with "home", "exit", "replay", "next level", "save" buttons
+        // - if final level say "Congrats!" with "home", "exit", "replay" buttons
+
+        changeKeyListener(new Controller(this)); //switch control set back to default controls
+        gameTimer.stop();
     }
 
     /**
@@ -151,11 +181,24 @@ public class Base extends JFrame {
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
         try {
-            //Maze.player.move(dir); TODO when player isn't null, uncomment this line
+            Maze.player.move(dir);
         } catch (IllegalArgumentException e) {
-            //TODO make player face dir in Maze
+            Maze.player.setDir(dir);
         }
-        //TODO tell recorder, should ask domain if item picked up/door interacted with?
+        //TODO ask domain if item picked up/door interacted with?
+        recorder.addMove(new MoveAction(dir.name(), 1));
+        //recorder.addCollect(new CollectAction("definitely a key"));
+    }
+
+    /**
+     * Undo move from Recorder class.
+     *
+     * @param dir direction to reverse
+     */
+    public void undoMove(String dir) {
+        //TODO make param Recorder.Direction enum type
+        //Maze.player.moveOpp(); //TODO tell Domain to move player backwards
+        //TODO what about collect actions?
     }
 
     /**
@@ -180,65 +223,68 @@ public class Base extends JFrame {
     /**
      * Create, run and draw new level
      *
-     * @param isLevelOne true for making level one
+     * @param seconds number of seconds into level
+     * @param milliseconds number milliseconds into level
      */
-    public void newLevelPhase(boolean isLevelOne) {
+    public void loadLevel(int seconds, int milliseconds) {
         runClosePhase();
-
         //set up the viewport and the timer
-        PhasePanel level;
+
         JLabel timeLabel = new JLabel("Time: 0");
-        if (isLevelOne) {
-            System.out.println("New Level One");
-            JPanel game = new JPanel(); //TODO link to actual game window
-            game.setBackground(Color.MAGENTA);
+        //if (lvl == 1) {
+        JPanel game = new JPanel(); //TODO renderer - link to actual game window
+        game.setBackground(Color.MAGENTA);
 
-            JPanel side = new JPanel();
-            side.setBackground(Color.CYAN);
-            side.add(timeLabel);
+        JPanel side = new JPanel();
+        side.setBackground(Color.CYAN);
+        side.add(timeLabel);
 
-            level = new PhasePanel(game, side);
-        } else {
-            System.out.println("New Level Two");
-            JPanel game = new JPanel();
-            game.setBackground(Color.ORANGE);
+        final PhasePanel level = new PhasePanel(game, side);
+//        } else {
+//            System.out.println("New Level Two");
+//            JPanel game = new JPanel();
+//            game.setBackground(Color.ORANGE);
+//
+//            JPanel side = new JPanel();
+//            side.setBackground(Color.PINK);
+//            side.add(timeLabel);
+//
+//            level = new PhasePanel(game, side);
+//        }
 
-            JPanel side = new JPanel();
-            side.setBackground(Color.PINK);
-            side.add(timeLabel);
-
-            level = new PhasePanel(game, side);
-        }
-
-        PhasePanel finalLevel = level;
-
-        currentPanel = finalLevel;
-        changeKeyListener(new Controller(this, false));
-
-        timeSec = 0;
+        timeSec = seconds;
+        timeMS = milliseconds;
         gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
-            //p.model().ping(); //TODO ping everything in domain
-            finalLevel.repaint(); //draws game
+            level.repaint(); //draws game
             timeMS += 20;
             if (timeMS % 1000 == 0) {
                 //TODO tell viewport current time
                 System.out.println(timeSec++);
                 timeLabel.setText("Time: " + timeSec);
             }
+
+            //TODO uncomment when ready for game ending/level switching
+//            if(timeSec >=60 || Maze.gameComplete()){
+//                finishLevel();
+//            }
         });
         gameTimer.start();
 
-        add(BorderLayout.CENTER, finalLevel);//add the new phase viewport
-        components.add(finalLevel);
+        currentPanel = level;
+        changeKeyListener(new Controller(this, false));
+
+        add(BorderLayout.CENTER, level);//add the new phase viewport
+        components.add(level);
         currentMenuBar = new GameMenuBar(this);
         currentMenuBar.addGameButtons();
         currentMenuBar.addLoadButton();
         currentMenuBar.addExitButton();
         setJMenuBar(currentMenuBar);
 
+
         pack();                     //after pack
-        finalLevel.requestFocus();  //need to be after pack
+        level.requestFocus();  //need to be after pack
     }
 
     public void changeKeyListener(KeyListener keyListener) {

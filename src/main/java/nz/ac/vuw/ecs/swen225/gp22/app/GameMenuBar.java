@@ -5,6 +5,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Menu bar for game
+ *
+ * @author Molly Henry, 300562038
+ * @version 1.2
+ */
 public class GameMenuBar extends JMenuBar {
 
     List<JComponent> components = new ArrayList<>(); //all components on window
@@ -62,11 +68,11 @@ public class GameMenuBar extends JMenuBar {
         newLevel.setBackground(Main.BUTTON_COLOR);
         newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
 
-        GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newLevelPhase(true));
+        GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newGame(1));
         newLevel.add(levelOne);
         components.add(levelOne);
 
-        GameMenuItem levelTwo = new GameMenuItem("Level Two", e -> base.newLevelPhase(false));
+        GameMenuItem levelTwo = new GameMenuItem("Level Two", e -> base.newGame(2));
         newLevel.add(levelTwo);
         components.add(levelTwo);
 

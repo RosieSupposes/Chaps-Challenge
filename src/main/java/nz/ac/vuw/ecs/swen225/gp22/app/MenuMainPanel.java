@@ -7,7 +7,7 @@ import java.awt.*;
  * Panel containing menu information
  *
  * @author Molly Henry, 300562038
- * @version 1.1
+ * @version 1.3
  */
 public class MenuMainPanel extends JPanel {
     Base base; //actions go to this base JFrame
@@ -94,7 +94,7 @@ public class MenuMainPanel extends JPanel {
 
     private void buttonsRowTwo(JPanel buttons, GridBagConstraints c) {
         c.gridx = 0;
-        final GameButton newGame = new GameButton("New Game", halfButtonSize, e -> base.newLevelPhase(true));
+        final GameButton newGame = new GameButton("New Game", halfButtonSize, e -> base.newGame(1));
         buttons.add(newGame, c);
 
         c.gridx = 1;
@@ -105,9 +105,9 @@ public class MenuMainPanel extends JPanel {
         dropDownMenu.setSelectedIndex(0);
         dropDownMenu.addActionListener(e -> {
             if (dropDownMenu.getSelectedItem().equals(choices[0])) {
-                newGame.changeActionListener(f -> base.newLevelPhase(true));
+                newGame.changeActionListener(f -> base.newGame(1));
             } else {
-                newGame.changeActionListener(f -> base.newLevelPhase(false));
+                newGame.changeActionListener(f -> base.newGame(2));
             }
         });
         buttons.add(dropDownMenu, c);

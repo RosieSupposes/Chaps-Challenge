@@ -7,7 +7,7 @@ import java.awt.*;
  * Side panel for menu
  *
  * @author Molly Henry, 300562038
- * @version 1.1
+ * @version 1.2
  */
 public class MenuSidePanel extends JPanel {
     /**
@@ -21,7 +21,7 @@ public class MenuSidePanel extends JPanel {
         this.add(new JLabel("Ctrl + S --> Save Game"));
         this.add(new JLabel("Space --> Pause Game"));
         this.add(new JLabel("Esc --> Un-Pause Game"));
-        this.add(new JLabel("W,A,S,D --> Move Player"));
+        this.add(new JLabel("Arrow Keys --> Move Player"));
         this.setPreferredSize(new Dimension(Main.SIDEBAR_WIDTH, Main.WINDOW_HEIGHT));
         this.setBackground(Color.YELLOW);
     }
