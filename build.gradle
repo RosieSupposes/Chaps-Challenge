@@ -32,11 +32,11 @@ application {
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
-    String path =  project.projectDir.toString() + "/build/reports/jacoco/test/html/index.html"
+    /*String path =  project.projectDir.toString() + "/build/reports/jacoco/test/html/index.html"
     String url = "file:///" + path.replace("\\","/").replace(" ","%20")
     File f = new File(path)
     if(f.exists()){ Desktop.desktop.browse url.toURI() }
-    else{ println "Error opening jacoco report!" }
+    else{ println "Error opening jacoco report!" }*/
 }
 
 jacocoTestReport {
