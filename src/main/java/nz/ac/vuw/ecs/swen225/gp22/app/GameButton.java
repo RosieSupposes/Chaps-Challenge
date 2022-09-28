@@ -5,11 +5,17 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GameButton extends JButton {
-    public GameButton(String name, Color col, Dimension dim, ActionListener action){
-        //TODO update all Base buttons to use this class
+    public GameButton(String name, Dimension dim, ActionListener action){
         super(name);
-        this.setBackground(col);
+        this.setBackground(Main.BUTTON_COLOR);
         this.setPreferredSize(dim);
+        this.setMinimumSize(dim);
+        this.setMaximumSize(dim);
         this.addActionListener(action);
+    }
+
+    public void changeActionListener(ActionListener actionListener){
+        this.removeActionListener(this.getActionListeners()[0]);
+        this.addActionListener(actionListener);
     }
 }
