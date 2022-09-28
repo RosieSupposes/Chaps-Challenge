@@ -3,8 +3,6 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
-import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
-import nz.ac.vuw.ecs.swen225.gp22.recorder.MoveAction;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
 
@@ -181,7 +179,7 @@ public class Base extends JFrame {
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
         try {
-            Maze.player.move(dir);
+            Maze.player.move(dir); //TODO when player isn't null, uncomment this line
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
@@ -230,14 +228,14 @@ public class Base extends JFrame {
         runClosePhase();
         //set up the viewport and the timer
 
-        JLabel timeLabel = new JLabel("Time: 0");
-        //if (lvl == 1) {
-        JPanel game = new JPanel(); //TODO renderer - link to actual game window
-        game.setBackground(Color.MAGENTA);
-
-        JPanel side = new JPanel();
-        side.setBackground(Color.CYAN);
-        side.add(timeLabel);
+            JPanel side = new JPanel();
+            side.setBackground(Color.CYAN);
+            Load.loadLevel("level1");
+            level = new PhasePanel(game, side);
+        } else {
+            System.out.println("New Level Two");
+            JPanel game = new JPanel();
+            game.setBackground(Color.ORANGE);
 
         final PhasePanel level = new PhasePanel(game, side);
 //        } else {
