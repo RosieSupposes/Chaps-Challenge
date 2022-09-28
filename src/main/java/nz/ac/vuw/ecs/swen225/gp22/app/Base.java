@@ -258,7 +258,8 @@ public class Base extends JFrame {
             timeMS += 20;
             if (timeMS % 1000 == 0) {
                 //TODO tell viewport current time
-                //System.out.println(timeSec++);
+                
+                timeSec++;
                 timeLabel.setText("Time: " + timeSec);
             }
 
