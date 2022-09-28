@@ -12,7 +12,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.imgs.Img;
 
 /**
  * This class displays the maze, and all the entities active in the current level
