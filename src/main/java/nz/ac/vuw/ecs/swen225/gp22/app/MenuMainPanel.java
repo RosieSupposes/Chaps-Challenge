@@ -88,7 +88,7 @@ public class MenuMainPanel extends JPanel {
         buttons.add(start, c);
 
         c.gridx = 1;
-        JLabel info = new JLabel("Last Save info..."); //TODO ask persistency for info on save
+        JLabel info = new JLabel("Timer: 37, Keys: 3"); //TODO ask persistency for info on save
         buttons.add(info, c);
     }
 
