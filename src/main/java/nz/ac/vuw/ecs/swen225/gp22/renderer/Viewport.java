@@ -27,7 +27,7 @@ public class Viewport extends JPanel implements ActionListener {
   private static final int tileSize = 60; // tiles are 60x60
   private static final int numTiles = 9; // number of tiles per row and col
   private static final int focusArea = numTiles/2;
-  private static final int dimensions = focusArea*tileSize;
+  private static final int dimensions = focusArea*tileSize; // size of the maze on screen
 
   // maze variables
   private Player player;
