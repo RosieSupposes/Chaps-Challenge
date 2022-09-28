@@ -37,7 +37,7 @@ public class Viewport extends JPanel implements ActionListener {
    * Initialises a new maze upon the loading of a level.
    */
   public Viewport(Player player){ 
-    this.player = player;
+    this.player = Maze.player;
     currentMaze = new Tile[numTiles][numTiles];
     previousMaze = new Tile[numTiles][numTiles]; 
 
