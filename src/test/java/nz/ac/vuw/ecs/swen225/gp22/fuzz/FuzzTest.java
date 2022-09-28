@@ -42,7 +42,7 @@ public class FuzzTest {
         try {
             Robot robot = new Robot();
             try {
-                SwingUtilities.invokeLater(() -> new Base().levelPhase(true));
+                SwingUtilities.invokeLater(() -> new Base().newLevelPhase(true));
             } catch (Error e) {
             }
             List<Integer> generatedInputs = generateInputs();
@@ -72,7 +72,7 @@ public class FuzzTest {
         try {
             Robot robot = new Robot();
             try {
-                SwingUtilities.invokeLater(() -> new Base().levelPhase(true));
+                SwingUtilities.invokeLater(() -> new Base().newLevelPhase(true));
             } catch (Error e) {
 
             }
