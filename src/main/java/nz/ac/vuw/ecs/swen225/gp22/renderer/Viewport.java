@@ -55,8 +55,8 @@ public class Viewport extends JPanel implements ActionListener {
    * @param maze The maze to be drawn on. 
    */
   private void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
-    for (int x = 0; x < numTiles - 1; x++){
-        for (int y = 0; y < numTiles - 1; y++){
+    for (int x = 0; x < numTiles; x++){
+        for (int y = 0; y < numTiles; y++){
             if (maze[x][y] != null) { // check that the tile is not null
                 g.drawImage(getTileImg(Maze.getTile(new Maze.Point(x,y))), 
                 (x*tileSize) + xOffset, (y*tileSize) + yOffset, this);
