@@ -7,23 +7,24 @@ import javax.imageio.ImageIO;
 /**
  * This stores an enum with the names of all the images to be used in the game.
  * It creates a new instance of the image by loading the object and returning
- * a BufferedImage object from a png file with its name that will be displayed in the game.  
+ * a BufferedImage object from a png file with its name.  
  * 
  * @author Diana Batoon, 300475111
  * @version 1.1 
  */
 public enum Img {
     // images to be displayed for level 1 of Chap's Challenge
-    BlueKey, BlueLockedDoor, FreeTile, GreenKey, GreenLockedDoor, RedKey, RedLockedDoor, YellowKey, YellowLockedDoor,
-    Exit, LockedExit, InfoField, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall; 
+    BlueKey, BlueLockedDoor, GreenKey, GreenLockedDoor, RedKey, RedLockedDoor, YellowKey, YellowLockedDoor,
+    FreeTile, Exit, LockedExit, InfoField, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall; 
     
     // TODO: images to be displayed for level 2 of Chap's Challenge
 
     public final BufferedImage image;
-    Img(){image=loadImage(this.name());}
+
+    Img(){ image = loadImage(this.name()); }
     static private BufferedImage loadImage(String name){
         URL imagePath = Img.class.getResource(name+".png");
-        try{return ImageIO.read(imagePath);}
+        try{ return ImageIO.read(imagePath); }
         catch(IOException e) { throw new Error(e); }
     }
 }
