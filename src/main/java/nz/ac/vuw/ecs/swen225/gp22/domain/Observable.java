@@ -47,6 +47,8 @@ public abstract class Observable<S extends Observable<S>>{
      */
     @SuppressWarnings("unchecked") 
     public void updateObservers(){
-        observers.forEach(o -> o.update((S) this));
+        for(int o = observers.size() - 1; o >= 0; o--) {
+            observers.get(o).update((S) this);
+        }
     }
 }
