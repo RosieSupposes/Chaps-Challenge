@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<game level="1">
+    <move direction="up" steps="3"/>
+    <move direction="right" steps="2"/>
+    <collect item="green-key"/>
+    <move direction="right"/>
+    <move direction="down" steps="3"/>
+    <move direction="left"/>
+</game>
