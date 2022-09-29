@@ -12,12 +12,11 @@ import java.awt.AWTException;
 import java.awt.event.KeyEvent;
 import nz.ac.vuw.ecs.swen225.gp22.app.*;
 
-
 /**
  * Class for Fuzz Testing
  * 
  * @author Gavin Lim, 300585341
- * @version 1.1
+ * @version 1.2
  */
 public class FuzzTest {
 
@@ -27,6 +26,11 @@ public class FuzzTest {
     List<Integer> inputs = List.of(KeyEvent.VK_UP,
             KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN);
 
+    /**
+     * Generates a list of 100 valid inputs
+     * 
+     * @return list of 100 valid inputs
+     */
     private List<Integer> generateInputs() {
         return IntStream.range(0, 100)
                 .map(i -> r.nextInt(inputs.size()))
@@ -34,10 +38,18 @@ public class FuzzTest {
                 .toList();
     }
 
+    /**
+     * Generates a single valid input
+     * 
+     * @return single valid input
+     */
     private int generateOneInput() {
         return inputs.get(r.nextInt(inputs.size()));
     }
 
+    /**
+     * Inputs random inputs for Level 1 of Chap's Challenge
+     */
     public void test1() {
         try {
             Robot robot = new Robot();
@@ -47,27 +59,24 @@ public class FuzzTest {
             }
             List<Integer> generatedInputs = generateInputs();
             for (int i : generatedInputs) {
-                if (SwingUtilities.isEventDispatchThread()) {
-
-                } else {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            robot.keyPress(generateOneInput());
-                        }
-                    });
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        robot.keyPress(i);
                     }
-                    SwingUtilities.invokeLater(() -> robot.keyPress(generatedInputs.get(i)));
+                });
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
                 }
             }
-
         } catch (AWTException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Inputs random inputs for Level 2 of Chap's Challenge
+     */
     public void test2() {
         try {
             Robot robot = new Robot();
@@ -78,27 +87,25 @@ public class FuzzTest {
             }
             List<Integer> generatedInputs = generateInputs();
             for (int i : generatedInputs) {
-                if (SwingUtilities.isEventDispatchThread()) {
-
-                } else {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            robot.keyPress(generateOneInput());
-                        }
-                    });
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        robot.keyPress(i);
                     }
-                    SwingUtilities.invokeLater(() -> robot.keyPress(generatedInputs.get(i)));
+                });
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
                 }
             }
-
         } catch (AWTException e) {
             e.printStackTrace();
         }
     }
-    
+
+    /**
+     * Runs tests for both level 1 and 2 of Chap's Challenge
+     * Tests are limited to a one minute timer
+     */
     @Test
     public void fuzzTests() {
         assertTimeout(Duration.ofSeconds(60), () -> test1());
