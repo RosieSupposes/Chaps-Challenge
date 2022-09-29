@@ -41,10 +41,10 @@ public class Base extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         menuScreen();
+        System.out.println(this.getSize());
 
         setVisible(true);
         setResizable(false);
-        setPreferredSize(Main.WINDOW_SIZE);
         pack();
         addWindowListener(new WindowAdapter() {
             @Override
@@ -183,6 +183,7 @@ public class Base extends JFrame {
         System.out.println("Move: " + dir);
         try {
             Maze.player.move(dir);
+            Maze.player.setDir(dir); //TODO remove, temp fix until Domain changes move method
             recorder.addMove(new MoveAction(dir.name(), 1));
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
@@ -220,7 +221,8 @@ public class Base extends JFrame {
         runClosePhase();
         setJMenuBar(null);
 
-        PhasePanel menu = new PhasePanel(new MenuMainPanel(this), new MenuSidePanel());
+        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", new Dimension(Main.SIDEBAR_WIDTH, Main.WINDOW_HEIGHT), new Dimension(25, 25));
+        PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
         currentPanel = menu;
         changeKeyListener(new Controller(this));
@@ -231,6 +233,7 @@ public class Base extends JFrame {
         setPreferredSize(Main.WINDOW_SIZE);
 
         pack();
+        menu.requestFocus();
     }
 
     /**
@@ -245,8 +248,9 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
 
         JPanel side = new JPanel(); //TODO link to renderer side panel
-        side.setBackground(Color.CYAN);
+        side.setBackground(Main.LIGHT_YELLOW_COLOR);
         JLabel timeLabel = new JLabel("Time: 0");
+        timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
 
         final PhasePanel level = new PhasePanel(game, side);
@@ -258,7 +262,8 @@ public class Base extends JFrame {
             timeMS += 20;
             if (timeMS % 1000 == 0) {
                 //TODO tell viewport current time
-                //System.out.println(timeSec++);
+
+                timeSec++;
                 timeLabel.setText("Time: " + timeSec);
             }
 
@@ -280,13 +285,12 @@ public class Base extends JFrame {
         currentMenuBar.addExitButton();
         setJMenuBar(currentMenuBar);
 
-
         pack();
         level.requestFocus();  //need to be after pack
     }
 
     /**
-     * Removes current key listner, adds new one.
+     * Removes current key listener, adds new one.
      * Use to ensure there is only one key listener being
      * used at any given time
      *

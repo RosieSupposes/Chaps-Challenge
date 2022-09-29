@@ -6,21 +6,42 @@ import java.awt.event.ActionListener;
 
 public class GameMenuItem extends JMenuItem {
 
-    public GameMenuItem(String name, ActionListener actionList, int width){
+    ImageIcon imageIcon;
+
+    public GameMenuItem(String name, ActionListener actionList, int width) {
         super(name);
-        this.setMaximumSize(new Dimension(width,30));
-        this.addActionListener(actionList);
-        this.setBackground(Main.BUTTON_COLOR);
+        setUp(actionList);
+
+        this.setMaximumSize(new Dimension(width, 30));
     }
 
-    public GameMenuItem(String name, ActionListener actionList){
+    public GameMenuItem(String name, ActionListener actionList, int width, ImageIcon imageIcon) {
         super(name);
-        this.addActionListener(actionList);
-        this.setBackground(Main.BUTTON_COLOR);
+        setUp(actionList);
+
+        this.setMaximumSize(new Dimension(width, 30));
+
+        this.imageIcon = imageIcon;
+        this.setIcon(imageIcon);
     }
 
-    public void changeActionListener(ActionListener action){
+    public GameMenuItem(String name, ActionListener actionList) {
+        super(name);
+        setUp(actionList);
+    }
+
+    private void setUp(ActionListener actionList){
+        this.addActionListener(actionList);
+        this.setBackground(Main.BUTTON_COLOR);
+        this.setForeground(Main.TEXT_COLOR);
+    }
+
+    public void changeActionListener(ActionListener action) {
         this.removeActionListener(this.getActionListeners()[0]);
         this.addActionListener(action);
+    }
+
+    public void changeIcon(ImageIcon imageIcon) {
+        this.setIcon(imageIcon);
     }
 }
