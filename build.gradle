@@ -28,6 +28,12 @@ application {
     mainClass = group + ".app.Main"
 }
 
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+  }
+}
+
 // Testing and coverage
 test {
     useJUnitPlatform()
