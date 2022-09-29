@@ -13,6 +13,7 @@ public class Main {
 
   public static final Color BUTTON_COLOR = new Color(220, 170, 200);
     public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
+  public static final Color BUTTON_COLOR = new Color(220, 170, 200);
 
   public static final Color BG_COLOR_LIGHTER = new Color(228, 213, 242);
   public static final Color BG_COLOR_DARKER = new Color(200, 190, 230);
