@@ -10,24 +10,27 @@ public class GameMenuItem extends JMenuItem {
 
     public GameMenuItem(String name, ActionListener actionList, int width) {
         super(name);
+        setUp(actionList);
+
         this.setMaximumSize(new Dimension(width, 30));
-        this.addActionListener(actionList);
-        this.setBackground(Main.BUTTON_COLOR);
-        this.setForeground(Main.TEXT_COLOR);
     }
 
     public GameMenuItem(String name, ActionListener actionList, int width, ImageIcon imageIcon) {
         super(name);
+        setUp(actionList);
+
         this.setMaximumSize(new Dimension(width, 30));
-        this.addActionListener(actionList);
-        this.setBackground(Main.BUTTON_COLOR);
+
         this.imageIcon = imageIcon;
         this.setIcon(imageIcon);
-        this.setForeground(Main.TEXT_COLOR);
     }
 
     public GameMenuItem(String name, ActionListener actionList) {
         super(name);
+        setUp(actionList);
+    }
+
+    private void setUp(ActionListener actionList){
         this.addActionListener(actionList);
         this.setBackground(Main.BUTTON_COLOR);
         this.setForeground(Main.TEXT_COLOR);
