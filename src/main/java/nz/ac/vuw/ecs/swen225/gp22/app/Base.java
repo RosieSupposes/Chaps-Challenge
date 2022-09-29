@@ -220,7 +220,8 @@ public class Base extends JFrame {
         runClosePhase();
         setJMenuBar(null);
 
-        PhasePanel menu = new PhasePanel(new MenuMainPanel(this), new MenuSidePanel());
+        ImagePanel imagePanel = new ImagePanel("MenuSidePanel",new Dimension(Main.SIDEBAR_WIDTH,Main.WINDOW_HEIGHT),new Dimension(25,25));
+        PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
         currentPanel = menu;
         changeKeyListener(new Controller(this));
