@@ -44,7 +44,7 @@ public class Base extends JFrame {
 
         setVisible(true);
         setResizable(false);
-        setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT));
+        setPreferredSize(Main.WINDOW_SIZE);
         pack();
         addWindowListener(new WindowAdapter() {
             @Override
@@ -119,7 +119,7 @@ public class Base extends JFrame {
         Player playerWindow = new Player(this);
 
         add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
-        setPreferredSize(getSize());//to keep the current size
+        setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT + 150));//to keep the current size
         pack();                     //after pack
         playerWindow.requestFocus();//need to be after pack
 
@@ -228,6 +228,7 @@ public class Base extends JFrame {
         add(BorderLayout.CENTER, menu);
         components.add(menu);
         components.addAll(menu.getAllComponents());
+        setPreferredSize(Main.WINDOW_SIZE);
 
         pack();
     }
