@@ -8,7 +8,7 @@ import javax.swing.*;
  * A button that is used for playback controls.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.2
  */
 public class PlaybackButton extends JButton {
 
