@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +42,7 @@ public class Base extends JFrame {
 
         setVisible(true);
         setResizable(false);
-        setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT));
+        setPreferredSize(Main.WINDOW_SIZE);
         pack();
         addWindowListener(new WindowAdapter() {
             @Override
@@ -103,7 +104,7 @@ public class Base extends JFrame {
         currentMenuBar.setUnPause();
 
         changeKeyListener(new Controller(this, false));
-        //TODO close popup window
+        //TODO close pause popup window
     }
 
     /**
@@ -116,7 +117,7 @@ public class Base extends JFrame {
         Player playerWindow = new Player(this);
 
         add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
-        setPreferredSize(getSize());//to keep the current size
+        setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT + 150));//to keep the current size
         pack();                     //after pack
         playerWindow.requestFocus();//need to be after pack
 
@@ -128,7 +129,7 @@ public class Base extends JFrame {
      */
     public void loadGame() {
         Load.resumeGame(); //TODO ask persistency for time of loaded game
-        loadLevel(0,0);
+        loadLevel(0, 0);
 
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
@@ -137,7 +138,7 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
-        Load.loadLevel("level"+1); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel("level" + 1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0, 0);
         recorder = new Recorder(lvl);
     }
@@ -179,23 +180,34 @@ public class Base extends JFrame {
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
         try {
-            Maze.player.move(dir); //TODO when player isn't null, uncomment this line
+            Maze.player.move(dir);
+            recorder.addMove(new MoveAction(dir.name(), 1));
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
+            //recorder.addTurn(new TurnAction(dir)); ? //TODO save turning action
         }
         //TODO ask domain if item picked up/door interacted with?
-        recorder.addMove(new MoveAction(dir.name(), 1));
         //recorder.addCollect(new CollectAction("definitely a key"));
     }
 
     /**
      * Undo move from Recorder class.
      *
-     * @param dir direction to reverse
+     * @param action action that occurred
      */
-    public void undoMove(String dir) {
-        //TODO make param Recorder.Direction enum type
-        //Maze.player.moveOpp(); //TODO tell Domain to move player backwards
+    public void undoMove(String action) {
+        switch (action) {
+            case "Move":
+                //Maze.player.undoMove(oldDir);
+                break;
+            case "Turn":
+                //Maze.player.setDir(dir);
+                break;
+            case "Collect":
+                //Maze.player.dropItem(item);
+                break;
+        }
+        //TODO tell Domain to move player backwards
         //TODO what about collect actions?
     }
 
@@ -214,6 +226,7 @@ public class Base extends JFrame {
         add(BorderLayout.CENTER, menu);
         components.add(menu);
         components.addAll(menu.getAllComponents());
+        setPreferredSize(Main.WINDOW_SIZE);
 
         pack();
     }
@@ -221,35 +234,20 @@ public class Base extends JFrame {
     /**
      * Create, run and draw new level
      *
-     * @param seconds number of seconds into level
+     * @param seconds      number of seconds into level
      * @param milliseconds number milliseconds into level
      */
     public void loadLevel(int seconds, int milliseconds) {
         runClosePhase();
-        //set up the viewport and the timer
 
-            JPanel side = new JPanel();
-            side.setBackground(Color.CYAN);
-            Load.loadLevel("level1");
-            level = new PhasePanel(game, side);
-        } else {
-            System.out.println("New Level Two");
-            JPanel game = new JPanel();
-            game.setBackground(Color.ORANGE);
+        JPanel game = new Viewport();
+
+        JPanel side = new JPanel(); //TODO link to renderer side panel
+        side.setBackground(Color.CYAN);
+        JLabel timeLabel = new JLabel("Time: 0");
+        side.add(timeLabel);
 
         final PhasePanel level = new PhasePanel(game, side);
-//        } else {
-//            System.out.println("New Level Two");
-//            JPanel game = new JPanel();
-//            game.setBackground(Color.ORANGE);
-//
-//            JPanel side = new JPanel();
-//            side.setBackground(Color.PINK);
-//            side.add(timeLabel);
-//
-//            level = new PhasePanel(game, side);
-//        }
-
         timeSec = seconds;
         timeMS = milliseconds;
         gameTimer = new Timer(20, unused -> {
@@ -258,7 +256,7 @@ public class Base extends JFrame {
             timeMS += 20;
             if (timeMS % 1000 == 0) {
                 //TODO tell viewport current time
-                System.out.println(timeSec++);
+                //System.out.println(timeSec++);
                 timeLabel.setText("Time: " + timeSec);
             }
 
@@ -272,7 +270,7 @@ public class Base extends JFrame {
         currentPanel = level;
         changeKeyListener(new Controller(this, false));
 
-        add(BorderLayout.CENTER, level);//add the new phase viewport
+        add(BorderLayout.CENTER, level);
         components.add(level);
         currentMenuBar = new GameMenuBar(this);
         currentMenuBar.addGameButtons();
@@ -281,10 +279,17 @@ public class Base extends JFrame {
         setJMenuBar(currentMenuBar);
 
 
-        pack();                     //after pack
+        pack();
         level.requestFocus();  //need to be after pack
     }
 
+    /**
+     * Removes current key listner, adds new one.
+     * Use to ensure there is only one key listener being
+     * used at any given time
+     *
+     * @param keyListener new keylistener to use
+     */
     public void changeKeyListener(KeyListener keyListener) {
         if (currentPanel.getKeyListeners().length > 0) {
             currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);

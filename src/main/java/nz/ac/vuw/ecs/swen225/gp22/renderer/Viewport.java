@@ -12,14 +12,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.imgs.Img;
 
 /**
  * This class displays the maze, and all the entities active in the current level
  * such as the player, free tiles, walls, keys, locked doors, treasures, locked exit, and exit.
  * 
  * @author Diana Batoon, 300475111 
- * @version 1.2
+ * @version 1.3
  */
 public class Viewport extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
@@ -27,7 +26,6 @@ public class Viewport extends JPanel implements ActionListener {
   private static final int tileSize = 60; // tiles are 60x60
   private static final int numTiles = 9; // number of tiles per row and col
   private static final int focusArea = numTiles/2;
-  private static final int dimensions = focusArea*tileSize; // size of the maze on screen
 
   // maze variables
   private Player player;
@@ -38,12 +36,9 @@ public class Viewport extends JPanel implements ActionListener {
    * Initialises a new maze upon the loading of a level.
    */
   public Viewport(){ 
+    this.player = Maze.player;
     currentMaze = new Tile[numTiles][numTiles];
     previousMaze = new Tile[numTiles][numTiles]; 
-
-    Dimension canvasSize = new Dimension(dimensions, dimensions);
-    setPreferredSize(canvasSize);
-    setLayout(new FlowLayout(FlowLayout.LEFT));
   }
 
   /**
@@ -55,8 +50,8 @@ public class Viewport extends JPanel implements ActionListener {
    * @param maze The maze to be drawn on. 
    */
   private void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
-    for (int x = 0; x < numTiles - 1; x++){
-        for (int y = 0; y < numTiles - 1; y++){
+    for (int x = 0; x < numTiles; x++){
+        for (int y = 0; y < numTiles; y++){
             if (maze[x][y] != null) { // check that the tile is not null
                 g.drawImage(getTileImg(Maze.getTile(new Maze.Point(x,y))), 
                 (x*tileSize) + xOffset, (y*tileSize) + yOffset, this);
