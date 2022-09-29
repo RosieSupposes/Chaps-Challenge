@@ -41,10 +41,10 @@ public class Base extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         menuScreen();
+        System.out.println(this.getSize());
 
         setVisible(true);
         setResizable(false);
-        setPreferredSize(Main.WINDOW_SIZE);
         pack();
         addWindowListener(new WindowAdapter() {
             @Override
@@ -233,6 +233,7 @@ public class Base extends JFrame {
         setPreferredSize(Main.WINDOW_SIZE);
 
         pack();
+        menu.requestFocus();
     }
 
     /**
