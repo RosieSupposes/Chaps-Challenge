@@ -42,7 +42,7 @@ public class Player extends JPanel {
    */
   private void setup() {
     JPanel gamePanel = new JPanel();
-    gamePanel.setPreferredSize(new Dimension(800, 400));
+    gamePanel.setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT));
     gamePanel.setBackground(Color.BLACK);
 
     JButton stepBack = new PlaybackButton("Step Back", () -> scrubber.setValue(scrubber.getValue() - 1));
