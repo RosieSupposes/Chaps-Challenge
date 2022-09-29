@@ -26,15 +26,6 @@ public class ImagePanel extends JPanel {
      * Side panel for menu
      */
     public ImagePanel(String filename, Dimension dim, Dimension offset) {
-//        this.add(new JLabel("Ctrl + 1 --> New Level One"));
-//        this.add(new JLabel("Ctrl + 2 --> New Level Two"));
-//        this.add(new JLabel("Ctrl + R --> Resume Last Game"));
-//        this.add(new JLabel("Ctrl + X --> Exit Game"));
-//        this.add(new JLabel("Ctrl + S --> Save Game"));
-//        this.add(new JLabel("Space --> Pause Game"));
-//        this.add(new JLabel("Esc --> Un-Pause Game"));
-//        this.add(new JLabel("Arrow Keys --> Move Player"));
-
         this.setBackground(Main.BG_COLOR);
 
         double scale = 0.8;
@@ -43,7 +34,7 @@ public class ImagePanel extends JPanel {
 
         this.offset = offset;
 
-        URL imagePath = Img.class.getResource("/UI/" + filename + ".png");
+        URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
         try {
             image = ImageIO.read(imagePath);
         } catch (IOException e) {
