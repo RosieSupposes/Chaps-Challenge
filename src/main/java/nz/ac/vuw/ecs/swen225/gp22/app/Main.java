@@ -11,8 +11,7 @@ public class Main {
     public static final int GAME_WINDOW_SIZE = WINDOW_HEIGHT;
     public static final int WINDOW_WIDTH = NUM_GAME_TILE * TILE_SIZE + SIDEBAR_WIDTH;
 
-  public static final Color BUTTON_COLOR = new Color(220, 170, 200);
-    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
+    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT+65); //for whatever reason?
   public static final Color BUTTON_COLOR = new Color(220, 170, 200);
 
   public static final Color BG_COLOR_LIGHTER = new Color(228, 213, 242);
