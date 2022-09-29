@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Main;
+
 import javax.swing.*;
 
 /**
@@ -19,5 +21,6 @@ public class PlaybackButton extends JButton {
   public PlaybackButton(String text, Runnable action) {
     super(text);
     addActionListener(e -> action.run());
+    setBackground(Main.BUTTON_COLOR);
   }
 }
