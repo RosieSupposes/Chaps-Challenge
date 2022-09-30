@@ -47,7 +47,7 @@ public class MenuMainPanel extends JPanel {
      */
     private JPanel titlePanelForMenu() {
         Dimension dim = new Dimension(400, 100);
-        ImagePanel panel = new ImagePanel("Title", dim, 1);
+        ImagePanel panel = new ImagePanel("Title", dim, 0.8);
         panel.setPreferredSize(dim);
         return panel;
     }
