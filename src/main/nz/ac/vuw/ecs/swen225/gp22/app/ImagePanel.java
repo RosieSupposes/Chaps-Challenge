@@ -28,11 +28,11 @@ public class ImagePanel extends JPanel {
     public ImagePanel(String filename, Dimension dim, Dimension offset) {
         this.setBackground(Main.BG_COLOR);
 
-        double scale = 0.8;
-        width = (int) (scale * dim.width);
-        height = (int) (scale * dim.height);
+//        double scale = 0.8;
+//        width = (int) (scale * dim.width);
+//        height = (int) (scale * dim.height);
 
-        this.offset = offset;
+//        this.offset = offset;
 
         URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
         try {
@@ -45,7 +45,8 @@ public class ImagePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g.create();
-        g2D.drawImage(image, offset.width, offset.height, width, height, this); // see javadoc for more info on the parameters
+        g2D.drawImage(image,0,0,this);
+//        g2D.drawImage(image, offset.width, offset.height, width, height, this); // see javadoc for more info on the parameters
         g2D.dispose();
     }
 }
