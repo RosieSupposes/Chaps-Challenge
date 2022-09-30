@@ -17,13 +17,13 @@
             <text>helpful stuff, you can't walk through walls, keys open doors</text>
         </tile>
         <tile ID="key" x="0" y="2">
-            <color>red</color>
+            <color>Red</color>
         </tile>
         <tile ID="wall" x="-1" y="0"/>
         <tile ID="wall" x="1" y="0"/>
         <tile ID="treasure" x="0" y="3"/>
         <tile ID="door" x="0" y="4">
-            <color>red</color>
+            <color>Red</color>
         </tile>
         <tile ID="exit-gate" x="0" y="6"/>
         <tile ID="exit" x="0" y="7"/>

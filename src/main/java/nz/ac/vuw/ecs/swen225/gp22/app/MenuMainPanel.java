@@ -1,7 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
+import nz.ac.vuw.ecs.swen225.gp22.renderer.Img;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Panel containing menu information
@@ -24,11 +30,10 @@ public class MenuMainPanel extends JPanel {
         this.base = base;
 
         this.setBackground(Main.BG_COLOR);
-        this.setPreferredSize(new Dimension(Main.GAME_WINDOW_SIZE, Main.WINDOW_HEIGHT));
 
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.LINE_START;
+        c.anchor = GridBagConstraints.CENTER;
 
         c.gridy = 0;
         this.add(titlePanelForMenu(), c);
@@ -46,8 +51,11 @@ public class MenuMainPanel extends JPanel {
      *
      * @return JLabel for title
      */
-    private JLabel titlePanelForMenu() {
-        return new JLabel("Chap Challenge Game!");
+    private JPanel titlePanelForMenu() {
+        Dimension dim = new Dimension(400,100);
+        ImagePanel panel = new ImagePanel("Title",dim,new Dimension(0,0));
+        panel.setPreferredSize(new Dimension((int) (dim.width*0.8), (int) (dim.height*0.8)));
+        return panel;
     }
 
     /**
@@ -101,6 +109,7 @@ public class MenuMainPanel extends JPanel {
         String[] choices = {"Level One", "Level Two"};
         JComboBox<String> dropDownMenu = new JComboBox<>(choices);
         dropDownMenu.setBackground(Main.BUTTON_COLOR);
+        dropDownMenu.setForeground(Main.TEXT_COLOR);
         dropDownMenu.setPreferredSize(halfButtonSize);
         dropDownMenu.setSelectedIndex(0);
         dropDownMenu.addActionListener(e -> {

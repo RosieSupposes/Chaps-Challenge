@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class Load {
 
+    private static final String resourceDirectory = System.getProperty("user.dir")+"\\src\\main\\resources\\";
+
     /**
      * Load saved gamed from xml.
      * Open fileChooser
@@ -24,18 +26,30 @@ public class Load {
     }
 
     /**
+     * Determine if there is a previous unfinished level to load
+     * @return true if there is an unfinished level false otherwise
+     */
+    public static boolean isDefaultPresent(){
+        return getFile("previousGame").isFile();
+    }
+
+    /**
      * Load level from xml.
      *
      * @param name level to load.
      */
     public static void loadLevel(String name){
-        File file = new File(System.getProperty("user.dir")+"\\src\\main\\resources\\levels\\" + name + ".xml");
+        File file = getFile("levels\\" + name);
         Parser parser = new Parser(file);
         parser.parseMapInfo();
         List<Tile> tiles = parser.getTiles();
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
         }
+    }
+
+    private static File getFile(String file){
+        return new File(resourceDirectory + file + ".xml");
     }
 
 }

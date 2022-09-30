@@ -12,6 +12,7 @@ public class GameButton extends JButton {
         this.setMinimumSize(dim);
         this.setMaximumSize(dim);
         this.addActionListener(action);
+        this.setForeground(Main.TEXT_COLOR);
     }
 
     public void changeActionListener(ActionListener actionListener){

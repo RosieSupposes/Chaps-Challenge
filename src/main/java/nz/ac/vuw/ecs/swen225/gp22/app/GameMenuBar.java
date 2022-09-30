@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class GameMenuBar extends JMenuBar {
      * Adds home button to this JMenuBar
      */
     private void addHomeButton() {
-        GameMenuItem home = new GameMenuItem("Home", e -> base.menuScreen(), menuItemWidth);
+        ImageIcon icon = getIcon("home");
+        GameMenuItem home = new GameMenuItem("Home", e -> base.menuScreen(), menuItemWidth, icon);
         this.add(home);
         components.add(home);
     }
@@ -42,17 +44,21 @@ public class GameMenuBar extends JMenuBar {
     /**
      * game is paused so set pause button to display "un pause"
      */
-    public void setPause(){
-        pause.setText("Un Pause");
+    public void setPause() {
+        pause.setText("Play");
         pause.changeActionListener(e -> base.unPause());
+        ImageIcon imageIcon = getIcon("play");
+        pause.changeIcon(imageIcon);
     }
 
     /**
      * game is unpaused so set pause button to display "pause"
      */
-    public void setUnPause(){
+    public void setUnPause() {
         pause.setText("Pause");
         pause.changeActionListener(e -> base.pause());
+        ImageIcon imageIcon = getIcon("pause");
+        pause.changeIcon(imageIcon);
     }
 
     /**
@@ -60,12 +66,14 @@ public class GameMenuBar extends JMenuBar {
      * Pause, New - level 1, level 2, Save
      */
     public void addGameButtons() {
-        pause = new GameMenuItem("Pause", e -> base.pause(), menuItemWidth);
+        ImageIcon imageIcon = getIcon("pause");
+        pause = new GameMenuItem("Pause", e -> base.pause(), menuItemWidth, imageIcon);
         this.add(pause);
         components.add(pause);
 
         JMenu newLevel = new JMenu("New");
         newLevel.setBackground(Main.BUTTON_COLOR);
+        newLevel.setForeground(Main.TEXT_COLOR);
         newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
 
         GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newGame(1));
@@ -98,5 +106,13 @@ public class GameMenuBar extends JMenuBar {
 
     public List<JComponent> getAllComponents() {
         return components;
+    }
+
+    public ImageIcon getIcon(String filename) {
+        URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
+        ImageIcon imageIcon = new ImageIcon(imagePath);
+        Image img = imageIcon.getImage();
+        Image image = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        return new ImageIcon(image);
     }
 }
