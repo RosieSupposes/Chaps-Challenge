@@ -225,7 +225,7 @@ public class Base extends JFrame {
 //        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
 //        PhasePanel menu = new PhasePanel(testGame,testSide);
 
-        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", Main.SIDE_SIZE, new Dimension(25, 25));
+        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", Main.SIDE_SIZE, 0.85);
         PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
         currentPanel = menu;

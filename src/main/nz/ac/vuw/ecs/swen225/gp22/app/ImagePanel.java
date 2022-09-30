@@ -20,19 +20,20 @@ public class ImagePanel extends JPanel {
     int width;
     int height;
 
-    Dimension offset;
+    int offsetX;
+    int offsetY;
 
     /**
      * Side panel for menu
      */
-    public ImagePanel(String filename, Dimension dim, Dimension offset) {
+    public ImagePanel(String filename, Dimension dim, double scale) {
         this.setBackground(Main.BG_COLOR);
 
-//        double scale = 0.8;
-//        width = (int) (scale * dim.width);
-//        height = (int) (scale * dim.height);
+        width = (int) (scale * dim.width);
+        height = (int) (scale * dim.height);
 
-//        this.offset = offset;
+        this.offsetX = (dim.width-width)/2;
+        this.offsetY = (dim.height-height)/2;
 
         URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
         try {
@@ -45,8 +46,7 @@ public class ImagePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g.create();
-        g2D.drawImage(image,0,0,this);
-//        g2D.drawImage(image, offset.width, offset.height, width, height, this); // see javadoc for more info on the parameters
+        g2D.drawImage(image,offsetX,offsetY,width,height,this);
         g2D.dispose();
     }
 }
