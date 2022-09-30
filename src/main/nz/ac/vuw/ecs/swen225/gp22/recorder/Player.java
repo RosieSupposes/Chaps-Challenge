@@ -124,7 +124,7 @@ public class Player extends JPanel {
    * Load a file.
    */
   private void load() {
-    JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir") + "\\src\\main\\resources\\recordings");
+    JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir") + "/resources/recordings");
     fileChooser.setDialogTitle("Select a recording to play");
     fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Replay File (xml)", "xml");

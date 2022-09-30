@@ -3,6 +3,8 @@ package nz.ac.vuw.ecs.swen225.gp22.fuzz;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.time.Duration;
+
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -10,7 +12,6 @@ import javax.swing.SwingUtilities;
 import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.event.KeyEvent;
-import nz.ac.vuw.ecs.swen225.gp22.app.*;
 
 /**
  * Class for Fuzz Testing
