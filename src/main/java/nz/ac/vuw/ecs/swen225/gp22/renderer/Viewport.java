@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 
@@ -73,17 +71,16 @@ public class Viewport extends JPanel implements ActionListener {
         case Green: return Img.GreenKey.image;
         case Red: return Img.RedKey.image;
         case Yellow: return Img.YellowKey.image;
-        default: throw new IllegalArgumentException("Invalid colour.");
+        default: throw new IllegalArgumentException("Invalid colour./n");
       }
     }            
     if (tile instanceof LockedDoor ld){
-      System.out.print(""+ld.getColor() + "LockedDoor");
         switch (ld.getColor()){
           case Blue: return Img.BlueLockedDoor.image;
           case Green: return Img.GreenLockedDoor.image;
           case Red: return Img.RedLockedDoor.image;
           case Yellow: return Img.YellowLockedDoor.image;
-          default: throw new IllegalArgumentException("Invalid colour.");
+          default: throw new IllegalArgumentException("Invalid colour./n");
         }
     }
     if (tile instanceof InfoField){ return Img.InfoField.image; }
@@ -126,7 +123,7 @@ public class Viewport extends JPanel implements ActionListener {
       case Down: return Img.PlayerDown.image;
       case Left: return Img.PlayerLeft.image; 
       case Right: return Img.PlayerRight.image;
-      default: throw new IllegalArgumentException("Invalid direction.");
+      default: throw new IllegalArgumentException("Invalid direction./n");
     }
   }
 
@@ -139,9 +136,9 @@ public class Viewport extends JPanel implements ActionListener {
     for (int xTick = 0, x = player.getPos().x() - focusArea; x <= player.getPos().x() + focusArea; xTick++, x++){
       for (int yTick = 0, y = player.getPos().y() - focusArea; y <= player.getPos().y() + focusArea; yTick++, y++){
         previousMaze[xTick][yTick] = currentMaze[xTick][yTick];
-
+        
         // Check if tiles are within range
-        if ((x > 0 && y > 0) && (x < currentMaze.length && y < currentMaze[x].length)) { //TODO: if not drawn properly, use Maze.
+        if ((x > 0 && y > 0) && (x < currentMaze.length && y < currentMaze[x].length)) { //TODO:
           currentMaze[xTick][yTick] = Maze.getTile(new Maze.Point(x, y));
         }
       }
@@ -162,7 +159,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param y The player's y position.
    * @return The y position in the focus area.
    */
-  private int getFocusY(int y) { return focusArea + y - player.getPos().y(); }
+  private int getFocusY(int y) { return y - player.getPos().y() + focusArea; }
 
   @Override
   public void paintComponent(Graphics g){
