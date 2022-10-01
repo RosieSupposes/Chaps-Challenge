@@ -202,8 +202,8 @@ public class Player extends JPanel {
    * @return True if the player should stop progressing.
    */
   private boolean progress(int i, boolean isProgressing) {
+    currentAction = i < actions.size() ? i : actions.size() - 1;
     scrubber.setValue(i);
-    currentAction = i;
     try {
       Thread.sleep(1000 / speed);
     } catch (InterruptedException e) {
