@@ -63,7 +63,7 @@ public class Recorder {
     Element root = doc.addElement("game").addAttribute("level", String.valueOf(level));
     actions.forEach(action -> root.add(action.toXML()));
 
-    String filename = System.getProperty("user.dir") + "\\src\\main\\resources\\recordings\\"
+    String filename = System.getProperty("user.dir") + "/resources/recordings/"
                       + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
     try (FileWriter out = new FileWriter(filename)) {
       (new XMLWriter(out, OutputFormat.createPrettyPrint())).write(doc);
