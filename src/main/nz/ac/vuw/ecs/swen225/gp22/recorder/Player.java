@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.app.Main;
+import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,6 +24,7 @@ public class Player extends JPanel {
   private boolean isPlaying = false;
   private boolean isRewinding = false;
   private int speed = 1;
+  private int level;
 
   /**
    * Create a new player.
@@ -41,7 +43,7 @@ public class Player extends JPanel {
    * Set up the player.
    */
   private void setup() {
-    JPanel gamePanel = new JPanel();
+    JPanel gamePanel = base.getGameWindow();
     gamePanel.setPreferredSize(new Dimension(840, 540)); // Will be changed when I get passed the viewport later
     gamePanel.setBackground(Color.BLACK);
 
