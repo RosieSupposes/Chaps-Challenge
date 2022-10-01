@@ -42,7 +42,7 @@ public class Player extends JPanel {
    */
   private void setup() {
     JPanel gamePanel = new JPanel();
-    gamePanel.setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT)); // Will be changed when I get passed the viewport later
+    gamePanel.setPreferredSize(new Dimension(840, 540)); // Will be changed when I get passed the viewport later
     gamePanel.setBackground(Color.BLACK);
 
     JButton stepBack = new PlaybackButton("Step Back", () -> scrubber.setValue(scrubber.getValue() - 1));
