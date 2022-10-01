@@ -12,7 +12,7 @@ import java.util.List;
  * Used to parse recorded games from XML.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.2
  */
 public class Parser {
 
@@ -57,9 +57,12 @@ public class Parser {
   private Action parseAction(Element element) {
     switch (element.getName()) {
       case "move" -> {
+        int x = Integer.parseInt(element.attributeValue("x"));
+        int y = Integer.parseInt(element.attributeValue("y"));
         String direction = element.attributeValue("direction");
-        int steps = element.attributeValue("steps") == null ? 1 : Integer.parseInt(element.attributeValue("steps"));
-        return new MoveAction(direction, steps);
+        return new MoveAction(Integer.parseInt(element.attributeValue("x")),
+                              Integer.parseInt(element.attributeValue("y")),
+                              direction);
       }
       case "collect" -> {
         String item = element.attributeValue("item");
