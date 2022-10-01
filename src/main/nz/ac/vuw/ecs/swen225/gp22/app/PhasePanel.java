@@ -29,7 +29,7 @@ public class PhasePanel extends JPanel {
 
         setUpPanels();
 
-        this.setPreferredSize(new Dimension(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT));
+        this.setPreferredSize(Main.WINDOW_SIZE);
         components.addAll(List.of(sidePanel, gamePanel));
     }
 
@@ -37,13 +37,8 @@ public class PhasePanel extends JPanel {
      * sets up panel sizes and adds them to panel
      */
     public void setUpPanels() {
-        gamePanel.setPreferredSize(new Dimension(Main.GAME_WINDOW_SIZE, Main.GAME_WINDOW_SIZE));
-        gamePanel.setMaximumSize(new Dimension(Main.GAME_WINDOW_SIZE, Main.GAME_WINDOW_SIZE));
-        gamePanel.setMinimumSize(new Dimension(Main.GAME_WINDOW_SIZE, Main.GAME_WINDOW_SIZE));
-
-        sidePanel.setPreferredSize(new Dimension(Main.SIDEBAR_WIDTH, Main.WINDOW_HEIGHT));
-        sidePanel.setMaximumSize(new Dimension(Main.SIDEBAR_WIDTH, Main.WINDOW_HEIGHT));
-        sidePanel.setMinimumSize(new Dimension(Main.SIDEBAR_WIDTH, Main.WINDOW_HEIGHT));
+        gamePanel.setPreferredSize(Main.GAME_SIZE);
+        sidePanel.setPreferredSize(Main.SIDE_SIZE);
 
         this.add(BorderLayout.WEST, gamePanel);
         this.add(BorderLayout.EAST, sidePanel);
