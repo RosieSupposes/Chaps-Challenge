@@ -137,6 +137,7 @@ public class Player extends JPanel {
     if (fileChooser.getSelectedFile() != null) {
       Parser parser = new Parser(fileChooser.getSelectedFile());
       actions = parser.getActions();
+      Load.loadLevel("level" + parser.getLevel());
       if (scrubber != null) {
         scrubber.setMaximum(actions.size() - 1);
         currentAction = 0;
