@@ -31,8 +31,8 @@ public class Viewport extends JPanel implements ActionListener {
    */
   public Viewport(){ 
     this.player = Maze.player;
-    currentMaze = new Tile[GameDimensions.getTileNum()][GameDimensions.getTileNum()];
-    previousMaze = new Tile[GameDimensions.getTileNum()][GameDimensions.getTileNum()]; 
+    currentMaze = new Tile[GameDimensions.NUM_GAME_TILE][GameDimensions.NUM_GAME_TILE];
+    previousMaze = new Tile[GameDimensions.NUM_GAME_TILE][GameDimensions.NUM_GAME_TILE]; 
   }
 
   /**
@@ -44,11 +44,11 @@ public class Viewport extends JPanel implements ActionListener {
    * @param maze The maze to be drawn on. 
    */
   private void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
-    for (int x = 0; x < GameDimensions.getTileNum(); x++){
-        for (int y = 0; y < GameDimensions.getTileNum(); y++){
+    for (int x = 0; x < GameDimensions.NUM_GAME_TILE; x++){
+        for (int y = 0; y < GameDimensions.NUM_GAME_TILE; y++){
             if (maze[x][y] != null) { // check that the tile is not null
                 g.drawImage(getTileImg(Maze.getTile(new Maze.Point(x,y))), 
-                (x*GameDimensions.getTileSize()) + xOffset, (y*GameDimensions.getTileSize()) + yOffset, this);
+                (x*GameDimensions.TILE_SIZE) + xOffset, (y*GameDimensions.TILE_SIZE) + yOffset, this);
             }            
         }
     }
@@ -97,8 +97,8 @@ public class Viewport extends JPanel implements ActionListener {
    */
   private void renderEntities(Graphics g, int xOffset, int yOffset){
     // draws the player based on the direction it is facing
-    g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*GameDimensions.getTileSize()),
-    getFocusY(player.getPos().y()*GameDimensions.getTileSize()), this);
+    g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
+    getFocusY(player.getPos().y()*GameDimensions.TILE_SIZE), this);
     
     //TODO: display the enemy for level 2
       
@@ -127,8 +127,8 @@ public class Viewport extends JPanel implements ActionListener {
   */
   private void setFocusArea(){
     // loop through each tile in the maze to determine which are visible
-    for (int xTick = 0, x = player.getPos().x() - GameDimensions.getFocusArea(); x <= player.getPos().x() + GameDimensions.getFocusArea(); xTick++, x++){
-      for (int yTick = 0, y = player.getPos().y() - GameDimensions.getFocusArea(); y <= player.getPos().y() + GameDimensions.getFocusArea(); yTick++, y++){
+    for (int xTick = 0, x = player.getPos().x() - GameDimensions.FOCUS_AREA; x <= player.getPos().x() + GameDimensions.FOCUS_AREA; xTick++, x++){
+      for (int yTick = 0, y = player.getPos().y() - GameDimensions.FOCUS_AREA; y <= player.getPos().y() + GameDimensions.FOCUS_AREA; yTick++, y++){
         previousMaze[xTick][yTick] = currentMaze[xTick][yTick];
         
         // Check if tiles are within range
@@ -145,7 +145,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param x The player's x position.
    * @return The x position in the focus area.
    */
-  private int getFocusX(int x) { return GameDimensions.getFocusArea() + x - player.getPos().x() ; }
+  private int getFocusX(int x) { return GameDimensions.FOCUS_AREA + x - player.getPos().x() ; }
   
   /**
    * Convert the player's y position to the focus area's coordinates.
@@ -153,7 +153,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param y The player's y position.
    * @return The y position in the focus area.
    */
-  private int getFocusY(int y) { return y - player.getPos().y() + GameDimensions.getFocusArea(); }
+  private int getFocusY(int y) { return y - player.getPos().y() + GameDimensions.FOCUS_AREA; }
 
   @Override
   public void paintComponent(Graphics g){
@@ -175,44 +175,6 @@ public class Viewport extends JPanel implements ActionListener {
     updateUI();
   }
 
-  public static class GameDimensions {
-    // maze dimensions
-    private static final int TILE_SIZE = 60;
-    private static final int NUM_GAME_TILE = 9;
-    private static final int FOCUS_AREA = NUM_GAME_TILE/2;
-
-    // window dimensions
-    private static final int SIDEBAR_WIDTH = 5 * TILE_SIZE;
-    private static final int WINDOW_HEIGHT = NUM_GAME_TILE * TILE_SIZE;
-    private static final int WINDOW_WIDTH = NUM_GAME_TILE * TILE_SIZE + SIDEBAR_WIDTH;
-    private static final int GAME_WINDOW_SIZE = WINDOW_HEIGHT;
-    private static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT + 65);
-
-    /*** @return The size of a tile. */
-    public static int getTileSize(){ return TILE_SIZE; }
-
-    /*** @return The number of tiles per row and column. */
-    public static int getTileNum(){ return NUM_GAME_TILE; }
-
-    /*** @return The area of the maze being displayed on the window. */
-    public static int getFocusArea() { return FOCUS_AREA; }
-
-    /*** @return The width of the window's sidebar. */
-    public static int getSideBarWidth(){ return SIDEBAR_WIDTH; }
-
-    /*** @return The height of the window. */
-    public static int getWindowHeight(){ return WINDOW_HEIGHT; }
-
-    /*** @return The width of the window. */
-    public static int getWindowWidth(){ return WINDOW_WIDTH; }
-
-    /*** @return The size of the game window. */
-    public static int getGameWindowSize(){ return GAME_WINDOW_SIZE; }
-
-    /*** @return The size of the window in the menu. */
-    public static Dimension getWindowSize(){ return WINDOW_SIZE; }
-    
-  }
 }
 
   
