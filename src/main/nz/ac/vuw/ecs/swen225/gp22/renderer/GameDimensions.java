@@ -21,7 +21,7 @@ public class GameDimensions {
     public static final int WINDOW_HEIGHT = NUM_GAME_TILE * TILE_SIZE;
     public static final int WINDOW_WIDTH = NUM_GAME_TILE * TILE_SIZE + SIDEBAR_WIDTH;
     public static final int GAME_WINDOW_SIZE = WINDOW_HEIGHT;
-    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT + 65);
+    public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
     public static final Dimension GAME_SIZE = new Dimension(GAME_WINDOW_SIZE, WINDOW_HEIGHT);
     public static final Dimension SIDE_SIZE = new Dimension(SIDEBAR_WIDTH, WINDOW_HEIGHT);
     
