@@ -8,7 +8,7 @@ import java.awt.Dimension;
  * window they will be displayed on.
  * 
  * @author Diana Batoon, 300475111
- * @version 1.1
+ * @version 1.2
  */
 public class GameDimensions {
     // maze dimensions
