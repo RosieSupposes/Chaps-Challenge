@@ -13,7 +13,7 @@ import java.util.*;
  * Used to parse XML files.
  *
  * @author Gideon Wilkins, 300576057
- * @version 1.3
+ * @version 1.4
  */
 public class Parser {
     Document document;
@@ -42,6 +42,24 @@ public class Parser {
         Maze.player = parsePlayer();
     }
 
+    /**
+     * Get the amount of time that has passed in a save file
+     * Should only be used for saveFiles, not levels
+     *
+     * @return the time that has passed in this save file
+     */
+    public int getTime(){
+        return intFromElement(document.getRootElement().element("saveInfo"),"time");
+    }
+    /**
+     * Get the number of keys the player has collected
+     * Should only be used for saveFiles, not levels
+     *
+     * @return the number of keys collected in this save file
+     */
+    public int getNumKeysCollected(){
+        return intFromElement(document.getRootElement().element("saveInfo"),"keysCollected");
+    }
     /**
      * Parse the saved player information from the file
      * create player at saved position and direction
