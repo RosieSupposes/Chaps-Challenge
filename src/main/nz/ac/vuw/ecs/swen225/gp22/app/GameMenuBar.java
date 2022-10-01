@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -26,7 +28,7 @@ public class GameMenuBar extends JMenuBar {
      */
     public GameMenuBar(Base base) {
         this.base = base;
-        menuItemWidth = Main.GAME_WINDOW_SIZE / 6;
+        menuItemWidth = GameDimensions.GAME_WINDOW_SIZE / 6;
         addHomeButton();
         this.setBackground(Main.BUTTON_COLOR);
     }
