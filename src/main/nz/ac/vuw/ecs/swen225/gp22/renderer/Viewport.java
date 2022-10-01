@@ -77,13 +77,22 @@ public class Viewport extends JPanel implements ActionListener {
           default: throw new IllegalArgumentException("Invalid colour./n");
         }
     }
-    if (tile instanceof InfoField){ return Img.InfoField.image; } //TODO: display infofield details
+    if (tile instanceof InfoField){ 
+      //TODO: display infofield details
+      //displayInfo(tile);
+      return Img.InfoField.image; 
+    } 
     if (tile instanceof Exit){ return Img.Exit.image; } 
     if (tile instanceof LockedExit){ return Img.LockedExit.image; }
     if (tile instanceof Treasure){ return Img.Treasure.image; }
     if (tile instanceof Wall){ return Img.Wall.image; }
 
     return Img.FreeTile.image;
+  }
+
+  public void displayInfo(Graphics g){
+    // if tile being stepped on is infofield then display game brief
+    g.drawImage(Img.GameInfo.image, 100, 200, this); //TODO: make an image for infofield
   }
 
   /**
@@ -96,26 +105,40 @@ public class Viewport extends JPanel implements ActionListener {
    */
   private void renderEntities(Graphics g, int xOffset, int yOffset){
     // draws the player based on the direction it is facing
-    g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
+    g.drawImage(getEntityImg(player.getDir(), true), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
     getFocusY(player.getPos().y()*GameDimensions.TILE_SIZE), this);
     
     //TODO: display the enemy for level 2
-      
+    //g.drawImage(getEntityImg(enemy.getDir()), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
+    //getFocusY(player.getPos().y()*GameDimensions.TILE_SIZE), this);
+
   }
 
   /**
    * Returns a BufferedImage corresponding to the direction 
-   * the player is facing. 
+   * an entity is facing. 
    * 
-   * @param dir The direction the player is facing.
+   * @param dir The direction the entity is facing.
+   * @param player Whether the entity is a player.
+   * @return The image of an entity depending on the direction it is facing.
    */
-  private BufferedImage getEntityImg(Entity.Direction dir){
-    // check for the facingDir of player then return image accordingly
+  private BufferedImage getEntityImg(Entity.Direction dir, boolean player){
+    if (player){
+      // check for the facingDir of player then return image accordingly
+      switch (dir){
+        case Up: return Img.PlayerUp.image;
+        case Down: return Img.PlayerDown.image;
+        case Left: return Img.PlayerLeft.image; 
+        case Right: return Img.PlayerRight.image;
+        default: throw new IllegalArgumentException("Invalid direction./n");
+      }
+    }
+    // check for the facingDir of the enemy
     switch (dir){
-      case Up: return Img.PlayerUp.image;
-      case Down: return Img.PlayerDown.image;
-      case Left: return Img.PlayerLeft.image; 
-      case Right: return Img.PlayerRight.image;
+      case Up: return Img.EnemyUp.image;
+      case Down: return Img.EnemyDown.image;
+      case Left: return Img.EnemyLeft.image; 
+      case Right: return Img.EnemyRight.image;
       default: throw new IllegalArgumentException("Invalid direction./n");
     }
   }
