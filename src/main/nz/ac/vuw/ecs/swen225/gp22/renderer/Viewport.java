@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
-import java.awt.Dimension;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 
