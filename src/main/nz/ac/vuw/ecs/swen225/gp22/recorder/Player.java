@@ -13,7 +13,7 @@ import java.util.List;
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.10
+ * @version 1.11
  */
 public class Player extends JPanel {
   private final Base base;
