@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Load {
 
-    private static final String resourceDirectory = System.getProperty("user.dir")+"\\src\\main\\resources\\";
+    private static final String resourceDirectory = System.getProperty("user.dir")+"/resources/";
 
     /**
      * Load saved gamed from xml.
@@ -39,7 +39,7 @@ public class Load {
      * @param name level to load.
      */
     public static void loadLevel(String name){
-        File file = getFile("levels\\" + name);
+        File file = getFile("levels/" + name);
         Parser parser = new Parser(file);
         parser.parseMapInfo();
         List<Tile> tiles = parser.getTiles();

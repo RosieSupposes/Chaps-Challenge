@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 
@@ -67,7 +65,6 @@ public class Viewport extends JPanel implements ActionListener {
 */
   private BufferedImage getTileImg(Tile tile){
     if (tile instanceof Key k){ // check the colours against the four different ones available
-      System.out.print(""+k.getColor() + "Key");
       switch (k.getColor()){
         case Blue: return Img.BlueKey.image;
         case Green: return Img.GreenKey.image;
@@ -77,7 +74,6 @@ public class Viewport extends JPanel implements ActionListener {
       }
     }            
     if (tile instanceof LockedDoor ld){
-      System.out.print(""+ld.getColor() + "LockedDoor");
         switch (ld.getColor()){
           case Blue: return Img.BlueLockedDoor.image;
           case Green: return Img.GreenLockedDoor.image;
@@ -86,7 +82,7 @@ public class Viewport extends JPanel implements ActionListener {
           default: throw new IllegalArgumentException("Invalid colour.");
         }
     }
-    if (tile instanceof InfoField){ return Img.InfoField.image; }
+    if (tile instanceof InfoField){ return Img.InfoField.image; } //TODO: display infofield details
     if (tile instanceof Exit){ return Img.Exit.image; } 
     if (tile instanceof LockedExit){ return Img.LockedExit.image; }
     if (tile instanceof Treasure){ return Img.Treasure.image; }
@@ -108,8 +104,7 @@ public class Viewport extends JPanel implements ActionListener {
     g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*tileSize),
     getFocusY(player.getPos().y()*tileSize), this);
     
-    //TODO: check if the tile is a wall
-
+    //TODO: display the enemy for level 2
       
   }
 
@@ -141,7 +136,7 @@ public class Viewport extends JPanel implements ActionListener {
         previousMaze[xTick][yTick] = currentMaze[xTick][yTick];
 
         // Check if tiles are within range
-        if ((x > 0 && y > 0) && (x < currentMaze.length && y < currentMaze[x].length)) { //TODO: if not drawn properly, use Maze.
+        if ((x > 0 && y > 0) && (x < currentMaze.length && y < currentMaze[x].length)) {
           currentMaze[xTick][yTick] = Maze.getTile(new Maze.Point(x, y));
         }
       }
