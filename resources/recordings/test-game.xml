@@ -5,9 +5,10 @@
     <move x="5" y="1" direction="up"/>
     <move x="5" y="2" direction="up"/>
     <move x="4" y="2" direction="left"/>
-    <collect item="green-key"/>
+    <collect x="3" y="2" type="key" color="green"/>
     <move x="3" y="2" direction="left"/>
     <move x="3" y="3" direction="down"/>
+    <collect x="3" y="4" type="treasure"/>
     <move x="3" y="4" direction="down"/>
     <move x="4" y="4" direction="right"/>
 </game>
