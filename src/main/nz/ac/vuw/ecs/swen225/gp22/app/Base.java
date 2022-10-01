@@ -185,7 +185,7 @@ public class Base extends JFrame {
         try {
             Maze.player.move(dir);
             Maze.player.setDir(dir); //TODO remove, temp fix until Domain changes move method
-            recorder.addMove(new MoveAction(dir.name(), 1));
+            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), dir.toString()));
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
             //recorder.addTurn(new TurnAction(dir)); ? //TODO save turning action
