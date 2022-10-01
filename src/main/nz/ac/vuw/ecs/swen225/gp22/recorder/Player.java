@@ -54,6 +54,8 @@ public class Player extends JPanel {
     JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
       scrubber.setValue(scrubber.getValue() - 1);
       gamePanel.repaint();
+      isPlaying = false;
+      isRewinding = false;
     }, "stepback");
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
@@ -86,6 +88,8 @@ public class Player extends JPanel {
     JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
       scrubber.setValue(scrubber.getValue() + 1);
       gamePanel.repaint();
+      isPlaying = false;
+      isRewinding = false;
       }, "stepforward");
 
     JButton rewind = new GameButton("", BUTTON_DIM, e -> {
