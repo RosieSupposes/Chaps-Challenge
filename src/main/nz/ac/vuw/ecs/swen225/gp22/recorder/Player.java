@@ -171,7 +171,7 @@ public class Player extends JPanel {
     isRewinding = true;
     isPlaying = false;
     new Thread(() -> {
-      for (int i = scrubber.getValue(); i >= 0; i--) {
+      for (int i = currentAction; i >= 0; i--) {
         actions.get(i).undo();
         if (progress(i, isRewinding)) break;
       }
@@ -186,7 +186,7 @@ public class Player extends JPanel {
     isPlaying = true;
     isRewinding = false;
     new Thread(() -> {
-      for (int i = scrubber.getValue(); i < actions.size(); i++) {
+      for (int i = currentAction; i < actions.size(); i++) {
         actions.get(i).execute();
         if (progress(i, isPlaying)) break;
       }
