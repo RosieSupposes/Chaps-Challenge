@@ -14,7 +14,7 @@ import java.util.List;
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.10
+ * @version 1.11
  */
 public class Player extends JPanel {
   private final Base base;
@@ -136,9 +136,12 @@ public class Player extends JPanel {
     // only load if a file was selected
     if (fileChooser.getSelectedFile() != null) {
       Parser parser = new Parser(fileChooser.getSelectedFile());
-      level = parser.getLevel();
       actions = parser.getActions();
-      Load.loadLevel("level" + level);
+      if (scrubber != null) {
+        scrubber.setMaximum(actions.size() - 1);
+        currentAction = 0;
+        scrubber.setValue(0);
+      }
     }
   }
 
@@ -160,7 +163,7 @@ public class Player extends JPanel {
         actions.get(i).undo();
       }
     }
-    currentAction = position;
+    currentAction = position < actions.size() ? position : actions.size() - 1;
   }
 
   /**
@@ -170,7 +173,7 @@ public class Player extends JPanel {
     isRewinding = true;
     isPlaying = false;
     new Thread(() -> {
-      for (int i = scrubber.getValue(); i >= 0; i--) {
+      for (int i = currentAction; i >= 0; i--) {
         actions.get(i).undo();
         if (progress(i, isRewinding)) break;
       }
@@ -185,7 +188,7 @@ public class Player extends JPanel {
     isPlaying = true;
     isRewinding = false;
     new Thread(() -> {
-      for (int i = scrubber.getValue(); i < actions.size(); i++) {
+      for (int i = currentAction; i < actions.size(); i++) {
         actions.get(i).execute();
         if (progress(i, isPlaying)) break;
       }
@@ -201,8 +204,8 @@ public class Player extends JPanel {
    * @return True if the player should stop progressing.
    */
   private boolean progress(int i, boolean isProgressing) {
+    currentAction = i < actions.size() ? i : actions.size() - 1;
     scrubber.setValue(i);
-    currentAction = i;
     try {
       Thread.sleep(1000 / speed);
     } catch (InterruptedException e) {
