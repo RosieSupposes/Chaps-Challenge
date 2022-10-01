@@ -16,16 +16,11 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.*;
  * such as the player, free tiles, walls, keys, locked doors, treasures, locked exit, and exit.
  * 
  * @author Diana Batoon, 300475111 
- * @version 1.3
+ * @version 1.4
  */
 public class Viewport extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
 
-  private static final int tileSize = 60; // tiles are 60x60
-  private static final int numTiles = 9; // number of tiles per row and col
-  private static final int focusArea = numTiles/2;
-
-  // maze variables
   private Player player;
   private final Tile[][] currentMaze;
   private final Tile[][] previousMaze; // the view of the maze before a player moves
@@ -35,8 +30,8 @@ public class Viewport extends JPanel implements ActionListener {
    */
   public Viewport(){ 
     this.player = Maze.player;
-    currentMaze = new Tile[numTiles][numTiles];
-    previousMaze = new Tile[numTiles][numTiles]; 
+    currentMaze = new Tile[GameDimensions.NUM_GAME_TILE][GameDimensions.NUM_GAME_TILE];
+    previousMaze = new Tile[GameDimensions.NUM_GAME_TILE][GameDimensions.NUM_GAME_TILE]; 
   }
 
   /**
@@ -48,11 +43,11 @@ public class Viewport extends JPanel implements ActionListener {
    * @param maze The maze to be drawn on. 
    */
   private void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
-    for (int x = 0; x < numTiles; x++){
-        for (int y = 0; y < numTiles; y++){
+    for (int x = 0; x < GameDimensions.NUM_GAME_TILE; x++){
+        for (int y = 0; y < GameDimensions.NUM_GAME_TILE; y++){
             if (maze[x][y] != null) { // check that the tile is not null
                 g.drawImage(getTileImg(Maze.getTile(new Maze.Point(x,y))), 
-                (x*tileSize) + xOffset, (y*tileSize) + yOffset, this);
+                (x*GameDimensions.TILE_SIZE) + xOffset, (y*GameDimensions.TILE_SIZE) + yOffset, this);
             }            
         }
     }
@@ -70,7 +65,7 @@ public class Viewport extends JPanel implements ActionListener {
         case Green: return Img.GreenKey.image;
         case Red: return Img.RedKey.image;
         case Yellow: return Img.YellowKey.image;
-        default: throw new IllegalArgumentException("Invalid colour.");
+        default: throw new IllegalArgumentException("Invalid colour./n");
       }
     }            
     if (tile instanceof LockedDoor ld){
@@ -79,7 +74,7 @@ public class Viewport extends JPanel implements ActionListener {
           case Green: return Img.GreenLockedDoor.image;
           case Red: return Img.RedLockedDoor.image;
           case Yellow: return Img.YellowLockedDoor.image;
-          default: throw new IllegalArgumentException("Invalid colour.");
+          default: throw new IllegalArgumentException("Invalid colour./n");
         }
     }
     if (tile instanceof InfoField){ return Img.InfoField.image; } //TODO: display infofield details
@@ -101,8 +96,8 @@ public class Viewport extends JPanel implements ActionListener {
    */
   private void renderEntities(Graphics g, int xOffset, int yOffset){
     // draws the player based on the direction it is facing
-    g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*tileSize),
-    getFocusY(player.getPos().y()*tileSize), this);
+    g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
+    getFocusY(player.getPos().y()*GameDimensions.TILE_SIZE), this);
     
     //TODO: display the enemy for level 2
       
@@ -121,7 +116,7 @@ public class Viewport extends JPanel implements ActionListener {
       case Down: return Img.PlayerDown.image;
       case Left: return Img.PlayerLeft.image; 
       case Right: return Img.PlayerRight.image;
-      default: throw new IllegalArgumentException("Invalid direction.");
+      default: throw new IllegalArgumentException("Invalid direction./n");
     }
   }
 
@@ -131,10 +126,10 @@ public class Viewport extends JPanel implements ActionListener {
   */
   private void setFocusArea(){
     // loop through each tile in the maze to determine which are visible
-    for (int xTick = 0, x = player.getPos().x() - focusArea; x <= player.getPos().x() + focusArea; xTick++, x++){
-      for (int yTick = 0, y = player.getPos().y() - focusArea; y <= player.getPos().y() + focusArea; yTick++, y++){
+    for (int xTick = 0, x = player.getPos().x() - GameDimensions.FOCUS_AREA; x <= player.getPos().x() + GameDimensions.FOCUS_AREA; xTick++, x++){
+      for (int yTick = 0, y = player.getPos().y() - GameDimensions.FOCUS_AREA; y <= player.getPos().y() + GameDimensions.FOCUS_AREA; yTick++, y++){
         previousMaze[xTick][yTick] = currentMaze[xTick][yTick];
-
+        
         // Check if tiles are within range
         if ((x > 0 && y > 0) && (x < currentMaze.length && y < currentMaze[x].length)) {
           currentMaze[xTick][yTick] = Maze.getTile(new Maze.Point(x, y));
@@ -149,7 +144,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param x The player's x position.
    * @return The x position in the focus area.
    */
-  private int getFocusX(int x) { return focusArea + x - player.getPos().x() ; }
+  private int getFocusX(int x) { return GameDimensions.FOCUS_AREA + x - player.getPos().x() ; }
   
   /**
    * Convert the player's y position to the focus area's coordinates.
@@ -157,7 +152,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param y The player's y position.
    * @return The y position in the focus area.
    */
-  private int getFocusY(int y) { return focusArea + y - player.getPos().y(); }
+  private int getFocusY(int y) { return y - player.getPos().y() + GameDimensions.FOCUS_AREA; }
 
   @Override
   public void paintComponent(Graphics g){
