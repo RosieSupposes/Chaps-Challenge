@@ -134,9 +134,12 @@ public class Player extends JPanel {
     // only load if a file was selected
     if (fileChooser.getSelectedFile() != null) {
       Parser parser = new Parser(fileChooser.getSelectedFile());
-      int level = parser.getLevel();
       actions = parser.getActions();
-      System.out.println(level);
+      if (scrubber != null) {
+        scrubber.setMaximum(actions.size() - 1);
+        currentAction = 0;
+        scrubber.setValue(0);
+      }
     }
   }
 
@@ -158,7 +161,7 @@ public class Player extends JPanel {
         actions.get(i).undo();
       }
     }
-    currentAction = position;
+    currentAction = position < actions.size() ? position : actions.size() - 1;
   }
 
   /**
