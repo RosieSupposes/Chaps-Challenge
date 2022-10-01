@@ -122,10 +122,10 @@ public class Base extends JFrame {
 
         Player playerWindow = new Player(this);
 
-        add(BorderLayout.CENTER, playerWindow);//add the new phase viewport
-        setMinimumSize(new Dimension(GameDimensions.WINDOW_WIDTH, GameDimensions.WINDOW_HEIGHT + 150));//to keep the current size
-        pack();                     //after pack
-        playerWindow.requestFocus();//need to be after pack
+        add(BorderLayout.CENTER, playerWindow);
+        setMinimumSize(new Dimension(GameDimensions.WINDOW_WIDTH, GameDimensions.WINDOW_HEIGHT + 150));
+        pack();
+        playerWindow.requestFocus(); //need to be after pack
 
         components.add(playerWindow);
     }
@@ -220,6 +220,21 @@ public class Base extends JFrame {
     }
 
     /**
+     * gets the game window.
+     * @return game window
+     */
+    public JPanel getGameWindow(){
+        assert Maze.player != null;
+
+        JPanel game = new Viewport();
+
+        JPanel side = new JPanel(); //TODO link to renderer side panel
+        side.setBackground(Main.LIGHT_YELLOW_COLOR);
+
+        return new PhasePanel(game,side);
+    }
+
+    /**
      * Run and display menu
      */
     public void menuScreen() {
@@ -250,18 +265,20 @@ public class Base extends JFrame {
      *
      * @param seconds      number of seconds into level
      */
-    public void loadLevel(int seconds) {
+    public void loadLevel(int seconds, int milliseconds) {
+        assert Maze.player != null;
+
         runClosePhase();
-
+        
+        //TODO switch to getGameWindow method once Renderer side panel is created
         JPanel game = new Viewport();
-
-        JPanel side = new JPanel(); //TODO link to renderer side panel
+        JPanel side = new JPanel();
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
         JLabel timeLabel = new JLabel("Time: 0");
         timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
-
         final PhasePanel level = new PhasePanel(game, side);
+
         timeSec = seconds;
         timeMS = 0;
         gameTimer = new Timer(20, unused -> {
