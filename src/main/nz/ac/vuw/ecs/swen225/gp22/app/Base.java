@@ -154,7 +154,7 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
-        Save.saveGame("test-save-file"); //TODO persistency should choose name, App should pass current time
+        Save.saveGame(gameTimer.getDelay()); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
     }
 
