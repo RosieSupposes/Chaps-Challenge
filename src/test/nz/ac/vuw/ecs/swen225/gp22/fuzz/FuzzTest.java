@@ -67,6 +67,11 @@ public class FuzzTest {
                 });
                 try {
                     Thread.sleep(100);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            robot.keyRelease(i);
+                        }
+                    });
                 } catch (InterruptedException e) {
                 }
             }
@@ -95,6 +100,11 @@ public class FuzzTest {
                 });
                 try {
                     Thread.sleep(100);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            robot.keyRelease(i);
+                        }
+                    });
                 } catch (InterruptedException e) {
                 }
             }
