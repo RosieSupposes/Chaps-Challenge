@@ -28,7 +28,7 @@ public record CollectAction(int x, int y, String item, String color) implements 
         .addAttribute("y", String.valueOf(y))
         .addAttribute("item", item);
 
-    if (color != null) { element.addAttribute("color", color); }
+    if (!color.equals("None")) { element.addAttribute("color", color); }
 
     return element;
   }

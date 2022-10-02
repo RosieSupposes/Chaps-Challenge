@@ -31,7 +31,7 @@ public record DoorAction(int x, int y, String type, String color) implements Act
         .addAttribute("y", String.valueOf(y))
         .addAttribute("type", type);
 
-    if (color != null) { door.addAttribute("color", color); }
+    if (!color.equals("None")) { door.addAttribute("color", color); }
 
     return door;
   }
