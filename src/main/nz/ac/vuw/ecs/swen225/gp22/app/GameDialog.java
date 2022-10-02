@@ -18,20 +18,88 @@ public class GameDialog {
     public static void makeGameDialog(Base base, String type) {
         switch (type) {
             case "Pause" -> setUpPause(base);
-            case "GameOver" -> setUpGameOver();
-            case "GameCompleted" -> setUpGameCompleted();
+            case "GameOver" -> setUpGameOver(base);
+            case "GameCompleted" -> setUpGameCompleted(base);
             case "Save" -> setUpSave();
         }
     }
 
     private static void setUpSave() {
+        JDialog dialog = new JDialog();
+        dialog.setBounds(x, y, 300, 250);
+        dialog.setLayout(new GridBagLayout());
+        dialog.setBackground(Main.LIGHT_YELLOW_COLOR);
 
+        JLabel info = new JLabel("Fuck You");
+        Runnable action = () -> {
+            dialog.setVisible(false);
+        };
+        GameButton button = new GameButton("Okay",BUTTON_SIZE,e->action.run());
+//        info.addKeyListener(new Controller(base,true));
+//        GameButton homeButton = makeButton("Exit to Home", dialog, action, KeyEvent.VK_H, false);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(10, 10, 10, 10);
+
+        c.gridy = 0;
+        dialog.add(info, c);
+        c.gridy = 1;
+        dialog.add(button, c);
+
+        dialog.setVisible(true);
     }
 
-    private static void setUpGameCompleted() {
+    private static void setUpGameCompleted(Base base) {
+        JDialog dialog = new JDialog();
+        dialog.setBounds(x, y, 300, 250);
+        dialog.setLayout(new GridBagLayout());
+        dialog.setBackground(Main.LIGHT_YELLOW_COLOR);
+
+        JLabel info = new JLabel("You Win");
+        Runnable action = () -> {
+            base.menuScreen();
+            dialog.setVisible(false);
+        };
+//        info.addKeyListener(new Controller(base,true));
+        GameButton homeButton = makeButton("Exit to Home", dialog, action, KeyEvent.VK_H, false);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(10, 10, 10, 10);
+
+        c.gridy = 0;
+        dialog.add(info, c);
+        c.gridy = 1;
+        dialog.add(homeButton, c);
+
+        dialog.setVisible(true);
     }
 
-    private static void setUpGameOver() {
+    private static void setUpGameOver(Base base) {
+        JDialog dialog = new JDialog();
+        dialog.setBounds(x, y, 300, 250);
+        dialog.setLayout(new GridBagLayout());
+        dialog.setBackground(Main.LIGHT_YELLOW_COLOR);
+
+        JLabel info = new JLabel("Fuck You");
+        Runnable action = () -> {
+            base.menuScreen();
+            dialog.setVisible(false);
+        };
+//        info.addKeyListener(new Controller(base,true));
+        GameButton homeButton = makeButton("Exit to Home", dialog, action, KeyEvent.VK_H, false);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(10, 10, 10, 10);
+
+        c.gridy = 0;
+        dialog.add(info, c);
+        c.gridy = 1;
+        dialog.add(homeButton, c);
+
+        dialog.setVisible(true);
     }
 
     private static void setUpPause(Base base) {
