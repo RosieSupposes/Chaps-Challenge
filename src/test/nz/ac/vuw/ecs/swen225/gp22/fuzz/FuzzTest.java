@@ -7,7 +7,6 @@ import java.time.Duration;
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.junit.jupiter.api.Test;
 import java.util.*;
-import java.util.stream.IntStream;
 import javax.swing.SwingUtilities;
 import java.awt.Robot;
 import java.awt.AWTException;
@@ -24,7 +23,7 @@ public class FuzzTest {
     static final Random r = new Random();
 
     // List of possible inputs
-    List<Integer> inputs = List.of(KeyEvent.VK_UP,
+    private final List<Integer> inputs = List.of(KeyEvent.VK_UP,
             KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN);
 
     //Map of inputs and their opposite inputs
@@ -35,15 +34,15 @@ public class FuzzTest {
                     KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT);
 
     /**
-     * Generates a list of 100 valid inputs
+     * Generates a list of 500 valid inputs
      * Chap will not move back to the tile he was previously on
      * 
-     * @return list of 100 valid inputs
+     * @return list of 500 valid inputs
      */
     private List<Integer> generateInputs() {
         int prev = -1;
         List<Integer> moves = new ArrayList<>();
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 500; i++) {
             while(true) {
                 int random = r.nextInt(inputs.size());
                 int move = inputs.get(random);
@@ -138,6 +137,6 @@ public class FuzzTest {
     @Test
     public void fuzzTests() {
         assertTimeout(Duration.ofSeconds(60), () -> test1());
-        //assertTimeout(Duration.ofSeconds(60), () -> test2());
+        assertTimeout(Duration.ofSeconds(60), () -> test2());
     }
 }
