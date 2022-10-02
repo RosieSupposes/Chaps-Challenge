@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
  * Class for Fuzz Testing
  * 
  * @author Gavin Lim, 300585341
- * @version 1.2
+ * @version 1.3
  */
 public class FuzzTest {
 
@@ -26,6 +26,13 @@ public class FuzzTest {
     // List of possible inputs
     List<Integer> inputs = List.of(KeyEvent.VK_UP,
             KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN);
+
+    //Map of inputs and opposite inputs
+    private final Map<Integer, Integer> inputsAndOpposite =
+            Map.of(KeyEvent.VK_UP, KeyEvent.VK_DOWN,
+                    KeyEvent.VK_DOWN, KeyEvent.VK_UP,
+                    KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+                    KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT);
 
     /**
      * Generates a list of 100 valid inputs
@@ -120,6 +127,6 @@ public class FuzzTest {
     @Test
     public void fuzzTests() {
         assertTimeout(Duration.ofSeconds(60), () -> test1());
-        assertTimeout(Duration.ofSeconds(60), () -> test2());
+        //assertTimeout(Duration.ofSeconds(60), () -> test2());
     }
 }
