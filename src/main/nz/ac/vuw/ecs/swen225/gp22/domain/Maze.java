@@ -8,7 +8,7 @@ import java.util.Objects;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.5
+ * @version 1.7
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -90,6 +90,9 @@ public class Maze{
 
     /** @return Whether or not all the {@link Treasure} tiles on the map have been collected. */
     public static boolean collectedAllTreasures(){ return treasuresLeft == 0; }
+
+    /** @return The number of treasures left to collect. */
+    public static int getTreasuresLeft(){ return treasuresLeft; }
 
     /** @return The name of the next level to load. */
     public static String getNextLevel(){ return nextLevel; }
