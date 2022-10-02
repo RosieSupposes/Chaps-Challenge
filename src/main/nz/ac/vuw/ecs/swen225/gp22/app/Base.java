@@ -96,6 +96,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
+        GameDialog.makeGameDialog(this,"Pause");
     }
 
     /**
