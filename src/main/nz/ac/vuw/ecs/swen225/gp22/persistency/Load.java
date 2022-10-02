@@ -11,26 +11,18 @@ import java.util.List;
  * Using xml files.
  *
  * @author Gideon Wilkins, 300576057
- * @version 1.3
+ * @version 1.4
  */
 public class Load {
-
     private static final String resourceDirectory = System.getProperty("user.dir")+"/resources/";
+    private static final String previousGame = "saves/previousGame";
 
     /**
-     * Load saved gamed from xml.
-     * Open fileChooser
+     * Load saved game from xml.
+     * Open fileChooser.
      */
     public static void resumeGame(){
         System.out.println("Loading saved game");
-    }
-
-    /**
-     * Determine if there is a previous unfinished level to load
-     * @return true if there is an unfinished level false otherwise
-     */
-    public static boolean isDefaultPresent(){
-        return getFile("previousGame").isFile();
     }
 
     /**
@@ -39,15 +31,62 @@ public class Load {
      * @param name level to load.
      */
     public static void loadLevel(String name){
-        File file = getFile("levels/" + name);
+        loadGame(getFile("levels/" + name));
+    }
+
+    /**
+     * Determine if there is a previous unfinished level to load.
+     * @return true if there is an unfinished level false otherwise.
+     */
+    public static boolean previousGamePresent(){return getFile(previousGame).isFile();}
+
+    /**
+     * Loads the previous game if present.
+     * If there is no previous game present loads level1
+     * returns the time passed in the previous game
+     *
+     * @return an int representing how long the previous game was played for
+     */
+    public static int previousGame() {
+        if(!previousGamePresent()){
+            loadLevel("level1");
+            return 0;
+        }
+        Parser parser = loadGame(getFile(previousGame));
+        return parser.getTime();
+    }
+
+    /**
+     * Parses information about the previous game
+     *
+     * @return a string containing information about the previous game, time passed & keys collected
+     */
+    public static String previousGameInfo(){
+        if(!previousGamePresent()) return "Time: 0, Keys Collected: 0";
+        Parser parser = new Parser(getFile(previousGame));
+        return "Time: " + parser.getTime() + ", Keys: " + parser.getNumKeysCollected();
+    }
+
+    /**
+     * Parses a game from the provided file
+     * @param file the file to parse and load the game from
+     */
+    private static Parser loadGame(File file){
         Parser parser = new Parser(file);
         parser.parseMapInfo();
         List<Tile> tiles = parser.getTiles();
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
         }
+        return parser;
     }
 
+    /**
+     * Loads and returns a file using the provided file name
+     *
+     * @param file fileName to find
+     * @return The File that was found associated with the provided name,
+     */
     private static File getFile(String file){
         return new File(resourceDirectory + file + ".xml");
     }

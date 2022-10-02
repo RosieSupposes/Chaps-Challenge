@@ -1,13 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.Img;
+import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Panel containing menu information
@@ -52,9 +48,9 @@ public class MenuMainPanel extends JPanel {
      * @return JLabel for title
      */
     private JPanel titlePanelForMenu() {
-        Dimension dim = new Dimension(400,100);
-        ImagePanel panel = new ImagePanel("Title",dim,new Dimension(0,0));
-        panel.setPreferredSize(new Dimension((int) (dim.width*0.8), (int) (dim.height*0.8)));
+        Dimension dim = new Dimension(400, 100);
+        ImagePanel panel = new ImagePanel("Title", dim, 0.8);
+        panel.setPreferredSize(dim);
         return panel;
     }
 
@@ -96,7 +92,8 @@ public class MenuMainPanel extends JPanel {
         buttons.add(start, c);
 
         c.gridx = 1;
-        JLabel info = new JLabel("Timer: 37, Keys: 3"); //TODO ask persistency for info on save
+        JLabel info = new JLabel(Load.previousGameInfo());
+        info.setForeground(Main.TEXT_COLOR);
         buttons.add(info, c);
     }
 
