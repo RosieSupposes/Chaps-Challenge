@@ -190,7 +190,9 @@ public class Player extends JPanel {
     isRewinding = true;
     isPlaying = false;
     new Thread(() -> {
-      for (int i = currentAction; i >= 0; i--) {
+      for (int i = currentAction; i > 0; i--) {
+        Action prevAction = actions.get(i - 1);
+        if (prevAction instanceof MoveAction m) { m.execute(); }
         actions.get(i).undo();
         gamePanel.repaint();
         if (progress(i, isRewinding)) break;
