@@ -65,15 +65,15 @@ public class Parser {
       case "collect" -> {
         int x = Integer.parseInt(element.attributeValue("x"));
         int y = Integer.parseInt(element.attributeValue("y"));
-        String type = element.attributeValue("type");
-        String colour = element.attributeValue("colour");
+        String type = element.attributeValue("item");
+        String colour = element.attributeValue("color");
         return new CollectAction(x, y, type, colour);
       }
       case "door" -> {
         int x = Integer.parseInt(element.attributeValue("x"));
         int y = Integer.parseInt(element.attributeValue("y"));
         String type = element.attributeValue("type");
-        String colour = element.attributeValue("colour");
+        String colour = element.attributeValue("color");
         return new DoorAction(x, y, type, colour);
       }
       default -> throw new IllegalArgumentException("Invalid action" + element.getName());
