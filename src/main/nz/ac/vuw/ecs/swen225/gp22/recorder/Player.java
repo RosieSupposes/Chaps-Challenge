@@ -10,12 +10,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.11
+ * @version 1.12
  */
 public class Player extends JPanel {
   private final Base base;
