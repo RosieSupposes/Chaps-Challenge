@@ -8,7 +8,7 @@ import java.util.Objects;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.5
+ * @version 1.7
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */

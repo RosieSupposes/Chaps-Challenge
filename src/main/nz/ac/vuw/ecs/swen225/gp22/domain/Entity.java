@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.5
+ * @version 1.6
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -63,6 +63,16 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      */
     public void move(){ 
         move(facingDir);
+    }
+
+    /**
+     * Combines methods {@link #setDir setDir()} and {@link #move move()}.
+     * 
+     * @param dir The new {@link Direction direction} of the entity. 
+     */
+    public void moveAndTurn(Direction dir){
+        setDir(dir);
+        move();
     }
 
     /** @return The {@link #entityPos position} of the entity. */
