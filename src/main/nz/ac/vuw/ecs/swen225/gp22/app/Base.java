@@ -3,8 +3,8 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
-import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 
@@ -15,6 +15,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType.*;
 
 /**
  * Base is the base window that all actions occur on.
@@ -183,23 +185,22 @@ public class Base extends JFrame {
         String direction = dir.toString();
         int x = Maze.player.getPos().x();
         int y = Maze.player.getPos().y();
-        //Action action;
+
+        Entity.Action action = null;
+
         try {
-            //action =
-            Maze.player.move(dir);      //TODO collect action object abdul is to make
-            Maze.player.setDir(dir);    //TODO remove, temp fix until Domain changes move method
+            action = Maze.player.moveAndTurn(dir);
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
         recorder.addAction(new MoveAction(x, y, direction));
-        //String type = action.getType().toString(); //can return null
-        String type;
-        //String colour = action.getColour().toString(); //can return null
-        String colour;
-        if (false) {
-            recorder.addAction(new DoorAction(x, y, type, colour));
-        } else if (false) {
-            recorder.addAction(new CollectAction(x, y, type, colour));
+
+        if(action == null){ return; }
+        Entity.Action.Interaction interaction = action.interaction();
+        if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
+            recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
+        } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
+            recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
         }
     }
 
@@ -211,7 +212,7 @@ public class Base extends JFrame {
      * @param y         y position of player
      * @param direction action that occurred
      */
-    public void setMove(int x, int y, String direction, String action, String object, String color) {
+    public void setMove(int x, int y, String direction) {
         Maze.Point pos = new Maze.Point(x, y);
         Maze.player.setPos(pos);
         switch (direction) {
@@ -220,9 +221,23 @@ public class Base extends JFrame {
             case "Up" -> Maze.player.setDir(Entity.Direction.Up);
             case "Down" -> Maze.player.setDir(Entity.Direction.Down);
         }
+    }
+
+    /**
+     * for undoing and redoing actions from Recorder class.
+     * sets tiles.
+     *
+     * @param x      x coord of tile
+     * @param y      y coord of tile
+     * @param action Open, Close, Pick-up, Drop
+     * @param object Door, Exit, Key, Treasure
+     * @param color  Red, Green, Blue, Yellow
+     */
+    public void setAction(int x, int y, String action, String object, String color) {
+        Maze.Point pos = new Maze.Point(x, y);
         switch (action) {
             case "Open" -> {
-                switch(object){
+                switch (object) {
                     case "Door" -> Maze.setTile(pos, new Ground(pos));
                     case "Exit" -> Maze.setTile(pos, new Exit(pos));
                 }
@@ -231,10 +246,10 @@ public class Base extends JFrame {
                 switch (object) {
                     case "Door" -> {
                         switch (color) {
-                            case "Red" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Red));
-                            case "Green" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Green));
-                            case "Blue" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Blue));
-                            case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Yellow));
+                            case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
+                            case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
+                            case "Blue" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Blue));
+                            case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
                         }
                     }
                     case "Exit" -> Maze.setTile(pos, new LockedExit(pos));
@@ -255,7 +270,6 @@ public class Base extends JFrame {
                 }
             }
         }
-
     }
 
     /**
