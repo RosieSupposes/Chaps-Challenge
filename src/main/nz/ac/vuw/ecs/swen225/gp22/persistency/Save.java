@@ -75,8 +75,13 @@ public class Save {
 
         String filename = System.getProperty("user.dir") + "/resources/saves/"
                 + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
-        try (FileWriter out = new FileWriter(filename)) {
+        try {
+            FileWriter out = new FileWriter(filename);
+            FileWriter previousOut = new FileWriter(System.getProperty("user.dir") + "/resources/saves/previousGame.xml");
             (new XMLWriter(out, OutputFormat.createPrettyPrint())).write(doc);
+            (new XMLWriter(previousOut, OutputFormat.createPrettyPrint())).write(doc);
+            out.close();
+            previousOut.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
