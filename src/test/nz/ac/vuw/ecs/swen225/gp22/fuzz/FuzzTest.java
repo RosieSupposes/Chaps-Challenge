@@ -27,7 +27,7 @@ public class FuzzTest {
     List<Integer> inputs = List.of(KeyEvent.VK_UP,
             KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN);
 
-    //Map of inputs and opposite inputs
+    //Map of inputs and their opposite inputs
     private final Map<Integer, Integer> inputsAndOpposite =
             Map.of(KeyEvent.VK_UP, KeyEvent.VK_DOWN,
                     KeyEvent.VK_DOWN, KeyEvent.VK_UP,
@@ -36,14 +36,25 @@ public class FuzzTest {
 
     /**
      * Generates a list of 100 valid inputs
+     * Chap will not move back to the tile he was previously on
      * 
      * @return list of 100 valid inputs
      */
     private List<Integer> generateInputs() {
-        return IntStream.range(0, 100)
-                .map(i -> r.nextInt(inputs.size()))
-                .mapToObj(j -> inputs.get(j))
-                .toList();
+        int prev = -1;
+        List<Integer> moves = new ArrayList<>();
+        for(int i = 0; i < 100; i++) {
+            while(true) {
+                int random = r.nextInt(inputs.size());
+                int move = inputs.get(random);
+                if (prev == - 1 || move != inputsAndOpposite.get(prev)) {
+                    moves.add(move);
+                    prev = move;
+                    break;
+                }
+            }
+        }
+        return moves;
     }
 
     /**
