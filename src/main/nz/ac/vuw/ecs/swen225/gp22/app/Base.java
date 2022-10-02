@@ -265,7 +265,7 @@ public class Base extends JFrame {
      *
      * @param seconds      number of seconds into level
      */
-    public void loadLevel(int seconds, int milliseconds) {
+    public void loadLevel(int seconds) {
         assert Maze.player != null;
 
         runClosePhase();
@@ -274,7 +274,7 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         JPanel side = new JPanel();
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
-        JLabel timeLabel = new JLabel("Time: 0");
+        JLabel timeLabel = new JLabel("Time: "+ seconds);
         timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
         final PhasePanel level = new PhasePanel(game, side);
