@@ -25,8 +25,8 @@ public class Key extends ColorableTile{
         
         playerObserver = player -> {
             if(player.getPos().equals(tilePos)){
-                Maze.player.addKey(color);
                 Maze.resetTile(tilePos);
+                Maze.player.addKey(color);
             }
         };
         Maze.player.addObserver(playerObserver);
