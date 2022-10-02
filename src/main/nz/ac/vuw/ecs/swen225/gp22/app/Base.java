@@ -244,13 +244,13 @@ public class Base extends JFrame {
         switch (action) {
             case "Open" -> {
                 switch (object) {
-                    case "Door" -> Maze.setTile(pos, new Ground(pos));
-                    case "Exit" -> Maze.setTile(pos, new Exit(pos));
+                    case "UnlockDoor" -> Maze.setTile(pos, new Ground(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new Exit(pos));
                 }
             }
             case "Close" -> {
                 switch (object) {
-                    case "Door" -> {
+                    case "UnlockDoor" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
@@ -258,13 +258,13 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Exit" -> Maze.setTile(pos, new LockedExit(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
                 }
             }
             case "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Drop" -> {
                 switch (object) {
-                    case "Key" -> {
+                    case "PickupKey" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
@@ -272,7 +272,7 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Treasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
                 }
             }
         }
