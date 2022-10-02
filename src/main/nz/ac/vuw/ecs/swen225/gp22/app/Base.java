@@ -76,6 +76,8 @@ public class Base extends JFrame {
             loadLevel(time);
 
             recorder = new Recorder(1);
+            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
+
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -139,6 +141,7 @@ public class Base extends JFrame {
         loadLevel(time);
 
         recorder = new Recorder(1);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -149,6 +152,7 @@ public class Base extends JFrame {
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0);
         recorder = new Recorder(lvl);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
 
     /**
