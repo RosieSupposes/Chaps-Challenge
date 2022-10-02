@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import java.util.ArrayDeque;
 import java.util.Objects;
+import java.util.Queue;
 
 /**
  * This class stores the game state (player, tilemap, entities, and treasures). 
@@ -8,7 +10,7 @@ import java.util.Objects;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.7
+ * @version 1.8
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -23,6 +25,8 @@ public class Maze{
 
     /** Stores the name of the next level to load. If empty or null then the {@link #gameComplete() game over flag} returns true. */
     private static String nextLevel;
+
+    public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
 
     /** 
      * Generates a new map. This will be used by the persistency module for level loading. 

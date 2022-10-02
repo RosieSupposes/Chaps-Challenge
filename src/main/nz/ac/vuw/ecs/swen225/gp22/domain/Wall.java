@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * obstruct the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.2
+ * @version 1.3
  */
 public class Wall extends Tile{
     /**
@@ -17,4 +17,7 @@ public class Wall extends Tile{
     public Wall(Maze.Point tilePos){
         super(tilePos, true);
     }
+
+    @Override
+    public String toString(){ return "W"; }
 }
