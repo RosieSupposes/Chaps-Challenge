@@ -1,17 +1,17 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.Text;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Used to save the current game;
@@ -33,10 +33,25 @@ public class Save {
         mapInfo.addElement("width").addText("16"); //TODO get map width and height from domain
         mapInfo.addElement("height").addText("16");
         mapInfo.addElement("treasures").addText("3");  //TODO Maze get methods for saving game
-        Element player = mapInfo.addElement("player");
+        mapInfo.addElement("nextLevel").addText(Maze.getNextLevel());
+        Element saveInfo = root.addElement("saveInfo");
+        int keyCount = Maze.player.keyCount();
+        saveInfo.addElement("time").addText(String.valueOf(gameTime));
+        saveInfo.addElement("keysCollected").addText(String.valueOf(keyCount));
+        Element player = root.addElement("player");
         addPoint(player,Maze.player.getPos());
+        player.addAttribute("Direction",Maze.player.getDir().name());
+        if(keyCount > 0){
+            Element inventory = player.addElement("inventory");
+            /*Map<String,Long> keyMap = Maze.player.getKeyList().stream()
+                                                 .collect(Collectors.groupingBy(ColorableTile.Color::name,Collectors.counting()));
+            keyMap.forEach(
+                    (k,v) -> inventory.addElement("key")
+                                      .addAttribute("count",String.valueOf(v))
+                                      .addAttribute("color",k));
+             */
+        }
         Element tiles = root.addElement("tiles");
-
         for(int x = 0; x < 16; x++){
             for(int y = 0; y < 16; y++) {
                 Maze.Point p = new Maze.Point(x,y);
