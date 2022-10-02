@@ -27,6 +27,7 @@ public class Player extends JPanel {
   private int speed = 1;
   private int level;
   private GameButton playPause;
+  private JPanel gamePanel;
 
   private static final Dimension BUTTON_DIM = new Dimension(50, 30);
 
@@ -47,9 +48,7 @@ public class Player extends JPanel {
    * Set up the player.
    */
   private void setup() {
-    JPanel gamePanel = base.getGameWindow();
-    gamePanel.setPreferredSize(new Dimension(840, 540)); // Will be changed when I get passed the viewport later
-    gamePanel.setBackground(Color.BLACK);
+    gamePanel = base.getGameWindow();
 
     JButton stepBack = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() - 1), "stepback");
 
@@ -172,11 +171,13 @@ public class Player extends JPanel {
       // scrub forward
       for (int i = currentAction; i < position; i++) {
         actions.get(i).execute();
+        gamePanel.repaint();
       }
     } else if (position < currentAction) {
       // scrub backward
       for (int i = currentAction; i > position; i--) {
         actions.get(i).undo();
+        gamePanel.repaint();
       }
     }
     currentAction = position < actions.size() ? position : actions.size() - 1;
@@ -191,6 +192,7 @@ public class Player extends JPanel {
     new Thread(() -> {
       for (int i = currentAction; i >= 0; i--) {
         actions.get(i).undo();
+        gamePanel.repaint();
         if (progress(i, isRewinding)) break;
       }
       isRewinding = false;
@@ -207,6 +209,7 @@ public class Player extends JPanel {
     new Thread(() -> {
       for (int i = currentAction; i < actions.size(); i++) {
         actions.get(i).execute();
+        gamePanel.repaint();
         if (progress(i, isPlaying)) break;
       }
       isPlaying = false;
