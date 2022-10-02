@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <game level="1">
-    <move x="5" y="0" direction="up"/>
-    <move x="5" y="1" direction="up"/>
-    <move x="5" y="2" direction="up"/>
-    <move x="4" y="2" direction="left"/>
-    <collect x="3" y="2" type="key" color="green"/>
-    <move x="3" y="2" direction="left"/>
-    <move x="3" y="3" direction="down"/>
-    <collect x="3" y="4" type="treasure"/>
-    <move x="3" y="4" direction="down"/>
-    <move x="4" y="4" direction="right"/>
+    <move x="4" y="5" direction="Left"/>
+    <move x="3" y="5" direction="Left"/>
+    <collect x="3" y="5" item="PickupTreasure"/>
+    <move x="2" y="5" direction="Up"/>
+    <collect x="2" y="5" item="PickupKey" color="Blue"/>
+    <move x="2" y="4" direction="Down"/>
+    <move x="2" y="5" direction="Down"/>
+    <collect x="2" y="5" item="PickupKey" color="Red"/>
+    <move x="2" y="6" direction="Down"/>
+    <move x="2" y="7" direction="Right"/>
+    <move x="3" y="7" direction="Right"/>
+    <collect x="3" y="7" item="PickupTreasure"/>
+    <move x="4" y="7" direction="Right"/>
+    <move x="5" y="7" direction="Right"/>
+    <move x="6" y="7" direction="Right"/>
+    <door x="6" y="7" type="UnlockDoor" color="Blue"/>
+    <move x="7" y="7" direction="Left"/>
+    <move x="6" y="7" direction="Up"/>
+    <move x="6" y="6" direction="Up"/>
+    <collect x="6" y="6" item="PickupTreasure"/>
+    <move x="6" y="5" direction="Left"/>
+    <move x="5" y="5" direction="Left"/>
+    <move x="4" y="5" direction="Up"/>
+    <move x="4" y="4" direction="Up"/>
+    <move x="4" y="3" direction="Up"/>
+    <door x="4" y="3" type="UnlockDoor" color="Red"/>
+    <move x="4" y="2" direction="Up"/>
+    <door x="4" y="2" type="UnlockExit"/>
 </game>
