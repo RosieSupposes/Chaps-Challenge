@@ -1,4 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
+import org.dom4j.Element;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 import org.dom4j.Document;
