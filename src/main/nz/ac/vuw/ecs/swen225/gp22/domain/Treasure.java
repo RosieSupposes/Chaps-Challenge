@@ -26,6 +26,7 @@ public class Treasure extends Tile{
             if(player.getPos().equals(tilePos)){
                 Maze.collectTreasure();
                 Maze.resetTile(tilePos);
+                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.PickupTreasure);
             }
         };
         Maze.player.addObserver(playerObserver);

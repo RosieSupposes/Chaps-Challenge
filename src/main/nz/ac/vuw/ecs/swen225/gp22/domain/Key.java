@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * can pick up by walking onto the tile.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.4
+ * @version 1.5
  */
 public class Key extends ColorableTile{
     /** Used for tile functionality that depends on the player. */
@@ -25,8 +25,9 @@ public class Key extends ColorableTile{
         
         playerObserver = player -> {
             if(player.getPos().equals(tilePos)){
-                Maze.player.addKey(color);
                 Maze.resetTile(tilePos);
+                Maze.player.addKey(color);
+                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.PickupKey);
             }
         };
         Maze.player.addObserver(playerObserver);

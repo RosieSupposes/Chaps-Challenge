@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * on if they have collected all the treasures.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.4
+ * @version 1.5
  */
 public class LockedExit extends Tile{
     /** Used for tile functionality that depends on the player. */
@@ -26,6 +26,7 @@ public class LockedExit extends Tile{
             setObstructive(!Maze.collectedAllTreasures());
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
+                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.UnlockExit);
             }
         };
         Maze.player.addObserver(playerObserver);

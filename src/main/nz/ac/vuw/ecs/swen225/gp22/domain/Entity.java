@@ -1,11 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+
 /**
  * Template for entities in a level, including the player. 
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.6
+ * @version 1.8
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -23,6 +25,16 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
 
         /** Default constructor to set {@link #posChange}. */
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
+    }
+
+    public record Action(Maze.Point pos, Direction dir, Interaction interaction){
+        public enum Interaction{
+            None,
+            PickupKey,
+            PickupTreasure,
+            UnlockDoor,
+            UnlockExit;
+        }
     }
 
     /** Position of the entity in regards to the {@link Maze#tileMap tilemap}. */
@@ -67,12 +79,17 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
 
     /**
      * Combines methods {@link #setDir setDir()} and {@link #move move()}.
+     * Also returns an {@link Action} record for the app module to use.
      * 
      * @param dir The new {@link Direction direction} of the entity. 
      */
-    public void moveAndTurn(Direction dir){
+    public Action moveAndTurn(Direction dir){
         setDir(dir);
         move();
+
+        Action.Interaction interaction = Interaction.None;
+        if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
+        return new Action(entityPos, facingDir, interaction);
     }
 
     /** @return The {@link #entityPos position} of the entity. */
@@ -89,6 +106,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public void setPos(Maze.Point pos){ 
         if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
         entityPos = pos; 
+        updateObservers(); 
     }
 
     /**
@@ -99,5 +117,6 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public void setDir(Direction dir){ 
         if(dir == null) throw new IllegalArgumentException("Given direction is null");
         facingDir = dir; 
+        updateObservers(); 
     }
 }
