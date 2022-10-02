@@ -134,8 +134,8 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
-        Load.resumeGame(); //TODO ask persistency for time of loaded game
-        loadLevel(0);
+        int time = Load.resumeGame(); //TODO ask persistency for time of loaded game
+        loadLevel(time);
 
         recorder = new Recorder(1);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
@@ -145,7 +145,7 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
-        Load.loadLevel("level" + 1); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel( 1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0);
         recorder = new Recorder(lvl);
     }

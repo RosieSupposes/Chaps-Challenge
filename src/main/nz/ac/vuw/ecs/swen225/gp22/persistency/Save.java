@@ -45,7 +45,7 @@ public class Save {
         saveInfo.addElement("keysCollected").addText(String.valueOf(keyCount));
         Element player = root.addElement("player");
         addPoint(player,Maze.player.getPos());
-        player.addAttribute("Direction",Maze.player.getDir().name());
+        player.addAttribute("direction",Maze.player.getDir().name());
         if(keyCount > 0){
             Element inventory = player.addElement("inventory");
             Map<String,Long> keyMap = Maze.player.getAllKeys().stream()
@@ -67,12 +67,8 @@ public class Save {
                 tileElement.addAttribute("ID", tileID);
                 addPoint(tileElement,p);
                 switch (tileID){
-                    case "info" -> {
-                        tileElement.addElement("text").addText(((InfoField)tile).getText());
-                    }
-                    case "door","key" -> {
-                        tileElement.addElement("color").addText(((ColorableTile)tile).getColor().name());
-                    }
+                    case "info" -> tileElement.addElement("text").addText(((InfoField)tile).getText());
+                    case "door","key" -> tileElement.addElement("color").addText(((ColorableTile)tile).getColor().name());
                 }
             }
         }
