@@ -42,7 +42,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param yOffset Offset in the Y direction.
    * @param maze The maze to be drawn on. 
    */
-  private void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
+  public void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
     for (int x = 0; x < GameDimensions.NUM_GAME_TILE; x++){
         for (int y = 0; y < GameDimensions.NUM_GAME_TILE; y++){
             if (maze[x][y] != null) { // check that the tile is not null
@@ -58,7 +58,7 @@ public class Viewport extends JPanel implements ActionListener {
  * 
  * @param tile The tile being drawn on the canvas.
 */
-  private BufferedImage getTileImg(Tile tile){
+  public BufferedImage getTileImg(Tile tile){
     if (tile instanceof Key k){ // check the colours against the four different ones available
       switch (k.getColor()){
         case Blue: return Img.BlueKey.image;
@@ -90,6 +90,12 @@ public class Viewport extends JPanel implements ActionListener {
     return Img.FreeTile.image;
   }
 
+  /**
+   * Displays the information about the game that
+   * the player needs to do in order to complete a level.
+   * 
+   * @param g Graphics object needed to render images on the canvas.
+  */
   public void displayInfo(Graphics g){
     // if tile being stepped on is infofield then display game brief
     g.drawImage(Img.GameInfo.image, 100, 200, this); //TODO: make an image for infofield
@@ -103,7 +109,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param xOffset Offset in the X direction.
    * @param yOffset Offset in the Y direction.
    */
-  private void renderEntities(Graphics g, int xOffset, int yOffset){
+  public void renderEntities(Graphics g, int xOffset, int yOffset){
     // draws the player based on the direction it is facing
     g.drawImage(getEntityImg(player.getDir(), true), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
     getFocusY(player.getPos().y()*GameDimensions.TILE_SIZE), this);
@@ -122,7 +128,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param player Whether the entity is a player.
    * @return The image of an entity depending on the direction it is facing.
    */
-  private BufferedImage getEntityImg(Entity.Direction dir, boolean player){
+  public BufferedImage getEntityImg(Entity.Direction dir, boolean player){
     if (player){
       // check for the facingDir of player then return image accordingly
       switch (dir){
@@ -147,7 +153,7 @@ public class Viewport extends JPanel implements ActionListener {
   * Renders a new maze that focuses on the tiles within 
   * the vicinity of the player's current location on the canvas. 
   */
-  private void setFocusArea(){
+  public void setFocusArea(){
     // loop through each tile in the maze to determine which are visible
     for (int xTick = 0, x = player.getPos().x() - GameDimensions.FOCUS_AREA; x <= player.getPos().x() + GameDimensions.FOCUS_AREA; xTick++, x++){
       for (int yTick = 0, y = player.getPos().y() - GameDimensions.FOCUS_AREA; y <= player.getPos().y() + GameDimensions.FOCUS_AREA; yTick++, y++){
@@ -167,7 +173,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param x The player's x position.
    * @return The x position in the focus area.
    */
-  private int getFocusX(int x) { return GameDimensions.FOCUS_AREA + x - player.getPos().x() ; }
+  public int getFocusX(int x) { return GameDimensions.FOCUS_AREA + x - player.getPos().x() ; }
   
   /**
    * Convert the player's y position to the focus area's coordinates.
@@ -175,7 +181,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param y The player's y position.
    * @return The y position in the focus area.
    */
-  private int getFocusY(int y) { return y - player.getPos().y() + GameDimensions.FOCUS_AREA; }
+  public int getFocusY(int y) { return y - player.getPos().y() + GameDimensions.FOCUS_AREA; }
 
   @Override
   public void paintComponent(Graphics g){
