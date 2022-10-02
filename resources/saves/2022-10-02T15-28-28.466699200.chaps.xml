@@ -11,7 +11,7 @@
     <time>20</time>
     <keysCollected>5905</keysCollected>
   </saveInfo>
-  <player x="7" y="7" Direction="Left">
+  <player x="7" y="7" direction="Left">
     <inventory>
       <key count="2632" color="Red"/>
       <key count="3273" color="Blue"/>
