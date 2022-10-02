@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
+import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -90,7 +92,7 @@ public class MenuMainPanel extends JPanel {
         buttons.add(start, c);
 
         c.gridx = 1;
-        JLabel info = new JLabel("Timer: 37, Keys: 3"); //TODO ask persistency for info on save
+        JLabel info = new JLabel(Load.previousGameInfo());
         info.setForeground(Main.TEXT_COLOR);
         buttons.add(info, c);
     }

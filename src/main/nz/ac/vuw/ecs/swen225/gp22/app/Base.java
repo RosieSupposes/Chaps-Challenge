@@ -71,9 +71,12 @@ public class Base extends JFrame {
      * and run the level
      */
     public void startGame() {
-        //TODO check for last save file - Persistency
-        if (false) { //if file exists
-            //Load.defaultSave(); //TODO make persistency run default save
+        if (Load.previousGamePresent()) {
+            int time = Load.previousGame();
+            loadLevel(time);
+            
+            recorder = new Recorder(1);
+            //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
         }
@@ -132,8 +135,9 @@ public class Base extends JFrame {
      */
     public void loadGame() {
         Load.resumeGame(); //TODO ask persistency for time of loaded game
-        loadLevel(0, 0);
+        loadLevel(0);
 
+        recorder = new Recorder(1);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -142,7 +146,7 @@ public class Base extends JFrame {
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         Load.loadLevel("level" + 1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(0, 0);
+        loadLevel(0);
         recorder = new Recorder(lvl);
     }
 
@@ -260,9 +264,8 @@ public class Base extends JFrame {
      * Create, run and draw new level
      *
      * @param seconds      number of seconds into level
-     * @param milliseconds number milliseconds into level
      */
-    public void loadLevel(int seconds, int milliseconds) {
+    public void loadLevel(int seconds) {
         assert Maze.player != null;
 
         runClosePhase();
@@ -271,13 +274,13 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         JPanel side = new JPanel();
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
-        JLabel timeLabel = new JLabel("Time: 0");
+        JLabel timeLabel = new JLabel("Time: "+ seconds);
         timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
         final PhasePanel level = new PhasePanel(game, side);
 
         timeSec = seconds;
-        timeMS = milliseconds;
+        timeMS = 0;
         gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
             level.repaint(); //draws game
