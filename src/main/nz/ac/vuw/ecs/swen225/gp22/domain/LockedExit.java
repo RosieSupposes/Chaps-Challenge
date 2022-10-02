@@ -28,7 +28,7 @@ public class LockedExit extends Tile{
             setObstructive(!Maze.collectedAllTreasures());
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
-                Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.UnlockExit, null));
+                Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.UnlockExit, ColorableTile.Color.None));
             }
         };
         Maze.player.addObserver(playerObserver);
