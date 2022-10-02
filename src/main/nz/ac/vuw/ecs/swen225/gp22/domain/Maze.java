@@ -44,6 +44,9 @@ public class Maze{
         nextLevel = "";
     }
 
+    /** @return A {@link Point} representing the maps dimensions. */
+    public static Point getDimensions(){ return new Point(tileMap.length, tileMap[0].length); }
+
     /** 
      * Finds a {@link Tile} using the {@link #tileMap tilemap} given a {@link Point point}.
      * 
