@@ -18,11 +18,15 @@ import java.util.stream.Collectors;
  * Using xml files.
  *
  * @author Gideon Wilkins, 300576057
- * @version 1.3
+ * @version 1.4
  */
 public class Save {
     /**
      * Save current game as xml.
+     * Store information about the map, dimensions, number of treasures, nextLevel
+     * Store time and keysCollected
+     * Store player position, direction and inventory if present
+     * Store tilemap
      *
      * @param gameTime the time that has passed so far
      **/
@@ -30,9 +34,10 @@ public class Save {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("maze");
         Element mapInfo = root.addElement("mapInfo");
-        mapInfo.addElement("width").addText("16"); //TODO get map width and height from domain
-        mapInfo.addElement("height").addText("16");
-        mapInfo.addElement("treasures").addText("3");  //TODO Maze get methods for saving game
+        Maze.Point dimensions = Maze.getDimensions();
+        mapInfo.addElement("width").addText(String.valueOf(dimensions.x()));
+        mapInfo.addElement("height").addText(String.valueOf(dimensions.y()));
+        mapInfo.addElement("treasures").addText(String.valueOf(Maze.getTreasuresLeft()));
         mapInfo.addElement("nextLevel").addText(Maze.getNextLevel());
         Element saveInfo = root.addElement("saveInfo");
         int keyCount = Maze.player.keyCount();
@@ -43,13 +48,12 @@ public class Save {
         player.addAttribute("Direction",Maze.player.getDir().name());
         if(keyCount > 0){
             Element inventory = player.addElement("inventory");
-            /*Map<String,Long> keyMap = Maze.player.getKeyList().stream()
+            Map<String,Long> keyMap = Maze.player.getAllKeys().stream()
                                                  .collect(Collectors.groupingBy(ColorableTile.Color::name,Collectors.counting()));
             keyMap.forEach(
                     (k,v) -> inventory.addElement("key")
                                       .addAttribute("count",String.valueOf(v))
                                       .addAttribute("color",k));
-             */
         }
         Element tiles = root.addElement("tiles");
         for(int x = 0; x < 16; x++){
