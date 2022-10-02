@@ -96,6 +96,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
+        //GameDialog.makeGameDialog(this,"Pause");
     }
 
     /**
@@ -216,7 +217,7 @@ public class Base extends JFrame {
      * @param y         y position of player
      * @param direction action that occurred
      */
-    public void setMove(int x, int y, String direction) {
+    public static void setMove(int x, int y, String direction) {
         Maze.Point pos = new Maze.Point(x, y);
         Maze.player.setPos(pos);
         switch (direction) {
@@ -237,7 +238,7 @@ public class Base extends JFrame {
      * @param object Door, Exit, Key, Treasure
      * @param color  Red, Green, Blue, Yellow
      */
-    public void setAction(int x, int y, String action, String object, String color) {
+    public static void setAction(int x, int y, String action, String object, String color) {
         Maze.Point pos = new Maze.Point(x, y);
         switch (action) {
             case "Open" -> {
