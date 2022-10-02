@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * on if they have collected all the treasures.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class LockedExit extends Tile{
     /** Used for tile functionality that depends on the player. */
@@ -35,4 +35,7 @@ public class LockedExit extends Tile{
     public void deleteTile(){ 
         Maze.player.removeObserver(playerObserver);
     }
+
+    @Override
+    public String toString(){ return "L"; }
 }

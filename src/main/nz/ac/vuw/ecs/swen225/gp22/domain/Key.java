@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * can pick up by walking onto the tile.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class Key extends ColorableTile{
     /** Used for tile functionality that depends on the player. */
@@ -36,4 +36,7 @@ public class Key extends ColorableTile{
     public void deleteTile(){ 
         Maze.player.removeObserver(playerObserver);
     }
+
+    @Override
+    public String toString(){ return "K"; }
 }

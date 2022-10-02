@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Represents an empty tile.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class Ground extends Tile{
     /**
@@ -16,4 +16,7 @@ public class Ground extends Tile{
     public Ground(Maze.Point tilePos){
         super(tilePos, false);
     }
+
+    @Override
+    public String toString(){ return "G"; }
 }

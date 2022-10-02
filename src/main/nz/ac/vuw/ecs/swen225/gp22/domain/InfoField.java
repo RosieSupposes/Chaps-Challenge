@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * additional information if they are on it.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class InfoField extends Tile{
     /** The text that will be displayed if the player is on this tile. */
@@ -25,4 +25,7 @@ public class InfoField extends Tile{
 
     /** @return The {@link #infoText info text} of this tile. */
     public String getText(){ return infoText; }
+
+    @Override
+    public String toString(){ return "I"; }
 }

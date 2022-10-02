@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * on if they have a key of the correct color.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class LockedDoor extends ColorableTile{
     /** Used for tile functionality that depends on the player. */
@@ -38,4 +38,7 @@ public class LockedDoor extends ColorableTile{
     public void deleteTile(){ 
         Maze.player.removeObserver(playerObserver);
     }
+
+    @Override
+    public String toString(){ return "D"; }
 }
