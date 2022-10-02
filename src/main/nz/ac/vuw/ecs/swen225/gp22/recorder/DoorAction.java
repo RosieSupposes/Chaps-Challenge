@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.dom4j.Element;
 import org.dom4j.tree.BaseElement;
 
@@ -7,7 +8,7 @@ import org.dom4j.tree.BaseElement;
  * An action that opens a door.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.2
  * @param x the x coordinate of the door
  * @param y the y coordinate of the door
  * @param type the type of the door
@@ -16,12 +17,12 @@ import org.dom4j.tree.BaseElement;
 public record DoorAction(int x, int y, String type, String color) implements Action {
   @Override
   public void execute() {
-    System.out.println("Opened " + color + " " + type + " door at " + x + ", " + y);
+    Base.setAction(x, y, "Open", type, color);
   }
 
   @Override
   public void undo() {
-    System.out.println("Closed " + color + " " + type + " door at " + x + ", " + y);
+    Base.setAction(x, y, "Close", type, color);
   }
 
   @Override
