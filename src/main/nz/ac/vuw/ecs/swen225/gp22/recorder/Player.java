@@ -50,7 +50,10 @@ public class Player extends JPanel {
   private void setup() {
     gamePanel = base.getGameWindow();
 
-    JButton stepBack = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() - 1), "stepback");
+    JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
+      scrubber.setValue(scrubber.getValue() - 1);
+      gamePanel.repaint();
+    }, "stepback");
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
     scrubber.setPreferredSize(new Dimension(700, 25));
@@ -79,7 +82,10 @@ public class Player extends JPanel {
       if (actions != null) scrubber.setMaximum(actions.size());
     });
 
-    JButton stepForward = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() + 1), "stepforward");
+    JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
+      scrubber.setValue(scrubber.getValue() + 1);
+      gamePanel.repaint();
+      }, "stepforward");
 
     JButton rewind = new GameButton("", BUTTON_DIM, e -> {
       playPause.changeIcon("pause");
@@ -156,6 +162,7 @@ public class Player extends JPanel {
         scrubber.setMaximum(actions.size() - 1);
         currentAction = 0;
         scrubber.setValue(0);
+        gamePanel.repaint();
       }
     }
   }
