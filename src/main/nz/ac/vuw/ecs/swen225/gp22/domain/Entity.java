@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile.Color;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
 
@@ -95,7 +96,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         setDir(dir);
         move();
 
-        Action.Interaction interaction = new Interaction(ActionType.None, null);
+        Action.Interaction interaction = new Interaction(ActionType.None, Color.None);
         if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
         return new Action(entityPos, facingDir, interaction);
     }
