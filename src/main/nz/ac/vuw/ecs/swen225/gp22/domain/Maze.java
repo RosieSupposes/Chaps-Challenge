@@ -48,6 +48,9 @@ public class Maze{
         nextLevel = "";
     }
 
+    /** @return A {@link Point} representing the maps dimensions. */
+    public static Point getDimensions(){ return new Point(tileMap.length, tileMap[0].length); }
+
     /** 
      * Finds a {@link Tile} using the {@link #tileMap tilemap} given a {@link Point point}.
      * 
@@ -94,6 +97,9 @@ public class Maze{
 
     /** @return Whether or not all the {@link Treasure} tiles on the map have been collected. */
     public static boolean collectedAllTreasures(){ return treasuresLeft == 0; }
+
+    /** @return The number of treasures left to collect. */
+    public static int getTreasuresLeft(){ return treasuresLeft; }
 
     /** @return The name of the next level to load. */
     public static String getNextLevel(){ return nextLevel; }

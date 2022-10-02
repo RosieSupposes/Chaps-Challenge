@@ -8,7 +8,7 @@ import java.util.List;
  * a base {@link Entity} but with an inventory to hold keys.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.4
+ * @version 1.5
  */
 public class Player extends Entity<Player>{
     /** Stores all the keys that the player has. */
@@ -64,4 +64,7 @@ public class Player extends Entity<Player>{
 
     /** @return The number of keys the player has. */
     public int keyCount(){ return collectedKeys.size(); }
+    
+    /** @return An immutable list of the keys collected. */
+    public List<ColorableTile.Color> getAllKeys(){ return collectedKeys.stream().toList(); }
 }
