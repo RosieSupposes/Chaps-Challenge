@@ -33,7 +33,7 @@ public class Player extends Entity<Player>{
      * @param color {@link ColorableTile.Color Color} of the key. 
      */
     public void addKey(ColorableTile.Color color){
-        if(color == null) throw new IllegalArgumentException("Given color is null.");
+        if(color == null || color == ColorableTile.Color.None) throw new IllegalArgumentException("Given color is null.");
         int oldKeyCount = Maze.player.keyCount();
         collectedKeys.add(color);
         assert oldKeyCount + 1 == Maze.player.keyCount() && Maze.player.hasKey(color) : "Key was not added to inventory.";
@@ -46,7 +46,7 @@ public class Player extends Entity<Player>{
      * @param color {@link ColorableTile.Color Color} of the key.
      */
     public void consumeKey(ColorableTile.Color color){
-        if(color == null) throw new IllegalArgumentException("Given color is null.");
+        if(color == null || color == ColorableTile.Color.None) throw new IllegalArgumentException("Given color is null.");
         if(!collectedKeys.contains(color)) throw new IllegalArgumentException("Player does not have this key.");
         int oldKeyCount = Maze.player.keyCount();
         collectedKeys.remove(color);
