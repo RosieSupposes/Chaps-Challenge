@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+
 /**
  * Represents a tile which the player can only walk
  * on if they have a key of the correct color.
@@ -29,7 +31,7 @@ public class LockedDoor extends ColorableTile{
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
                 Maze.player.consumeKey(color);
-                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.UnlockDoor);
+                Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.UnlockDoor, color));
             }
         };
         Maze.player.addObserver(playerObserver);

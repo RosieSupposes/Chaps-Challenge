@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+
 /**
  * Represents a tile which the player can only walk
  * on if they have collected all the treasures.
@@ -26,7 +28,7 @@ public class LockedExit extends Tile{
             setObstructive(!Maze.collectedAllTreasures());
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
-                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.UnlockExit);
+                Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.UnlockExit, null));
             }
         };
         Maze.player.addObserver(playerObserver);

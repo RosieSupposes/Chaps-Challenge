@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+
 /**
  * Represents a tile with a treasure on it, which the player
  * can pick up by walking onto the tile.
@@ -26,7 +28,7 @@ public class Treasure extends Tile{
             if(player.getPos().equals(tilePos)){
                 Maze.collectTreasure();
                 Maze.resetTile(tilePos);
-                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.PickupTreasure);
+                Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.PickupTreasure, null));
             }
         };
         Maze.player.addObserver(playerObserver);

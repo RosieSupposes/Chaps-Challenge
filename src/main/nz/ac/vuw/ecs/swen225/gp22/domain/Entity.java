@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
 
 /**
  * Template for entities in a level, including the player. 
@@ -27,13 +28,20 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
     }
 
+    /**
+     * A record used to store an action taken. This will be 
+     * used to revert actions when replaying a game.
+     */
     public record Action(Maze.Point pos, Direction dir, Interaction interaction){
-        public enum Interaction{
-            None,
-            PickupKey,
-            PickupTreasure,
-            UnlockDoor,
-            UnlockExit;
+        record Interaction(ActionType type, ColorableTile.Color color){
+            /** Represents the entity interacting with a tile. */
+            public enum ActionType{
+                None,
+                PickupKey,
+                PickupTreasure,
+                UnlockDoor,
+                UnlockExit;
+            }
         }
     }
 
@@ -87,7 +95,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         setDir(dir);
         move();
 
-        Action.Interaction interaction = Interaction.None;
+        Action.Interaction interaction = new Interaction(ActionType.None, null);
         if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
         return new Action(entityPos, facingDir, interaction);
     }

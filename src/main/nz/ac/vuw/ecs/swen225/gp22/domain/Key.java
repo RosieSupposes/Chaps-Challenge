@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+
 /**
  * Represents a tile with a key on it, which the player
  * can pick up by walking onto the tile.
@@ -27,7 +29,7 @@ public class Key extends ColorableTile{
             if(player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
                 Maze.player.addKey(color);
-                Maze.unclaimedInteractions.offer(Entity.Action.Interaction.PickupKey);
+                Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.PickupKey, color));
             }
         };
         Maze.player.addObserver(playerObserver);
