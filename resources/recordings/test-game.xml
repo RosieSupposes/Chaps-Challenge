@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <game level="1">
-    <move direction="up" steps="3"/>
-    <move direction="right" steps="2"/>
-    <collect item="green-key"/>
-    <move direction="right"/>
-    <move direction="down" steps="3"/>
-    <move direction="left"/>
+    <move x="5" y="0" direction="up"/>
+    <move x="5" y="1" direction="up"/>
+    <move x="5" y="2" direction="up"/>
+    <move x="4" y="2" direction="left"/>
+    <collect x="3" y="2" type="key" color="green"/>
+    <move x="3" y="2" direction="left"/>
+    <move x="3" y="3" direction="down"/>
+    <collect x="3" y="4" type="treasure"/>
+    <move x="3" y="4" direction="down"/>
+    <move x="4" y="4" direction="right"/>
 </game>

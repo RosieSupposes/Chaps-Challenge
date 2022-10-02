@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
 import nz.ac.vuw.ecs.swen225.gp22.app.Main;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 
@@ -25,6 +26,9 @@ public class Player extends JPanel {
   private boolean isRewinding = false;
   private int speed = 1;
   private int level;
+  private GameButton playPause;
+
+  private static final Dimension BUTTON_DIM = new Dimension(50, 30);
 
   /**
    * Create a new player.
@@ -47,10 +51,10 @@ public class Player extends JPanel {
     gamePanel.setPreferredSize(new Dimension(840, 540)); // Will be changed when I get passed the viewport later
     gamePanel.setBackground(Color.BLACK);
 
-    JButton stepBack = new PlaybackButton("Step Back", () -> scrubber.setValue(scrubber.getValue() - 1));
+    JButton stepBack = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() - 1), "stepback");
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
-    scrubber.setPreferredSize(new Dimension(550, 25));
+    scrubber.setPreferredSize(new Dimension(700, 25));
     scrubber.setValue(0);
     scrubber.addChangeListener(e -> {
       JSlider source = (JSlider) e.getSource();
@@ -69,21 +73,22 @@ public class Player extends JPanel {
       }
     });
 
-    JButton home = new PlaybackButton("Home", base::menuScreen);
+    JButton home = new GameButton("", BUTTON_DIM, e -> base.menuScreen(), "home");
 
-    JButton load = new PlaybackButton("Load",  ()->{
+    JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
       load();
       if (actions != null) scrubber.setMaximum(actions.size());
     });
 
-    JButton stepForward = new PlaybackButton("Step Forward", () -> scrubber.setValue(scrubber.getValue() + 1));
+    JButton stepForward = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() + 1), "stepforward");
 
-    JButton rewind = new PlaybackButton("Rewind", this::rewind);
-    JButton play = new PlaybackButton("Play", this::play);
-    JButton pause = new PlaybackButton("Pause", () -> {
-      isPlaying = false;
-      isRewinding = false;
-    });
+    JButton rewind = new GameButton("", BUTTON_DIM, e -> {
+      playPause.changeIcon("pause");
+      rewind();
+      }, "rewind");
+    playPause = new GameButton("", BUTTON_DIM, e -> {
+      updatePlayBtn();
+    }, "play");
 
 
     JPanel speedPanel = new JPanel() {
@@ -114,12 +119,22 @@ public class Player extends JPanel {
     add(home);
     add(load);
     add(rewind);
-    add(play);
-    add(pause);
+    add(playPause);
     add(speedPanel);
 
     setPreferredSize(new Dimension(800, 520));
     setBackground(Main.BG_COLOR);
+  }
+  private void updatePlayBtn() {
+    if (isPlaying || isRewinding) {
+      isPlaying = false;
+      isRewinding = false;
+      playPause.changeIcon("play");
+    } else {
+      isPlaying = true;
+      playPause.changeIcon("pause");
+      play();
+    }
   }
 
   /**
@@ -137,7 +152,7 @@ public class Player extends JPanel {
     if (fileChooser.getSelectedFile() != null) {
       Parser parser = new Parser(fileChooser.getSelectedFile());
       actions = parser.getActions();
-      Load.loadLevel("level" + parser.getLevel());
+      Load.loadLevel(parser.getLevel());
       if (scrubber != null) {
         scrubber.setMaximum(actions.size() - 1);
         currentAction = 0;
@@ -179,6 +194,7 @@ public class Player extends JPanel {
         if (progress(i, isRewinding)) break;
       }
       isRewinding = false;
+      playPause.changeIcon("play");
     }).start();
   }
 
@@ -194,6 +210,7 @@ public class Player extends JPanel {
         if (progress(i, isPlaying)) break;
       }
       isPlaying = false;
+      playPause.changeIcon("play");
     }).start();
   }
 
