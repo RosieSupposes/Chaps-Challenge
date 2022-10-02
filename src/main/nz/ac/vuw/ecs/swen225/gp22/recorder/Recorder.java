@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class Recorder {
 
     String filename = System.getProperty("user.dir") + "/resources/recordings/"
                       + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
-    try (FileWriter out = new FileWriter(filename)) {
+    try (FileWriter out = new FileWriter(filename, StandardCharsets.UTF_8)) {
       (new XMLWriter(out, OutputFormat.createPrettyPrint())).write(doc);
     } catch (IOException e) {
       e.printStackTrace();

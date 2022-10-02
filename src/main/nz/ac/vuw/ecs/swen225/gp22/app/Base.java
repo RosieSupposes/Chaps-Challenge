@@ -74,8 +74,10 @@ public class Base extends JFrame {
         if (Load.previousGamePresent()) {
             int time = Load.previousGame();
             loadLevel(time);
-            
+
             recorder = new Recorder(1);
+            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
+
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -139,6 +141,7 @@ public class Base extends JFrame {
         loadLevel(time);
 
         recorder = new Recorder(1);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -146,9 +149,10 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
-        Load.loadLevel( 1); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0);
         recorder = new Recorder(lvl);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
 
     /**
@@ -157,6 +161,7 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
+        recorder.save();
     }
 
     public void finishLevel() {
@@ -187,10 +192,6 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
-        String direction = dir.toString();
-        int x = Maze.player.getPos().x();
-        int y = Maze.player.getPos().y();
-
         Entity.Action action = null;
 
         try {
@@ -198,15 +199,21 @@ public class Base extends JFrame {
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
-        recorder.addAction(new MoveAction(x, y, direction));
 
-        if(action == null){ return; }
-        Entity.Action.Interaction interaction = action.interaction();
-        if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
-            recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
-        } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
-            recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
+        String direction = dir.toString();
+        int x = Maze.player.getPos().x();
+        int y = Maze.player.getPos().y();
+
+        if (action != null) {
+            Entity.Action.Interaction interaction = action.interaction();
+            if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
+                recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
+            } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
+                recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
+            }
         }
+
+        recorder.addAction(new MoveAction(x, y, direction));
     }
 
     /**
@@ -243,13 +250,13 @@ public class Base extends JFrame {
         switch (action) {
             case "Open" -> {
                 switch (object) {
-                    case "Door" -> Maze.setTile(pos, new Ground(pos));
-                    case "Exit" -> Maze.setTile(pos, new Exit(pos));
+                    case "UnlockDoor" -> Maze.setTile(pos, new Ground(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new Exit(pos));
                 }
             }
             case "Close" -> {
                 switch (object) {
-                    case "Door" -> {
+                    case "UnlockDoor" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
@@ -257,13 +264,13 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Exit" -> Maze.setTile(pos, new LockedExit(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
                 }
             }
             case "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Drop" -> {
                 switch (object) {
-                    case "Key" -> {
+                    case "PickupKey" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
@@ -271,7 +278,7 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Treasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
                 }
             }
         }
@@ -322,7 +329,7 @@ public class Base extends JFrame {
     /**
      * Create, run and draw new level
      *
-     * @param seconds      number of seconds into level
+     * @param seconds number of seconds into level
      */
     public void loadLevel(int seconds) {
         assert Maze.player != null;
@@ -333,7 +340,7 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         JPanel side = new JPanel();
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
-        JLabel timeLabel = new JLabel("Time: "+ seconds);
+        JLabel timeLabel = new JLabel("Time: " + seconds);
         timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
         final PhasePanel level = new PhasePanel(game, side);

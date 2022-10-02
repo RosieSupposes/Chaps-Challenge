@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.dom4j.Element;
 import org.dom4j.tree.BaseElement;
 
@@ -7,18 +8,18 @@ import org.dom4j.tree.BaseElement;
  * An action that collects a key.
  *
  * @author Christopher Sa, 300570735
- * @version 1.4
+ * @version 1.5
  * @param item the item to collect
  */
 public record CollectAction(int x, int y, String item, String color) implements Action {
   @Override
   public void execute() {
-    System.out.println("Collect " + item);
+    Base.setAction(x, y, "Pick-up", item, color);
   }
 
   @Override
   public void undo() {
-    System.out.println("Undo collect " + item);
+    Base.setAction(x, y, "Drop", item, color);
   }
 
   @Override
