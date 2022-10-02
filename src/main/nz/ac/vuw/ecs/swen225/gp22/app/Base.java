@@ -1,12 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
+import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
-import nz.ac.vuw.ecs.swen225.gp22.recorder.MoveAction;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
-import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 
@@ -182,44 +180,90 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
+        String direction = dir.toString();
+        int x = Maze.player.getPos().x();
+        int y = Maze.player.getPos().y();
+        //Action action;
         try {
-            Maze.player.move(dir);
-            Maze.player.setDir(dir); //TODO remove, temp fix until Domain changes move method
-            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), dir.toString()));
+            //action =
+            Maze.player.move(dir);      //TODO collect action object abdul is to make
+            Maze.player.setDir(dir);    //TODO remove, temp fix until Domain changes move method
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
-            //recorder.addTurn(new TurnAction(dir)); ? //TODO save turning action
         }
-        //TODO ask domain if item picked up/door interacted with?
-        //recorder.addCollect(new CollectAction("definitely a key"));
+        recorder.addAction(new MoveAction(x, y, direction));
+        //String type = action.getType().toString(); //can return null
+        String type;
+        //String colour = action.getColour().toString(); //can return null
+        String colour;
+        if (false) {
+            recorder.addAction(new DoorAction(x, y, type, colour));
+        } else if (false) {
+            recorder.addAction(new CollectAction(x, y, type, colour));
+        }
     }
 
     /**
-     * Undo move from Recorder class.
+     * For undoing or redoing a move from Recorder class.
+     * Sets player position and the direction they face
      *
-     * @param action action that occurred
+     * @param x         x position of player
+     * @param y         y position of player
+     * @param direction action that occurred
      */
-    public void undoMove(String action) {
-        switch (action) {
-            case "Move":
-                //Maze.player.undoMove(oldDir);
-                break;
-            case "Turn":
-                //Maze.player.setDir(dir);
-                break;
-            case "Collect":
-                //Maze.player.dropItem(item);
-                break;
+    public void setMove(int x, int y, String direction, String action, String object, String color) {
+        Maze.Point pos = new Maze.Point(x, y);
+        Maze.player.setPos(pos);
+        switch (direction) {
+            case "Left" -> Maze.player.setDir(Entity.Direction.Left);
+            case "Right" -> Maze.player.setDir(Entity.Direction.Right);
+            case "Up" -> Maze.player.setDir(Entity.Direction.Up);
+            case "Down" -> Maze.player.setDir(Entity.Direction.Down);
         }
-        //TODO tell Domain to move player backwards
-        //TODO what about collect actions?
+        switch (action) {
+            case "Open" -> {
+                switch(object){
+                    case "Door" -> Maze.setTile(pos, new Ground(pos));
+                    case "Exit" -> Maze.setTile(pos, new Exit(pos));
+                }
+            }
+            case "Close" -> {
+                switch (object) {
+                    case "Door" -> {
+                        switch (color) {
+                            case "Red" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Red));
+                            case "Green" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Green));
+                            case "Blue" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Blue));
+                            case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos,ColorableTile.Color.Yellow));
+                        }
+                    }
+                    case "Exit" -> Maze.setTile(pos, new LockedExit(pos));
+                }
+            }
+            case "Pick-up" -> Maze.setTile(pos, new Ground(pos));
+            case "Drop" -> {
+                switch (object) {
+                    case "Key" -> {
+                        switch (color) {
+                            case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
+                            case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
+                            case "Blue" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Blue));
+                            case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
+                        }
+                    }
+                    case "Treasure" -> Maze.setTile(pos, new Treasure(pos));
+                }
+            }
+        }
+
     }
 
     /**
      * gets the game window.
+     *
      * @return game window
      */
-    public JPanel getGameWindow(){
+    public JPanel getGameWindow() {
         assert Maze.player != null;
 
         JPanel game = new Viewport();
@@ -227,7 +271,7 @@ public class Base extends JFrame {
         JPanel side = new JPanel(); //TODO link to renderer side panel
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
 
-        return new PhasePanel(game,side);
+        return new PhasePanel(game, side);
     }
 
     /**
@@ -266,7 +310,7 @@ public class Base extends JFrame {
         assert Maze.player != null;
 
         runClosePhase();
-        
+
         //TODO switch to getGameWindow method once Renderer side panel is created
         JPanel game = new Viewport();
         JPanel side = new JPanel();
