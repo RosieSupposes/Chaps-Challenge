@@ -157,6 +157,7 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
+        recorder.save();
     }
 
     public void finishLevel() {
@@ -187,10 +188,6 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
-        String direction = dir.toString();
-        int x = Maze.player.getPos().x();
-        int y = Maze.player.getPos().y();
-
         Entity.Action action = null;
 
         try {
@@ -198,6 +195,11 @@ public class Base extends JFrame {
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
+
+        String direction = dir.toString();
+        int x = Maze.player.getPos().x();
+        int y = Maze.player.getPos().y();
+
         recorder.addAction(new MoveAction(x, y, direction));
 
         if(action == null){ return; }
