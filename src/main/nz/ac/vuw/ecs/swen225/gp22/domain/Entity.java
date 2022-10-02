@@ -33,7 +33,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * used to revert actions when replaying a game.
      */
     public record Action(Maze.Point pos, Direction dir, Interaction interaction){
-        record Interaction(ActionType type, ColorableTile.Color color){
+        public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
             public enum ActionType{
                 None,
