@@ -30,9 +30,8 @@ public class Base extends JFrame {
     private int timeSec = 0;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
-    GameMenuBar currentMenuBar;
-
-    JPanel currentPanel; //for setting keylistener on
+    private GameMenuBar currentMenuBar;
+    private JPanel currentPanel; //for setting keylistener on
 
     /**
      * Begin program here. Run menu phase.
@@ -74,7 +73,7 @@ public class Base extends JFrame {
         if (Load.previousGamePresent()) {
             int time = Load.previousGame();
             loadLevel(time);
-            
+
             recorder = new Recorder(1);
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
@@ -86,7 +85,6 @@ public class Base extends JFrame {
      * pauses game
      */
     public void pause() {
-        //runClosePhase();
         System.out.println("Pause");
         gameTimer.stop();
         if (currentMenuBar == null) {
@@ -96,7 +94,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
-        GameDialog.makeGameDialog(this,"Pause");
+        GameDialog dialog = new GameDialog(this, "Pause");
     }
 
     /**
@@ -146,7 +144,7 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
-        Load.loadLevel( 1); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0);
         recorder = new Recorder(lvl);
     }
@@ -157,6 +155,10 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
+    }
+
+    public void resetFocus(){
+        currentPanel.requestFocus();
     }
 
     public void finishLevel() {
@@ -200,7 +202,9 @@ public class Base extends JFrame {
         }
         recorder.addAction(new MoveAction(x, y, direction));
 
-        if(action == null){ return; }
+        if (action == null) {
+            return;
+        }
         Entity.Action.Interaction interaction = action.interaction();
         if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
             recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
@@ -322,7 +326,7 @@ public class Base extends JFrame {
     /**
      * Create, run and draw new level
      *
-     * @param seconds      number of seconds into level
+     * @param seconds number of seconds into level
      */
     public void loadLevel(int seconds) {
         assert Maze.player != null;
@@ -333,7 +337,7 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         JPanel side = new JPanel();
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
-        JLabel timeLabel = new JLabel("Time: "+ seconds);
+        JLabel timeLabel = new JLabel("Time: " + seconds);
         timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
         final PhasePanel level = new PhasePanel(game, side);
