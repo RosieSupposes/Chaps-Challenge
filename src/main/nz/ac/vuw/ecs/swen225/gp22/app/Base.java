@@ -103,7 +103,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
-        pauseDialog.visibleFocus(this);
+        pauseDialog.visibleFocus();
     }
 
     /**
@@ -164,7 +164,7 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
-        saveDialog.visibleFocus(this);
+        saveDialog.visibleFocus();
     }
 
     public void resetFocus() {
@@ -174,14 +174,14 @@ public class Base extends JFrame {
     public void playerDied() {
         System.out.println("Level lost");
         recorder.save();
-        gameOverDialog.visibleFocus(this);
+        gameOverDialog.visibleFocus();
         gameTimer.stop();
     }
 
     public void playerWon() {
         System.out.println("Level won");
         recorder.save();
-        gameWinDialog.visibleFocus(this);
+        gameWinDialog.visibleFocus();
         gameTimer.stop();
     }
 

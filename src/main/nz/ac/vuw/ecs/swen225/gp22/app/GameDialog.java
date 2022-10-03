@@ -7,19 +7,27 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
+/**
+ * Creates Pop-up boxes for our game. There are four types of pop-ups.
+ * Pause, GameOver, GameComplete, Save
+ *
+ * @author Molly Henry, 300562038
+ * @version 1.2
+ */
 public class GameDialog extends JDialog {
 
-
-    private static final Dimension BUTTON_SIZE = new Dimension(150, 30);
+    private static final Dimension BUTTON_SIZE = new Dimension(180, 30);
     private int xOffset;
     private int yOffset;
     private int width;
     private int height;
     private Base base;
-
-    private Timer timer = new Timer(20,e->{});
+    private Timer timer = new Timer(20, e -> {
+    });
 
     /**
+     * New Dialog window, can create four types based on type passed in
+     *
      * @param base current base
      * @param type Pause, GameOver, GameComplete, Save
      */
@@ -43,16 +51,20 @@ public class GameDialog extends JDialog {
             this.add(component, c);
             c.gridy++;
         }
-//        this.setVisible(true);
-//        this.requestFocus();
     }
 
+    /**
+     * Set size and position of pop-up based on fields and current base coordinates
+     */
     public void makeBounds() {
         this.setBounds(base.getX() + xOffset, base.getY() + yOffset, width, height);
     }
 
-    public void visibleFocus(Base base) {
-        this.base = base;
+    /**
+     * Set pop-up as visible, in focus and reset it's bounds
+     * Start timer (only Save pop-up has timer).
+     */
+    public void visibleFocus() {
         this.timer.start();
         this.makeBounds();
         this.setVisible(true);
@@ -61,6 +73,11 @@ public class GameDialog extends JDialog {
 
     private int timeMS = 0;
 
+    /**
+     * Creates "saved game" pop-up
+     *
+     * @return list of components to be added to box
+     */
     private List<JComponent> setUpSave() {
         width = 100;
         height = 70;
@@ -87,8 +104,13 @@ public class GameDialog extends JDialog {
         return List.of(info);
     }
 
+    /**
+     * Sets up "game won" pop-up
+     *
+     * @return list of components to be added to window
+     */
     private List<JComponent> setUpGameCompleted() {
-        width = 200;
+        width = 230;
         height = 400;
         xOffset = GameDimensions.WINDOW_WIDTH / 2 - width / 2;
         yOffset = GameDimensions.WINDOW_HEIGHT / 4;
@@ -103,8 +125,13 @@ public class GameDialog extends JDialog {
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
+    /**
+     * sets up "game over" pop-up
+     *
+     * @return list of components to be added to window
+     */
     private List<JComponent> setUpGameOver() {
-        width = 200;
+        width = 230;
         height = 300;
         xOffset = GameDimensions.WINDOW_WIDTH / 2 - width / 2;
         yOffset = GameDimensions.WINDOW_HEIGHT / 4;
@@ -119,8 +146,13 @@ public class GameDialog extends JDialog {
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
+    /**
+     * sets up "pause" pop up
+     *
+     * @return list of components to be added to pop-up
+     */
     private List<JComponent> setUpPause() {
-        width = 200;
+        width = 230;
         height = 400;
         xOffset = GameDimensions.WINDOW_WIDTH / 2 - width / 2;
         yOffset = GameDimensions.WINDOW_HEIGHT / 4;
@@ -140,6 +172,11 @@ public class GameDialog extends JDialog {
         return List.of(info, playButton(), loadButton(), newOneButton(), newTwoButton(), saveButton(), exitButton());
     }
 
+    /**
+     * Makes play button. With action to set pop-up invisible again.
+     *
+     * @return play button
+     */
     public GameButton playButton() {
         Runnable action = () -> {
             base.unPause();
@@ -155,13 +192,23 @@ public class GameDialog extends JDialog {
         return button;
     }
 
+    /**
+     * Makes load level button. Closes pop-up when clicked
+     *
+     * @return load button
+     */
     public GameButton loadButton() {
-        return new GameButton("Load New Game", BUTTON_SIZE, e -> {
+        return new GameButton("Load Previous Game", BUTTON_SIZE, e -> {
             base.loadGame();
             this.setVisible(false);
         });
     }
 
+    /**
+     * Makes load level one button. Closes pop-up when clicked
+     *
+     * @return load level one button
+     */
     public GameButton newOneButton() {
         return new GameButton("Load Level One", BUTTON_SIZE, e -> {
             base.newGame(1);
@@ -169,6 +216,11 @@ public class GameDialog extends JDialog {
         });
     }
 
+    /**
+     * Makes load level two button. Closes pop-up when clicked
+     *
+     * @return load level two button
+     */
     public GameButton newTwoButton() {
         return new GameButton("Load Level Two", BUTTON_SIZE, e -> {
             base.newGame(2);
@@ -176,27 +228,26 @@ public class GameDialog extends JDialog {
         });
     }
 
+    /**
+     * Makes save game button
+     *
+     * @return save button
+     */
     public GameButton saveButton() {
         return new GameButton("Save Game", BUTTON_SIZE, e -> {
             base.saveGame();
         });
     }
 
+    /**
+     * Makes exit game button. Closes pop-up when clicked
+     *
+     * @return exit button
+     */
     public GameButton exitButton() {
         return new GameButton("Exit Game", BUTTON_SIZE, e -> {
             base.exitGame();
             this.setVisible(false);
         });
     }
-
-//    private GameButton makeButton(String name, Runnable action) {
-//        GameButton button = new GameButton(name, BUTTON_SIZE, e -> action.run());
-//        this.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosed(WindowEvent e) {
-//                action.run();
-//            }
-//        });
-//        return button;
-//    }
 }
