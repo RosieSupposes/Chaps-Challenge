@@ -12,7 +12,7 @@ import java.util.List;
  * Used to parse recorded games from XML.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.4
  */
 public class Parser {
 
@@ -57,15 +57,26 @@ public class Parser {
   private Action parseAction(Element element) {
     switch (element.getName()) {
       case "move" -> {
+        int x = Integer.parseInt(element.attributeValue("x"));
+        int y = Integer.parseInt(element.attributeValue("y"));
         String direction = element.attributeValue("direction");
-        int steps = element.attributeValue("steps") == null ? 1 : Integer.parseInt(element.attributeValue("steps"));
-        return new MoveAction(direction, steps);
+        return new MoveAction(x, y, direction);
       }
       case "collect" -> {
-        String item = element.attributeValue("item");
-        return new CollectAction(item);
+        int x = Integer.parseInt(element.attributeValue("x"));
+        int y = Integer.parseInt(element.attributeValue("y"));
+        String type = element.attributeValue("item");
+        String colour = element.attributeValue("color");
+        return new CollectAction(x, y, type, colour);
       }
-      default -> throw new IllegalArgumentException("Invalid action");
+      case "door" -> {
+        int x = Integer.parseInt(element.attributeValue("x"));
+        int y = Integer.parseInt(element.attributeValue("y"));
+        String type = element.attributeValue("type");
+        String colour = element.attributeValue("color");
+        return new DoorAction(x, y, type, colour);
+      }
+      default -> throw new IllegalArgumentException("Invalid action" + element.getName());
     }
   }
 }

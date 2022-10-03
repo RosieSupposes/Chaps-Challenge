@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
 import nz.ac.vuw.ecs.swen225.gp22.app.Main;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 
@@ -9,12 +10,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.11
+ * @version 1.12
  */
 public class Player extends JPanel {
   private final Base base;
@@ -25,6 +27,10 @@ public class Player extends JPanel {
   private boolean isRewinding = false;
   private int speed = 1;
   private int level;
+  private GameButton playPause;
+  private JPanel gamePanel;
+
+  private static final Dimension BUTTON_DIM = new Dimension(50, 30);
 
   /**
    * Create a new player.
@@ -43,14 +49,15 @@ public class Player extends JPanel {
    * Set up the player.
    */
   private void setup() {
-    JPanel gamePanel = base.getGameWindow();
-    gamePanel.setPreferredSize(new Dimension(840, 540)); // Will be changed when I get passed the viewport later
-    gamePanel.setBackground(Color.BLACK);
+    gamePanel = base.getGameWindow();
 
-    JButton stepBack = new PlaybackButton("Step Back", () -> scrubber.setValue(scrubber.getValue() - 1));
+    JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
+      scrubber.setValue(scrubber.getValue() - 1);
+      gamePanel.repaint();
+    }, "stepback");
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
-    scrubber.setPreferredSize(new Dimension(550, 25));
+    scrubber.setPreferredSize(new Dimension(700, 25));
     scrubber.setValue(0);
     scrubber.addChangeListener(e -> {
       JSlider source = (JSlider) e.getSource();
@@ -69,21 +76,25 @@ public class Player extends JPanel {
       }
     });
 
-    JButton home = new PlaybackButton("Home", base::menuScreen);
+    JButton home = new GameButton("", BUTTON_DIM, e -> base.menuScreen(), "home");
 
-    JButton load = new PlaybackButton("Load",  ()->{
+    JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
       load();
       if (actions != null) scrubber.setMaximum(actions.size());
     });
 
-    JButton stepForward = new PlaybackButton("Step Forward", () -> scrubber.setValue(scrubber.getValue() + 1));
+    JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
+      scrubber.setValue(scrubber.getValue() + 1);
+      gamePanel.repaint();
+      }, "stepforward");
 
-    JButton rewind = new PlaybackButton("Rewind", this::rewind);
-    JButton play = new PlaybackButton("Play", this::play);
-    JButton pause = new PlaybackButton("Pause", () -> {
-      isPlaying = false;
-      isRewinding = false;
-    });
+    JButton rewind = new GameButton("", BUTTON_DIM, e -> {
+      playPause.changeIcon("pause");
+      rewind();
+      }, "rewind");
+    playPause = new GameButton("", BUTTON_DIM, e -> {
+      updatePlayBtn();
+    }, "play");
 
 
     JPanel speedPanel = new JPanel() {
@@ -114,12 +125,22 @@ public class Player extends JPanel {
     add(home);
     add(load);
     add(rewind);
-    add(play);
-    add(pause);
+    add(playPause);
     add(speedPanel);
 
     setPreferredSize(new Dimension(800, 520));
     setBackground(Main.BG_COLOR);
+  }
+  private void updatePlayBtn() {
+    if (isPlaying || isRewinding) {
+      isPlaying = false;
+      isRewinding = false;
+      playPause.changeIcon("play");
+    } else {
+      isPlaying = true;
+      playPause.changeIcon("pause");
+      play();
+    }
   }
 
   /**
@@ -137,11 +158,12 @@ public class Player extends JPanel {
     if (fileChooser.getSelectedFile() != null) {
       Parser parser = new Parser(fileChooser.getSelectedFile());
       actions = parser.getActions();
-      Load.loadLevel("level" + parser.getLevel());
+      Load.loadLevel(parser.getLevel());
       if (scrubber != null) {
         scrubber.setMaximum(actions.size() - 1);
         currentAction = 0;
         scrubber.setValue(0);
+        gamePanel.repaint();
       }
     }
   }
@@ -157,11 +179,13 @@ public class Player extends JPanel {
       // scrub forward
       for (int i = currentAction; i < position; i++) {
         actions.get(i).execute();
+        gamePanel.repaint();
       }
     } else if (position < currentAction) {
       // scrub backward
       for (int i = currentAction; i > position; i--) {
         actions.get(i).undo();
+        gamePanel.repaint();
       }
     }
     currentAction = position < actions.size() ? position : actions.size() - 1;
@@ -174,11 +198,15 @@ public class Player extends JPanel {
     isRewinding = true;
     isPlaying = false;
     new Thread(() -> {
-      for (int i = currentAction; i >= 0; i--) {
+      for (int i = currentAction; i > 0; i--) {
+        Action prevAction = actions.get(i - 1);
+        if (prevAction instanceof MoveAction m) { m.execute(); }
         actions.get(i).undo();
+        gamePanel.repaint();
         if (progress(i, isRewinding)) break;
       }
       isRewinding = false;
+      playPause.changeIcon("play");
     }).start();
   }
 
@@ -191,9 +219,11 @@ public class Player extends JPanel {
     new Thread(() -> {
       for (int i = currentAction; i < actions.size(); i++) {
         actions.get(i).execute();
+        gamePanel.repaint();
         if (progress(i, isPlaying)) break;
       }
       isPlaying = false;
+      playPause.changeIcon("play");
     }).start();
   }
 

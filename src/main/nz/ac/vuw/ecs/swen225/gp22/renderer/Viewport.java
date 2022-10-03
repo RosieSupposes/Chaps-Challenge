@@ -21,7 +21,6 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 public class Viewport extends JPanel implements ActionListener {
   private static final long serialVersionUID = 1L;
 
-  private Player player;
   private final Tile[][] currentMaze;
   private final Tile[][] previousMaze; // the view of the maze before a player moves
 
@@ -29,7 +28,6 @@ public class Viewport extends JPanel implements ActionListener {
    * Initialises a new maze upon the loading of a level.
    */
   public Viewport(){ 
-    this.player = Maze.player;
     currentMaze = new Tile[GameDimensions.NUM_GAME_TILE][GameDimensions.NUM_GAME_TILE];
     previousMaze = new Tile[GameDimensions.NUM_GAME_TILE][GameDimensions.NUM_GAME_TILE]; 
   }
@@ -42,7 +40,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param yOffset Offset in the Y direction.
    * @param maze The maze to be drawn on. 
    */
-  private void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
+  public void renderTiles(Graphics g, int xOffset, int yOffset, Tile[][] maze){
     for (int x = 0; x < GameDimensions.NUM_GAME_TILE; x++){
         for (int y = 0; y < GameDimensions.NUM_GAME_TILE; y++){
             if (maze[x][y] != null) { // check that the tile is not null
@@ -58,7 +56,7 @@ public class Viewport extends JPanel implements ActionListener {
  * 
  * @param tile The tile being drawn on the canvas.
 */
-  private BufferedImage getTileImg(Tile tile){
+public BufferedImage getTileImg(Tile tile){
     if (tile instanceof Key k){ // check the colours against the four different ones available
       switch (k.getColor()){
         case Blue: return Img.BlueKey.image;
@@ -94,10 +92,10 @@ public class Viewport extends JPanel implements ActionListener {
    * @param xOffset Offset in the X direction.
    * @param yOffset Offset in the Y direction.
    */
-  private void renderEntities(Graphics g, int xOffset, int yOffset){
+  public void renderEntities(Graphics g, int xOffset, int yOffset){
     // draws the player based on the direction it is facing
-    g.drawImage(getEntityImg(player.getDir()), getFocusX(player.getPos().x()*GameDimensions.TILE_SIZE),
-    getFocusY(player.getPos().y()*GameDimensions.TILE_SIZE), this);
+    g.drawImage(getEntityImg(Maze.player.getDir()), getFocusX(Maze.player.getPos().x()*GameDimensions.TILE_SIZE),
+    getFocusY(Maze.player.getPos().y()*GameDimensions.TILE_SIZE), this);
     
     //TODO: display the enemy for level 2
       
@@ -109,7 +107,7 @@ public class Viewport extends JPanel implements ActionListener {
    * 
    * @param dir The direction the player is facing.
    */
-  private BufferedImage getEntityImg(Entity.Direction dir){
+  public BufferedImage getEntityImg(Entity.Direction dir){
     // check for the facingDir of player then return image accordingly
     switch (dir){
       case Up: return Img.PlayerUp.image;
@@ -124,10 +122,10 @@ public class Viewport extends JPanel implements ActionListener {
   * Renders a new maze that focuses on the tiles within 
   * the vicinity of the player's current location on the canvas. 
   */
-  private void setFocusArea(){
+  public void setFocusArea(){
     // loop through each tile in the maze to determine which are visible
-    for (int xTick = 0, x = player.getPos().x() - GameDimensions.FOCUS_AREA; x <= player.getPos().x() + GameDimensions.FOCUS_AREA; xTick++, x++){
-      for (int yTick = 0, y = player.getPos().y() - GameDimensions.FOCUS_AREA; y <= player.getPos().y() + GameDimensions.FOCUS_AREA; yTick++, y++){
+    for (int xTick = 0, x = Maze.player.getPos().x() - GameDimensions.FOCUS_AREA; x <= Maze.player.getPos().x() + GameDimensions.FOCUS_AREA; xTick++, x++){
+      for (int yTick = 0, y = Maze.player.getPos().y() - GameDimensions.FOCUS_AREA; y <= Maze.player.getPos().y() + GameDimensions.FOCUS_AREA; yTick++, y++){
         previousMaze[xTick][yTick] = currentMaze[xTick][yTick];
         
         // Check if tiles are within range
@@ -144,7 +142,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param x The player's x position.
    * @return The x position in the focus area.
    */
-  private int getFocusX(int x) { return GameDimensions.FOCUS_AREA + x - player.getPos().x() ; }
+  public int getFocusX(int x) { return GameDimensions.FOCUS_AREA + x - Maze.player.getPos().x() ; }
   
   /**
    * Convert the player's y position to the focus area's coordinates.
@@ -152,7 +150,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param y The player's y position.
    * @return The y position in the focus area.
    */
-  private int getFocusY(int y) { return y - player.getPos().y() + GameDimensions.FOCUS_AREA; }
+  public int getFocusY(int y) { return y - Maze.player.getPos().y() + GameDimensions.FOCUS_AREA; }
 
   @Override
   public void paintComponent(Graphics g){

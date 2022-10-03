@@ -11,10 +11,11 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Maze.Point;
 public abstract class ColorableTile extends Tile{
     /** Enum with values that represent all valid colors. */
     public enum Color{
+        None,
         Red,
         Green,
         Blue,
-        Yellow
+        Yellow;
     }
 
     /** The color of this tile. */
@@ -29,7 +30,7 @@ public abstract class ColorableTile extends Tile{
      */
     public ColorableTile(Point tilePos, boolean obstructive, Color color){
         super(tilePos, obstructive);
-        if(color == null) throw new IllegalArgumentException("Given color is null.");
+        if(color == null || color == Color.None) throw new IllegalArgumentException("Given color is null.");
         this.color = color;
     }
 

@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.dom4j.io.XMLWriter;
  * The recorder for the game. Used to record actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.2
  */
 public class Recorder {
   private final int level;
@@ -33,25 +34,11 @@ public class Recorder {
   }
 
   /**
-   * Add a move action to the recorder.
+   * Add an action to the recorder.
    *
    * @param action The action to add.
    */
-  public void addMove(MoveAction action) {
-    if (actions.size() > 0 && actions.get(actions.size() - 1) instanceof MoveAction move && move.direction().equals(action.direction())) {
-      // Increase last move action's count as it is the same direction
-      actions.set(actions.size() - 1, new MoveAction(action.direction(), move.steps() + 1));
-    } else {
-      actions.add(action);
-    }
-  }
-
-  /**
-   * Add a collect action to the recorder.
-   *
-   * @param action The action to add.
-   */
-  public void addCollect(CollectAction action) {
+  public void addAction(Action action) {
     actions.add(action);
   }
 
@@ -65,7 +52,7 @@ public class Recorder {
 
     String filename = System.getProperty("user.dir") + "/resources/recordings/"
                       + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
-    try (FileWriter out = new FileWriter(filename)) {
+    try (FileWriter out = new FileWriter(filename, StandardCharsets.UTF_8)) {
       (new XMLWriter(out, OutputFormat.createPrettyPrint())).write(doc);
     } catch (IOException e) {
       e.printStackTrace();

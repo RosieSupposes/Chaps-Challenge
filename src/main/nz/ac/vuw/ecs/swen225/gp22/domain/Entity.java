@@ -1,11 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile.Color;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
+
 /**
  * Template for entities in a level, including the player. 
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.5
+ * @version 1.8
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -23,6 +27,23 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
 
         /** Default constructor to set {@link #posChange}. */
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
+    }
+
+    /**
+     * A record used to store an action taken. This will be 
+     * used to revert actions when replaying a game.
+     */
+    public record Action(Maze.Point pos, Direction dir, Interaction interaction){
+        public record Interaction(ActionType type, ColorableTile.Color color){
+            /** Represents the entity interacting with a tile. */
+            public enum ActionType{
+                None,
+                PickupKey,
+                PickupTreasure,
+                UnlockDoor,
+                UnlockExit;
+            }
+        }
     }
 
     /** Position of the entity in regards to the {@link Maze#tileMap tilemap}. */
@@ -65,6 +86,21 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         move(facingDir);
     }
 
+    /**
+     * Combines methods {@link #setDir setDir()} and {@link #move move()}.
+     * Also returns an {@link Action} record for the app module to use.
+     * 
+     * @param dir The new {@link Direction direction} of the entity. 
+     */
+    public Action moveAndTurn(Direction dir){
+        setDir(dir);
+        move();
+
+        Action.Interaction interaction = new Interaction(ActionType.None, Color.None);
+        if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
+        return new Action(entityPos, facingDir, interaction);
+    }
+
     /** @return The {@link #entityPos position} of the entity. */
     public Maze.Point getPos(){ return entityPos; }
 
@@ -79,6 +115,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public void setPos(Maze.Point pos){ 
         if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
         entityPos = pos; 
+        updateObservers(); 
     }
 
     /**
@@ -89,5 +126,6 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public void setDir(Direction dir){ 
         if(dir == null) throw new IllegalArgumentException("Given direction is null");
         facingDir = dir; 
+        updateObservers(); 
     }
 }
