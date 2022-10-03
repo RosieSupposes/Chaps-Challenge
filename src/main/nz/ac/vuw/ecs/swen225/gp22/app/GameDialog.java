@@ -11,19 +11,28 @@ public class GameDialog extends JDialog {
 
 
     private static final Dimension BUTTON_SIZE = new Dimension(150, 30);
-    private final static int x = GameDimensions.WINDOW_WIDTH / 3;
-    private final static int y = GameDimensions.WINDOW_HEIGHT / 3;
-    private final Base base;
+    private int xOffset;
+    private int yOffset;
+    private int width;
+    private int height;
+    private Base base;
 
+    private Timer timer = new Timer(20,e->{});
+
+    /**
+     * @param base current base
+     * @param type Pause, GameOver, GameComplete, Save
+     */
     public GameDialog(Base base, String type) {
         this.base = base;
         this.setLayout(new GridBagLayout());
         this.getContentPane().setBackground(Main.LIGHT_YELLOW_COLOR);
+        this.setResizable(false);
         List<JComponent> components = List.of();
         switch (type) {
-            case "Pause" -> components = setUpPause(base);
-            case "GameOver" -> components = setUpGameOver(base);
-            case "GameCompleted" -> components = setUpGameCompleted(base);
+            case "Pause" -> components = setUpPause();
+            case "GameOver" -> components = setUpGameOver();
+            case "GameCompleted" -> components = setUpGameCompleted();
             case "Save" -> components = setUpSave();
         }
         GridBagConstraints c = new GridBagConstraints();
@@ -34,17 +43,30 @@ public class GameDialog extends JDialog {
             this.add(component, c);
             c.gridy++;
         }
+//        this.setVisible(true);
+//        this.requestFocus();
+    }
+
+    public void makeBounds() {
+        this.setBounds(base.getX() + xOffset, base.getY() + yOffset, width, height);
+    }
+
+    public void visibleFocus(Base base) {
+        this.base = base;
+        this.timer.start();
+        this.makeBounds();
         this.setVisible(true);
         this.requestFocus();
     }
 
     private int timeMS = 0;
+
     private List<JComponent> setUpSave() {
-        int width = 100;
-        int height = 70;
-        int x = base.getX() + GameDimensions.GAME_WINDOW_SIZE - 100/2;
-        int y = base.getY() + 100;
-        this.setBounds(x, y, width, height);
+        width = 100;
+        height = 70;
+        xOffset = GameDimensions.GAME_WINDOW_SIZE - width / 2;
+        yOffset = 100;
+        this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
@@ -53,23 +75,24 @@ public class GameDialog extends JDialog {
         info.setForeground(Main.TEXT_COLOR);
 
         timeMS = 0;
-        Timer timer = new Timer(250, unused -> {
+        timer = new Timer(250, unused -> {
             assert SwingUtilities.isEventDispatchThread();
             timeMS += 1;
             if (timeMS >= 3) {
                 this.setVisible(false);
+                timer.stop();
+                timeMS = 0;
             }
         });
-        timer.start();
         return List.of(info);
     }
 
-    private List<JComponent> setUpGameCompleted(Base base) {
-        int width = 200;
-        int height = 400;
-        int x = base.getX() + GameDimensions.WINDOW_WIDTH/2 - width/2;
-        int y = base.getY() + GameDimensions.WINDOW_HEIGHT/4;
-        this.setBounds(x, y, width, height);
+    private List<JComponent> setUpGameCompleted() {
+        width = 200;
+        height = 400;
+        xOffset = GameDimensions.WINDOW_WIDTH / 2 - width / 2;
+        yOffset = GameDimensions.WINDOW_HEIGHT / 4;
+        this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
@@ -80,12 +103,12 @@ public class GameDialog extends JDialog {
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
-    private List<JComponent> setUpGameOver(Base base) {
-        int width = 200;
-        int height = 300;
-        int x = base.getX() + GameDimensions.WINDOW_WIDTH/2 - width/2;
-        int y = base.getY() + GameDimensions.WINDOW_HEIGHT/4;
-        this.setBounds(x, y, width, height);
+    private List<JComponent> setUpGameOver() {
+        width = 200;
+        height = 300;
+        xOffset = GameDimensions.WINDOW_WIDTH / 2 - width / 2;
+        yOffset = GameDimensions.WINDOW_HEIGHT / 4;
+        this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
@@ -96,18 +119,23 @@ public class GameDialog extends JDialog {
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
-    private List<JComponent> setUpPause(Base base) {
-        int width = 200;
-        int height = 400;
-        int x = base.getX() + GameDimensions.WINDOW_WIDTH/2 - width/2;
-        int y = base.getY() + GameDimensions.WINDOW_HEIGHT/4;
-        this.setBounds(x, y, width, height);
+    private List<JComponent> setUpPause() {
+        width = 200;
+        height = 400;
+        xOffset = GameDimensions.WINDOW_WIDTH / 2 - width / 2;
+        yOffset = GameDimensions.WINDOW_HEIGHT / 4;
+        this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
         JLabel info = new JLabel("Game is Paused");
         info.setFont(new Font("Arial", Font.BOLD, 18));
         info.setForeground(Main.TEXT_COLOR);
+
+        if (!this.isFocusOwner()) {
+            base.unPause();
+            this.setVisible(false);
+        }
 
         return List.of(info, playButton(), loadButton(), newOneButton(), newTwoButton(), saveButton(), exitButton());
     }

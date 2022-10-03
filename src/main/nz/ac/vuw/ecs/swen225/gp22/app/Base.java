@@ -32,16 +32,25 @@ public class Base extends JFrame {
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
     private JPanel currentPanel; //for setting keylistener on
+    private GameDialog pauseDialog;
+    private GameDialog saveDialog;
+    private GameDialog gameOverDialog;
+    private GameDialog gameWinDialog;
 
     /**
      * Begin program here. Run menu phase.
      */
     public Base() {
         assert SwingUtilities.isEventDispatchThread();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         menuScreen();
         System.out.println(this.getSize());
+
+        pauseDialog = new GameDialog(this, "Pause");
+        saveDialog = new GameDialog(this,"Save");
+        gameOverDialog = new GameDialog(this, "GameOver");
+        gameWinDialog = new GameDialog(this,"GameCompleted");
 
         setVisible(true);
         setResizable(false);
@@ -94,7 +103,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
-        GameDialog dialog = new GameDialog(this, "Pause");
+        pauseDialog.visibleFocus(this);
     }
 
     /**
@@ -107,7 +116,7 @@ public class Base extends JFrame {
             return;
         }
         currentMenuBar.setUnPause();
-
+        pauseDialog.setVisible(false);
         changeKeyListener(new Controller(this, false));
         //TODO close pause popup window
     }
@@ -155,7 +164,7 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
-        GameDialog dialog = new GameDialog(this, "Save");
+        saveDialog.visibleFocus(this);
     }
 
     public void resetFocus() {
@@ -165,14 +174,14 @@ public class Base extends JFrame {
     public void playerDied() {
         System.out.println("Level lost");
         recorder.save();
-        GameDialog dialog = new GameDialog(this, "GameOver");
+        gameOverDialog.visibleFocus(this);
         gameTimer.stop();
     }
 
     public void playerWon() {
         System.out.println("Level won");
         recorder.save();
-        GameDialog dialog = new GameDialog(this, "GameCompleted");
+        gameWinDialog.visibleFocus(this);
         gameTimer.stop();
     }
 
