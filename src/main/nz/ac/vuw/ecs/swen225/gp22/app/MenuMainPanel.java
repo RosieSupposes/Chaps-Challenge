@@ -88,7 +88,14 @@ public class MenuMainPanel extends JPanel {
 
     private void buttonsRowOne(JPanel buttons, GridBagConstraints c) {
         c.gridx = 0;
-        GameButton start = new GameButton("Start Game", halfButtonSize, e -> base.startGame());
+
+        GameButton start;
+        if(Load.previousGamePresent()){
+            start = new GameButton("Resume Game", halfButtonSize, e -> base.startGame());
+        }else{
+            start = new GameButton("Start Game", halfButtonSize, e -> base.startGame());
+        }
+
         buttons.add(start, c);
 
         c.gridx = 1;

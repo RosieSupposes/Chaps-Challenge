@@ -84,6 +84,8 @@ public class Base extends JFrame {
             loadLevel(time);
 
             recorder = new Recorder(1);
+            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
+
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -146,6 +148,7 @@ public class Base extends JFrame {
         loadLevel(time);
 
         recorder = new Recorder(1);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -156,6 +159,7 @@ public class Base extends JFrame {
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0);
         recorder = new Recorder(lvl);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
 
     /**
@@ -201,10 +205,6 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
-        String direction = dir.toString();
-        int x = Maze.player.getPos().x();
-        int y = Maze.player.getPos().y();
-
         Entity.Action action = null;
 
         try {
@@ -212,17 +212,21 @@ public class Base extends JFrame {
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
-        recorder.addAction(new MoveAction(x, y, direction));
 
-        if (action == null) {
-            return;
+        String direction = dir.toString();
+        int x = Maze.player.getPos().x();
+        int y = Maze.player.getPos().y();
+
+        if (action != null) {
+            Entity.Action.Interaction interaction = action.interaction();
+            if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
+                recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
+            } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
+                recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
+            }
         }
-        Entity.Action.Interaction interaction = action.interaction();
-        if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
-            recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
-        } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
-            recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
-        }
+
+        recorder.addAction(new MoveAction(x, y, direction));
     }
 
     /**
@@ -233,7 +237,7 @@ public class Base extends JFrame {
      * @param y         y position of player
      * @param direction action that occurred
      */
-    public void setMove(int x, int y, String direction) {
+    public static void setMove(int x, int y, String direction) {
         Maze.Point pos = new Maze.Point(x, y);
         Maze.player.setPos(pos);
         switch (direction) {
@@ -254,18 +258,18 @@ public class Base extends JFrame {
      * @param object Door, Exit, Key, Treasure
      * @param color  Red, Green, Blue, Yellow
      */
-    public void setAction(int x, int y, String action, String object, String color) {
+    public static void setAction(int x, int y, String action, String object, String color) {
         Maze.Point pos = new Maze.Point(x, y);
         switch (action) {
             case "Open" -> {
                 switch (object) {
-                    case "Door" -> Maze.setTile(pos, new Ground(pos));
-                    case "Exit" -> Maze.setTile(pos, new Exit(pos));
+                    case "UnlockDoor" -> Maze.setTile(pos, new Ground(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new Exit(pos));
                 }
             }
             case "Close" -> {
                 switch (object) {
-                    case "Door" -> {
+                    case "UnlockDoor" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
@@ -273,13 +277,13 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Exit" -> Maze.setTile(pos, new LockedExit(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
                 }
             }
             case "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Drop" -> {
                 switch (object) {
-                    case "Key" -> {
+                    case "PickupKey" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
@@ -287,7 +291,7 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Treasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
                 }
             }
         }
