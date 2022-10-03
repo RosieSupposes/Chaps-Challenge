@@ -261,12 +261,7 @@ public class Base extends JFrame {
     public static void setAction(int x, int y, String action, String object, String color) {
         Maze.Point pos = new Maze.Point(x, y);
         switch (action) {
-            case "Open" -> {
-                switch (object) {
-                    case "UnlockDoor" -> Maze.setTile(pos, new Ground(pos));
-                    case "UnlockExit" -> Maze.setTile(pos, new Exit(pos));
-                }
-            }
+            case "Open", "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Close" -> {
                 switch (object) {
                     case "UnlockDoor" -> {
@@ -280,7 +275,6 @@ public class Base extends JFrame {
                     case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
                 }
             }
-            case "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Drop" -> {
                 switch (object) {
                     case "PickupKey" -> {
@@ -295,6 +289,7 @@ public class Base extends JFrame {
                 }
             }
         }
+
     }
 
     /**
