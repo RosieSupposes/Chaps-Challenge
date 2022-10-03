@@ -14,7 +14,7 @@ import java.awt.*;
 public class MenuMainPanel extends JPanel {
     Base base; //actions go to this base JFrame
     Dimension buttonGap = new Dimension(10, 10);
-    Dimension halfButtonSize = new Dimension(110, 30);
+    Dimension halfButtonSize = new Dimension(140, 30);
     Dimension fullButtonSize = new Dimension(halfButtonSize.width * 2 + buttonGap.width, halfButtonSize.height);
 
     /**
@@ -88,7 +88,14 @@ public class MenuMainPanel extends JPanel {
 
     private void buttonsRowOne(JPanel buttons, GridBagConstraints c) {
         c.gridx = 0;
-        GameButton start = new GameButton("Start Game", halfButtonSize, e -> base.startGame());
+
+        GameButton start;
+        if(Load.previousGamePresent()){
+            start = new GameButton("Resume Game", halfButtonSize, e -> base.startGame());
+        }else{
+            start = new GameButton("Start Game", halfButtonSize, e -> base.startGame());
+        }
+
         buttons.add(start, c);
 
         c.gridx = 1;
