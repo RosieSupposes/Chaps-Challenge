@@ -155,21 +155,24 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
+        GameDialog dialog = new GameDialog(this, "Save");
     }
 
-    public void resetFocus(){
+    public void resetFocus() {
         currentPanel.requestFocus();
     }
 
-    public void finishLevel() {
-        System.out.println("Level finished");
+    public void playerDied() {
+        System.out.println("Level lost");
         recorder.save();
+        GameDialog dialog = new GameDialog(this, "GameOver");
+        gameTimer.stop();
+    }
 
-        //TODO make pop up
-        // - if level one say "congrats" with "home", "exit", "replay", "next level", "save" buttons
-        // - if final level say "Congrats!" with "home", "exit", "replay" buttons
-
-        changeKeyListener(new Controller(this)); //switch control set back to default controls
+    public void playerWon() {
+        System.out.println("Level won");
+        recorder.save();
+        GameDialog dialog = new GameDialog(this, "GameCompleted");
         gameTimer.stop();
     }
 
@@ -356,8 +359,11 @@ public class Base extends JFrame {
             }
 
             //TODO uncomment when ready for game ending/level switching
-//            if(timeSec >=60 || Maze.gameComplete()){
-//                finishLevel();
+            if (timeSec >= 60) {
+                playerDied();
+            }
+//            else if (Maze.gameComplete()) {
+//                playerWon();
 //            }
         });
         gameTimer.start();

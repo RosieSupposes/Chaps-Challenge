@@ -12,10 +12,10 @@ import java.awt.*;
  * @version 1.3
  */
 public class MenuMainPanel extends JPanel {
-    Base base; //actions go to this base JFrame
-    Dimension buttonGap = new Dimension(10, 10);
-    Dimension halfButtonSize = new Dimension(110, 30);
-    Dimension fullButtonSize = new Dimension(halfButtonSize.width * 2 + buttonGap.width, halfButtonSize.height);
+    private final Base base; //actions go to this base JFrame
+    private final Dimension buttonGap = new Dimension(10, 10);
+    private final Dimension halfButtonSize = new Dimension(110, 30);
+    private final Dimension fullButtonSize = new Dimension(halfButtonSize.width * 2 + buttonGap.width, halfButtonSize.height);
 
     /**
      * Creates menu panel, connecting base actions to buttons on panel

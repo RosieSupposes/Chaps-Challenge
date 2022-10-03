@@ -4,10 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.List;
 
 public class GameDialog extends JDialog {
@@ -25,9 +22,9 @@ public class GameDialog extends JDialog {
         List<JComponent> components = List.of();
         switch (type) {
             case "Pause" -> components = setUpPause(base);
-            case "GameOver" -> setUpGameOver(base);
-            case "GameCompleted" -> setUpGameCompleted(base);
-            case "Save" -> setUpSave();
+            case "GameOver" -> components = setUpGameOver(base);
+            case "GameCompleted" -> components = setUpGameCompleted(base);
+            case "Save" -> components = setUpSave();
         }
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.CENTER;
@@ -41,16 +38,45 @@ public class GameDialog extends JDialog {
         this.requestFocus();
     }
 
-    private void setUpSave() {
+    private int timeMS = 0;
 
+    private List<JComponent> setUpSave() {
+        this.setBounds(50, 50, 100, 70);
+        this.addKeyListener(new Controller(base, this));
+
+        JLabel info = new JLabel("Game Saved");
+        info.setFont(new Font("Arial", Font.BOLD, 14));
+
+        timeMS = 0;
+        Timer timer = new Timer(250, unused -> {
+            assert SwingUtilities.isEventDispatchThread();
+            timeMS += 1;
+            if (timeMS >= 3) {
+                this.setVisible(false);
+            }
+        });
+        timer.start();
+        return List.of(info);
     }
 
-    private void setUpGameCompleted(Base base) {
+    private List<JComponent> setUpGameCompleted(Base base) {
+        this.setBounds(x, 50, 200, 400);
+        this.addKeyListener(new Controller(base, this));
 
+        JLabel info = new JLabel("You Win!");
+        info.setFont(new Font("Arial", Font.BOLD, 18));
+
+        return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
-    private void setUpGameOver(Base base) {
+    private List<JComponent> setUpGameOver(Base base) {
+        this.setBounds(x, 50, 200, 300);
+        this.addKeyListener(new Controller(base, this));
 
+        JLabel info = new JLabel("Game is Over");
+        info.setFont(new Font("Arial", Font.BOLD, 18));
+
+        return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
     private List<JComponent> setUpPause(Base base) {
@@ -64,49 +90,11 @@ public class GameDialog extends JDialog {
     }
 
     public GameButton playButton() {
-        return makeButton("Play Game", () -> {
+        Runnable action = () -> {
             base.unPause();
             this.setVisible(false);
-        });
-    }
-
-    public GameButton loadButton() {
-        return makeButton("Load New Game", () -> {
-            base.loadGame();
-            this.setVisible(false);
-        });
-    }
-
-    public GameButton newOneButton() {
-        return makeButton("Load Level One", () -> {
-            base.newGame(1);
-            this.setVisible(false);
-        });
-    }
-
-    public GameButton newTwoButton() {
-        return makeButton("Load Level Two", () -> {
-            base.newGame(2);
-            this.setVisible(false);
-        });
-    }
-
-    public GameButton saveButton() {
-        return makeButton("Save Game", () -> {
-            base.saveGame();
-            this.setVisible(false);
-        });
-    }
-
-    public GameButton exitButton() {
-        return makeButton("Exit Game", () -> {
-            base.newGame(2);
-            this.setVisible(false);
-        });
-    }
-
-    private GameButton makeButton(String name, Runnable action) {
-        GameButton button = new GameButton(name, BUTTON_SIZE, e -> action.run());
+        };
+        GameButton button = new GameButton("Play Game", BUTTON_SIZE, e -> action.run());
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -115,4 +103,49 @@ public class GameDialog extends JDialog {
         });
         return button;
     }
+
+    public GameButton loadButton() {
+        return new GameButton("Load New Game", BUTTON_SIZE, e -> {
+            base.loadGame();
+            this.setVisible(false);
+        });
+    }
+
+    public GameButton newOneButton() {
+        return new GameButton("Load Level One", BUTTON_SIZE, e -> {
+            base.newGame(1);
+            this.setVisible(false);
+        });
+    }
+
+    public GameButton newTwoButton() {
+        return new GameButton("Load Level Two", BUTTON_SIZE, e -> {
+            base.newGame(2);
+            this.setVisible(false);
+        });
+    }
+
+    public GameButton saveButton() {
+        return new GameButton("Save Game", BUTTON_SIZE, e -> {
+            base.saveGame();
+        });
+    }
+
+    public GameButton exitButton() {
+        return new GameButton("Exit Game", BUTTON_SIZE, e -> {
+            base.exitGame();
+            this.setVisible(false);
+        });
+    }
+
+//    private GameButton makeButton(String name, Runnable action) {
+//        GameButton button = new GameButton(name, BUTTON_SIZE, e -> action.run());
+//        this.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosed(WindowEvent e) {
+//                action.run();
+//            }
+//        });
+//        return button;
+//    }
 }

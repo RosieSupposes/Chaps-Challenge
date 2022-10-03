@@ -12,12 +12,12 @@ import java.awt.event.KeyEvent;
  * @version 1.2
  */
 public class Controller extends Keys {
-    Base b;
+    private final Base b;
 
     /**
      * Menu commands, exiting, replaying, making new levels
      *
-     * @param b
+     * @param b Base that actions happen
      */
     public Controller(Base b) {
         this.b = b;
@@ -76,6 +76,7 @@ public class Controller extends Keys {
 
         setAction(KeyEvent.VK_ESCAPE, () -> {
             dialog.setVisible(false);
+            b.resetFocus();
             b.unPause();
         }, false); //esc
     }
