@@ -30,19 +30,27 @@ public class Base extends JFrame {
     private int timeSec = 0;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
-    GameMenuBar currentMenuBar;
-
-    JPanel currentPanel; //for setting keylistener on
+    private GameMenuBar currentMenuBar;
+    private JPanel currentPanel; //for setting keylistener on
+    private GameDialog pauseDialog;
+    private GameDialog saveDialog;
+    private GameDialog gameOverDialog;
+    private GameDialog gameWinDialog;
 
     /**
      * Begin program here. Run menu phase.
      */
     public Base() {
         assert SwingUtilities.isEventDispatchThread();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         menuScreen();
         System.out.println(this.getSize());
+
+        pauseDialog = new GameDialog(this, "Pause");
+        saveDialog = new GameDialog(this,"Save");
+        gameOverDialog = new GameDialog(this, "GameOver");
+        gameWinDialog = new GameDialog(this,"GameCompleted");
 
         setVisible(true);
         setResizable(false);
@@ -88,7 +96,6 @@ public class Base extends JFrame {
      * pauses game
      */
     public void pause() {
-        //runClosePhase();
         System.out.println("Pause");
         gameTimer.stop();
         if (currentMenuBar == null) {
@@ -98,7 +105,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
-        //GameDialog.makeGameDialog(this,"Pause");
+        pauseDialog.visibleFocus();
     }
 
     /**
@@ -111,7 +118,7 @@ public class Base extends JFrame {
             return;
         }
         currentMenuBar.setUnPause();
-
+        pauseDialog.setVisible(false);
         changeKeyListener(new Controller(this, false));
         //TODO close pause popup window
     }
@@ -161,18 +168,24 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
-        recorder.save();
+        saveDialog.visibleFocus();
     }
 
-    public void finishLevel() {
-        System.out.println("Level finished");
+    public void resetFocus() {
+        currentPanel.requestFocus();
+    }
+
+    public void playerDied() {
+        System.out.println("Level lost");
         recorder.save();
+        gameOverDialog.visibleFocus();
+        gameTimer.stop();
+    }
 
-        //TODO make pop up
-        // - if level one say "congrats" with "home", "exit", "replay", "next level", "save" buttons
-        // - if final level say "Congrats!" with "home", "exit", "replay" buttons
-
-        changeKeyListener(new Controller(this)); //switch control set back to default controls
+    public void playerWon() {
+        System.out.println("Level won");
+        recorder.save();
+        gameWinDialog.visibleFocus();
         gameTimer.stop();
     }
 
@@ -359,8 +372,11 @@ public class Base extends JFrame {
             }
 
             //TODO uncomment when ready for game ending/level switching
-//            if(timeSec >=60 || Maze.gameComplete()){
-//                finishLevel();
+            if (timeSec >= 60) {
+                playerDied();
+            }
+//            else if (Maze.gameComplete()) {
+//                playerWon();
 //            }
         });
         gameTimer.start();
