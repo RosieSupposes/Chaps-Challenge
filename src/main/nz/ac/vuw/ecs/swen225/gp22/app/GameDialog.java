@@ -13,12 +13,12 @@ public class GameDialog extends JDialog {
     private static final Dimension BUTTON_SIZE = new Dimension(150, 30);
     private final static int x = GameDimensions.WINDOW_WIDTH / 3;
     private final static int y = GameDimensions.WINDOW_HEIGHT / 3;
-    private Base base;
+    private final Base base;
 
     public GameDialog(Base base, String type) {
         this.base = base;
         this.setLayout(new GridBagLayout());
-        this.setBackground(Main.LIGHT_YELLOW_COLOR);
+        this.getContentPane().setBackground(Main.LIGHT_YELLOW_COLOR);
         List<JComponent> components = List.of();
         switch (type) {
             case "Pause" -> components = setUpPause(base);
@@ -39,13 +39,18 @@ public class GameDialog extends JDialog {
     }
 
     private int timeMS = 0;
-
     private List<JComponent> setUpSave() {
-        this.setBounds(50, 50, 100, 70);
+        int width = 100;
+        int height = 70;
+        int x = base.getX() + GameDimensions.GAME_WINDOW_SIZE - 100/2;
+        int y = base.getY() + 100;
+        this.setBounds(x, y, width, height);
+
         this.addKeyListener(new Controller(base, this));
 
         JLabel info = new JLabel("Game Saved");
         info.setFont(new Font("Arial", Font.BOLD, 14));
+        info.setForeground(Main.TEXT_COLOR);
 
         timeMS = 0;
         Timer timer = new Timer(250, unused -> {
@@ -60,31 +65,49 @@ public class GameDialog extends JDialog {
     }
 
     private List<JComponent> setUpGameCompleted(Base base) {
-        this.setBounds(x, 50, 200, 400);
+        int width = 200;
+        int height = 400;
+        int x = base.getX() + GameDimensions.WINDOW_WIDTH/2 - width/2;
+        int y = base.getY() + GameDimensions.WINDOW_HEIGHT/4;
+        this.setBounds(x, y, width, height);
+
         this.addKeyListener(new Controller(base, this));
 
         JLabel info = new JLabel("You Win!");
         info.setFont(new Font("Arial", Font.BOLD, 18));
+        info.setForeground(Main.TEXT_COLOR);
 
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
     private List<JComponent> setUpGameOver(Base base) {
-        this.setBounds(x, 50, 200, 300);
+        int width = 200;
+        int height = 300;
+        int x = base.getX() + GameDimensions.WINDOW_WIDTH/2 - width/2;
+        int y = base.getY() + GameDimensions.WINDOW_HEIGHT/4;
+        this.setBounds(x, y, width, height);
+
         this.addKeyListener(new Controller(base, this));
 
         JLabel info = new JLabel("Game is Over");
         info.setFont(new Font("Arial", Font.BOLD, 18));
+        info.setForeground(Main.TEXT_COLOR);
 
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
 
     private List<JComponent> setUpPause(Base base) {
-        this.setBounds(x, 50, 200, 400);
+        int width = 200;
+        int height = 400;
+        int x = base.getX() + GameDimensions.WINDOW_WIDTH/2 - width/2;
+        int y = base.getY() + GameDimensions.WINDOW_HEIGHT/4;
+        this.setBounds(x, y, width, height);
+
         this.addKeyListener(new Controller(base, this));
 
         JLabel info = new JLabel("Game is Paused");
         info.setFont(new Font("Arial", Font.BOLD, 18));
+        info.setForeground(Main.TEXT_COLOR);
 
         return List.of(info, playButton(), loadButton(), newOneButton(), newTwoButton(), saveButton(), exitButton());
     }
