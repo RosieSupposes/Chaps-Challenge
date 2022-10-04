@@ -305,7 +305,10 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> {
+                        Maze.setTile(pos, new Treasure(pos));
+                        Maze.addTreasure();
+                    }
                 }
             }
         }
@@ -364,7 +367,7 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         SidePanel side = new SidePanel(timeSec, level);
         side.setTime(timeSec);
-        final JPanel level = new PhasePanel(game,side);
+        final JPanel level = new PhasePanel(game, side);
 
         timeMS = 0;
         gameTimer = new Timer(20, unused -> {

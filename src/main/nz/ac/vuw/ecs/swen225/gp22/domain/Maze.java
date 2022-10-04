@@ -95,6 +95,9 @@ public class Maze{
         treasuresLeft--;
     }
 
+    /** Increases the number of treasures left by 1. */
+    public static void addTreasure(){ treasuresLeft++; }
+
     /** @return Whether or not all the {@link Treasure} tiles on the map have been collected. */
     public static boolean collectedAllTreasures(){ return treasuresLeft == 0; }
 
