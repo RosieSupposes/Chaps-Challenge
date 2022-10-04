@@ -77,19 +77,19 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
-    public static void setLevel(int lvl){
+    public static void setLevel(int lvl) {
         level = lvl;
     }
 
-    public static void setTime(int t){
+    public static void setTime(int t) {
         timeSec = t;
     }
 
-    public static int getLevel(){
+    public static int getLevel() {
         return level;
     }
 
-    public static int getTime(){
+    public static int getTime() {
         return timeSec;
     }
 
@@ -323,8 +323,7 @@ public class Base extends JFrame {
     public JPanel getGameWindow() {
         assert Maze.player != null;
         JPanel game = new Viewport();
-        JPanel side = new JPanel(); //TODO link to renderer side panel
-        side.setBackground(Main.LIGHT_YELLOW_COLOR);
+        JPanel side = new SidePanel(timeSec, level);
         return new PhasePanel(game, side);
     }
 
@@ -356,8 +355,6 @@ public class Base extends JFrame {
 
     /**
      * Create, run and draw new level
-     *
-     * @param seconds number of seconds into level
      */
     public void loadLevel() {
         assert Maze.player != null;
