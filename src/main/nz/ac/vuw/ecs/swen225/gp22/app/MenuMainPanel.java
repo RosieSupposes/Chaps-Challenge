@@ -91,9 +91,9 @@ public class MenuMainPanel extends JPanel {
 
         GameButton start;
         if(Load.previousGamePresent()){
-            start = new GameButton("Resume Game", halfButtonSize, e -> base.startGame());
+            start = new GameButton("Resume", halfButtonSize, e -> base.startGame());
         }else{
-            start = new GameButton("Start Game", halfButtonSize, e -> base.startGame());
+            start = new GameButton("Start", halfButtonSize, e -> base.startGame());
         }
 
         buttons.add(start, c);
