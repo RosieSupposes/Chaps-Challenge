@@ -134,6 +134,10 @@ public class Player extends JPanel {
         setPreferredSize(new Dimension(800, 520));
         setBackground(Main.BG_COLOR);
     }
+
+    /**
+     * Update the play button icon.
+     */
     private void updatePlayBtn() {
         if (isPlaying || isRewinding) {
             isPlaying = false;
@@ -157,7 +161,7 @@ public class Player extends JPanel {
         fileChooser.setFileFilter(filter);
         fileChooser.showOpenDialog(this);
 
-// only load if a file was selected
+        // Only load if a file was selected
         if (fileChooser.getSelectedFile() != null) {
             Parser parser = new Parser(fileChooser.getSelectedFile());
             actions = parser.getActions();
@@ -239,7 +243,7 @@ public class Player extends JPanel {
      *
      * @param i The current action.
      * @param isProgressing If the player is progressing.
-     * @return True if the player should stop progressing.
+     * @return true if the player should stop progressing.
      */
     private boolean progress(int i, boolean isProgressing) {
         currentAction = i < actions.size() ? i : actions.size() - 1;
