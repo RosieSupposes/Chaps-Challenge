@@ -1,6 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import javax.swing.*;
+
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -19,8 +22,8 @@ public class GameButton extends JButton {
     }
 
     public void setUp(Dimension dim, ActionListener action){
-        this.setBackground(Main.BUTTON_COLOR);
-        this.setForeground(Main.TEXT_COLOR);
+        this.setBackground(GameConstants.BUTTON_COLOR);
+        this.setForeground(GameConstants.TEXT_COLOR);
 
         this.setPreferredSize(dim);
         this.setMinimumSize(dim);

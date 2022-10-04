@@ -1,6 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import javax.swing.*;
+
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -32,8 +35,8 @@ public class GameMenuItem extends JMenuItem {
 
     private void setUp(ActionListener actionList){
         this.addActionListener(actionList);
-        this.setBackground(Main.BUTTON_COLOR);
-        this.setForeground(Main.TEXT_COLOR);
+        this.setBackground(GameConstants.BUTTON_COLOR);
+        this.setForeground(GameConstants.TEXT_COLOR);
     }
 
     public void changeActionListener(ActionListener action) {

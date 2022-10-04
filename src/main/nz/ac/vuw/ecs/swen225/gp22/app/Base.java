@@ -5,7 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SidePanel;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 
@@ -152,7 +152,7 @@ public class Base extends JFrame {
         Player playerWindow = new Player(this);
 
         add(BorderLayout.CENTER, playerWindow);
-        setMinimumSize(new Dimension(GameDimensions.WINDOW_WIDTH, GameDimensions.WINDOW_HEIGHT + 150));
+        setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
         pack();
         playerWindow.requestFocus(); //need to be after pack
 
@@ -370,7 +370,7 @@ public class Base extends JFrame {
 //        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
 //        PhasePanel menu = new PhasePanel(testGame,testSide);
 
-        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameDimensions.SIDE_SIZE, 0.8);
+        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameConstants.SIDE_SIZE, 0.8);
         PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
         currentPanel = menu;
@@ -380,7 +380,7 @@ public class Base extends JFrame {
         components.add(menu);
         components.addAll(menu.getAllComponents());
 
-        setMinimumSize(GameDimensions.WINDOW_SIZE);
+        setMinimumSize(GameConstants.WINDOW_SIZE);
         pack();
         menu.requestFocus();
     }

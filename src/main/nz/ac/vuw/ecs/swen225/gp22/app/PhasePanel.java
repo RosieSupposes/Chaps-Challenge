@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +31,7 @@ public class PhasePanel extends JPanel {
 
         setUpPanels();
 
-        this.setPreferredSize(GameDimensions.WINDOW_SIZE);
+        this.setPreferredSize(GameConstants.WINDOW_SIZE);
         components.addAll(List.of(sidePanel, gamePanel));
     }
 
@@ -39,8 +39,8 @@ public class PhasePanel extends JPanel {
      * sets up panel sizes and adds them to panel
      */
     public void setUpPanels() {
-        gamePanel.setPreferredSize(GameDimensions.GAME_SIZE);
-        sidePanel.setPreferredSize(GameDimensions.SIDE_SIZE);
+        gamePanel.setPreferredSize(GameConstants.GAME_SIZE);
+        sidePanel.setPreferredSize(GameConstants.SIDE_SIZE);
 
         this.add(BorderLayout.WEST, gamePanel);
         this.add(BorderLayout.EAST, sidePanel);
