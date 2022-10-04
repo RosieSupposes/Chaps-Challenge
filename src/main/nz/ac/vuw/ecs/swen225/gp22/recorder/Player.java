@@ -10,12 +10,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.11
+ * @version 1.12
  */
 public class Player extends JPanel {
   private final Base base;
@@ -27,6 +28,7 @@ public class Player extends JPanel {
   private int speed = 1;
   private int level;
   private GameButton playPause;
+  private JPanel gamePanel;
 
   private static final Dimension BUTTON_DIM = new Dimension(50, 30);
 
@@ -47,11 +49,12 @@ public class Player extends JPanel {
    * Set up the player.
    */
   private void setup() {
-    JPanel gamePanel = base.getGameWindow();
-    gamePanel.setPreferredSize(new Dimension(840, 540)); // Will be changed when I get passed the viewport later
-    gamePanel.setBackground(Color.BLACK);
+    gamePanel = base.getGameWindow();
 
-    JButton stepBack = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() - 1), "stepback");
+    JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
+      scrubber.setValue(scrubber.getValue() - 1);
+      gamePanel.repaint();
+    }, "stepback");
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
     scrubber.setPreferredSize(new Dimension(700, 25));
@@ -80,7 +83,10 @@ public class Player extends JPanel {
       if (actions != null) scrubber.setMaximum(actions.size());
     });
 
-    JButton stepForward = new GameButton("", BUTTON_DIM, e -> scrubber.setValue(scrubber.getValue() + 1), "stepforward");
+    JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
+      scrubber.setValue(scrubber.getValue() + 1);
+      gamePanel.repaint();
+      }, "stepforward");
 
     JButton rewind = new GameButton("", BUTTON_DIM, e -> {
       playPause.changeIcon("pause");
@@ -157,6 +163,7 @@ public class Player extends JPanel {
         scrubber.setMaximum(actions.size() - 1);
         currentAction = 0;
         scrubber.setValue(0);
+        gamePanel.repaint();
       }
     }
   }
@@ -172,11 +179,13 @@ public class Player extends JPanel {
       // scrub forward
       for (int i = currentAction; i < position; i++) {
         actions.get(i).execute();
+        gamePanel.repaint();
       }
     } else if (position < currentAction) {
       // scrub backward
       for (int i = currentAction; i > position; i--) {
         actions.get(i).undo();
+        gamePanel.repaint();
       }
     }
     currentAction = position < actions.size() ? position : actions.size() - 1;
@@ -189,8 +198,11 @@ public class Player extends JPanel {
     isRewinding = true;
     isPlaying = false;
     new Thread(() -> {
-      for (int i = currentAction; i >= 0; i--) {
+      for (int i = currentAction; i > 0; i--) {
+        Action prevAction = actions.get(i - 1);
+        if (prevAction instanceof MoveAction m) { m.execute(); }
         actions.get(i).undo();
+        gamePanel.repaint();
         if (progress(i, isRewinding)) break;
       }
       isRewinding = false;
@@ -207,6 +219,7 @@ public class Player extends JPanel {
     new Thread(() -> {
       for (int i = currentAction; i < actions.size(); i++) {
         actions.get(i).execute();
+        gamePanel.repaint();
         if (progress(i, isPlaying)) break;
       }
       isPlaying = false;

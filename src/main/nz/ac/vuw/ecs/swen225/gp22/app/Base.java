@@ -30,19 +30,27 @@ public class Base extends JFrame {
     private int timeSec = 0;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
-    GameMenuBar currentMenuBar;
-
-    JPanel currentPanel; //for setting keylistener on
+    private GameMenuBar currentMenuBar;
+    private JPanel currentPanel; //for setting keylistener on
+    private GameDialog pauseDialog;
+    private GameDialog saveDialog;
+    private GameDialog gameOverDialog;
+    private GameDialog gameWinDialog;
 
     /**
      * Begin program here. Run menu phase.
      */
     public Base() {
         assert SwingUtilities.isEventDispatchThread();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         menuScreen();
         System.out.println(this.getSize());
+
+        pauseDialog = new GameDialog(this, "Pause");
+        saveDialog = new GameDialog(this,"Save");
+        gameOverDialog = new GameDialog(this, "GameOver");
+        gameWinDialog = new GameDialog(this,"GameCompleted");
 
         setVisible(true);
         setResizable(false);
@@ -74,8 +82,10 @@ public class Base extends JFrame {
         if (Load.previousGamePresent()) {
             int time = Load.previousGame();
             loadLevel(time);
-            
+
             recorder = new Recorder(1);
+            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
+
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -86,7 +96,6 @@ public class Base extends JFrame {
      * pauses game
      */
     public void pause() {
-        //runClosePhase();
         System.out.println("Pause");
         gameTimer.stop();
         if (currentMenuBar == null) {
@@ -96,6 +105,7 @@ public class Base extends JFrame {
 
         changeKeyListener(new Controller(this, true));
         //TODO learn how to make pop up windows!
+        pauseDialog.visibleFocus();
     }
 
     /**
@@ -108,7 +118,7 @@ public class Base extends JFrame {
             return;
         }
         currentMenuBar.setUnPause();
-
+        pauseDialog.setVisible(false);
         changeKeyListener(new Controller(this, false));
         //TODO close pause popup window
     }
@@ -138,6 +148,7 @@ public class Base extends JFrame {
         loadLevel(time);
 
         recorder = new Recorder(1);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -145,9 +156,10 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
-        Load.loadLevel( 1); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
         loadLevel(0);
         recorder = new Recorder(lvl);
+        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
 
     /**
@@ -156,17 +168,24 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
+        saveDialog.visibleFocus();
     }
 
-    public void finishLevel() {
-        System.out.println("Level finished");
+    public void resetFocus() {
+        currentPanel.requestFocus();
+    }
+
+    public void playerDied() {
+        System.out.println("Level lost");
         recorder.save();
+        gameOverDialog.visibleFocus();
+        gameTimer.stop();
+    }
 
-        //TODO make pop up
-        // - if level one say "congrats" with "home", "exit", "replay", "next level", "save" buttons
-        // - if final level say "Congrats!" with "home", "exit", "replay" buttons
-
-        changeKeyListener(new Controller(this)); //switch control set back to default controls
+    public void playerWon() {
+        System.out.println("Level won");
+        recorder.save();
+        gameWinDialog.visibleFocus();
         gameTimer.stop();
     }
 
@@ -186,10 +205,6 @@ public class Base extends JFrame {
      */
     public void movePlayer(Entity.Direction dir) {
         System.out.println("Move: " + dir);
-        String direction = dir.toString();
-        int x = Maze.player.getPos().x();
-        int y = Maze.player.getPos().y();
-
         Entity.Action action = null;
 
         try {
@@ -197,15 +212,21 @@ public class Base extends JFrame {
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
-        recorder.addAction(new MoveAction(x, y, direction));
 
-        if(action == null){ return; }
-        Entity.Action.Interaction interaction = action.interaction();
-        if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
-            recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
-        } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
-            recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
+        String direction = dir.toString();
+        int x = Maze.player.getPos().x();
+        int y = Maze.player.getPos().y();
+
+        if (action != null) {
+            Entity.Action.Interaction interaction = action.interaction();
+            if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
+                recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
+            } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
+                recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
+            }
         }
+
+        recorder.addAction(new MoveAction(x, y, direction));
     }
 
     /**
@@ -216,7 +237,7 @@ public class Base extends JFrame {
      * @param y         y position of player
      * @param direction action that occurred
      */
-    public void setMove(int x, int y, String direction) {
+    public static void setMove(int x, int y, String direction) {
         Maze.Point pos = new Maze.Point(x, y);
         Maze.player.setPos(pos);
         switch (direction) {
@@ -237,18 +258,13 @@ public class Base extends JFrame {
      * @param object Door, Exit, Key, Treasure
      * @param color  Red, Green, Blue, Yellow
      */
-    public void setAction(int x, int y, String action, String object, String color) {
+    public static void setAction(int x, int y, String action, String object, String color) {
         Maze.Point pos = new Maze.Point(x, y);
         switch (action) {
-            case "Open" -> {
-                switch (object) {
-                    case "Door" -> Maze.setTile(pos, new Ground(pos));
-                    case "Exit" -> Maze.setTile(pos, new Exit(pos));
-                }
-            }
+            case "Open", "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Close" -> {
                 switch (object) {
-                    case "Door" -> {
+                    case "UnlockDoor" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
@@ -256,13 +272,12 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Exit" -> Maze.setTile(pos, new LockedExit(pos));
+                    case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
                 }
             }
-            case "Pick-up" -> Maze.setTile(pos, new Ground(pos));
             case "Drop" -> {
                 switch (object) {
-                    case "Key" -> {
+                    case "PickupKey" -> {
                         switch (color) {
                             case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
                             case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
@@ -270,10 +285,11 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "Treasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
                 }
             }
         }
+
     }
 
     /**
@@ -321,7 +337,7 @@ public class Base extends JFrame {
     /**
      * Create, run and draw new level
      *
-     * @param seconds      number of seconds into level
+     * @param seconds number of seconds into level
      */
     public void loadLevel(int seconds) {
         assert Maze.player != null;
@@ -332,7 +348,7 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         JPanel side = new JPanel();
         side.setBackground(Main.LIGHT_YELLOW_COLOR);
-        JLabel timeLabel = new JLabel("Time: "+ seconds);
+        JLabel timeLabel = new JLabel("Time: " + seconds);
         timeLabel.setForeground(Main.TEXT_COLOR);
         side.add(timeLabel);
         final PhasePanel level = new PhasePanel(game, side);
@@ -351,8 +367,11 @@ public class Base extends JFrame {
             }
 
             //TODO uncomment when ready for game ending/level switching
-//            if(timeSec >=60 || Maze.gameComplete()){
-//                finishLevel();
+            if (timeSec >= 60) {
+                playerDied();
+            }
+//            else if (Maze.gameComplete()) {
+//                playerWon();
 //            }
         });
         gameTimer.start();

@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
 
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -11,12 +12,12 @@ import java.awt.event.KeyEvent;
  * @version 1.2
  */
 public class Controller extends Keys {
-    Base b;
+    private final Base b;
 
     /**
      * Menu commands, exiting, replaying, making new levels
      *
-     * @param b
+     * @param b Base that actions happen
      */
     public Controller(Base b) {
         this.b = b;
@@ -26,7 +27,7 @@ public class Controller extends Keys {
     /**
      * commands for when game is running
      *
-     * @param b base which commands get run on
+     * @param b      base which commands get run on
      * @param paused is the game paused?
      */
     public Controller(Base b, boolean paused) {
@@ -46,6 +47,40 @@ public class Controller extends Keys {
         }
     }
 
+    public Controller(Base b, JDialog dialog) {
+        this.b = b;
+
+        setAction(KeyEvent.VK_X, () -> {
+            dialog.setVisible(false);
+            b.exitGame();
+        }, true); //ctrl X
+
+        setAction(KeyEvent.VK_R, () -> {
+            dialog.setVisible(false);
+            b.loadGame();
+        }, true); //ctrl r
+
+        setAction(KeyEvent.VK_1, () -> {
+            dialog.setVisible(false);
+            b.newGame(1);
+        }, true); //ctrl 1
+
+        setAction(KeyEvent.VK_2, () -> {
+            dialog.setVisible(false);
+            b.newGame(2);
+        }, true); //ctrl 2
+
+        setAction(KeyEvent.VK_S, () -> {
+            b.saveGame();
+        }, true); //ctrl s
+
+        setAction(KeyEvent.VK_ESCAPE, () -> {
+            dialog.setVisible(false);
+            b.resetFocus();
+            b.unPause();
+        }, false); //esc
+    }
+
 
     private void constantCommand() {
         setAction(KeyEvent.VK_X, b::exitGame, true); //ctrl X
@@ -54,6 +89,5 @@ public class Controller extends Keys {
         setAction(KeyEvent.VK_2, () -> b.newGame(2), true); //ctrl 2
 
     }
-
 
 }
