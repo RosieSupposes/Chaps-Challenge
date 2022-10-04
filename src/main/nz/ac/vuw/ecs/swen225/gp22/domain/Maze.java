@@ -43,12 +43,17 @@ public class Maze{
     public static void generateMap(Point dimensions, int treasures){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
+
+        entities.forEach(n -> n.deleteEntity());
+        entities.clear();
+
         tileMap = new Tile[dimensions.x()][dimensions.y()];
         for(int x = 0; x < dimensions.x(); x++){
             for(int y = 0; y < dimensions.y(); y++){
                 tileMap[x][y] = new Ground(new Point(x, y));
             }
         }
+
         treasuresLeft = treasures;
         if(player == null) player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
