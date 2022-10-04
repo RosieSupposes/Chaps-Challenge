@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -10,11 +11,16 @@ import java.util.Queue;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.8
+ * @version 1.9
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
     public static Player player;
+
+    /** Contains all non-player entities. Suppressed the raw types warning as 
+     * the generic type is only used for observers and does not affect this use case.  */
+    @SuppressWarnings("rawtypes")
+    public static ArrayList<Entity> entities;
 
     /** A 2D array that stores the level {@link Tile} instances in a 
      *  way where they can be accessed by position.  */
