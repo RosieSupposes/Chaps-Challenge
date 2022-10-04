@@ -47,6 +47,10 @@ public abstract class Tile{
      */
     public void setObstructive(boolean obstructive){ this.obstructive = obstructive; }
 
-    /** Called when a tile is removed or replaced. */
+    /** 
+     * Called when a tile is removed or replaced.
+     * This method is not abstract because not all tiles 
+     * will need special code to run on deletion.
+     */
     public void deleteTile(){ }
 }

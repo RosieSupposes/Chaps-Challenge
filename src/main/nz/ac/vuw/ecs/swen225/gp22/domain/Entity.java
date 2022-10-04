@@ -9,7 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.8
+ * @version 1.9
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -63,6 +63,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         setDir(facingDir);
     }
 
+    /** Non-player entities will act based on how often this is called. */
+    abstract public Action ping();
+
     /**
      * Moves the entity in a given direction. 
      * 
@@ -96,9 +99,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         setDir(dir);
         move();
 
-        Action.Interaction interaction = new Interaction(ActionType.None, Color.None);
-        if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
-        return new Action(entityPos, facingDir, interaction);
+        return new Action(entityPos, facingDir, new Interaction(ActionType.None, Color.None));
     }
 
     /** @return The {@link #entityPos position} of the entity. */
@@ -128,4 +129,11 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         facingDir = dir; 
         updateObservers(); 
     }
+
+    /** 
+     * Called when an entity is removed.
+     * This method is not abstract because not all entities 
+     * will need special code to run on deletion.
+     */
+    public void deleteEntity(){ }
 }
