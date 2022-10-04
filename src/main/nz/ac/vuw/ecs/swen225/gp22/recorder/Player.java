@@ -53,9 +53,9 @@ public class Player extends JPanel {
 
     JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
       scrubber.setValue(scrubber.getValue() - 1);
-      gamePanel.repaint();
       isPlaying = false;
       isRewinding = false;
+      gamePanel.repaint();
     }, "stepback");
 
     scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
@@ -87,15 +87,16 @@ public class Player extends JPanel {
 
     JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
       scrubber.setValue(scrubber.getValue() + 1);
-      gamePanel.repaint();
       isPlaying = false;
       isRewinding = false;
+      gamePanel.repaint();
       }, "stepforward");
 
     JButton rewind = new GameButton("", BUTTON_DIM, e -> {
       playPause.changeIcon("pause");
       rewind();
       }, "rewind");
+
     playPause = new GameButton("", BUTTON_DIM, e -> {
       updatePlayBtn();
     }, "play");
@@ -188,6 +189,8 @@ public class Player extends JPanel {
     } else if (position < currentAction) {
       // scrub backward
       for (int i = currentAction; i > position; i--) {
+        Action prevAction = actions.get(i - 1);
+        if (prevAction instanceof MoveAction m) { m.execute(); }
         actions.get(i).undo();
         gamePanel.repaint();
       }
@@ -203,6 +206,7 @@ public class Player extends JPanel {
     isPlaying = false;
     new Thread(() -> {
       for (int i = currentAction; i > 0; i--) {
+        if (!isPlaying && !isRewinding) break;
         Action prevAction = actions.get(i - 1);
         if (prevAction instanceof MoveAction m) { m.execute(); }
         actions.get(i).undo();
@@ -222,6 +226,7 @@ public class Player extends JPanel {
     isRewinding = false;
     new Thread(() -> {
       for (int i = currentAction; i < actions.size(); i++) {
+        if (!isPlaying && !isRewinding) break;
         actions.get(i).execute();
         gamePanel.repaint();
         if (progress(i, isPlaying)) break;
