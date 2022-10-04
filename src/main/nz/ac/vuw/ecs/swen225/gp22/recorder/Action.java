@@ -10,20 +10,20 @@ import org.dom4j.Element;
  */
 public interface Action {
 
-  /**
-   * Execute the action.
-   */
-  void execute();
+    /**
+     * Execute the action.
+     */
+    void execute();
 
-  /**
-   * Undo the action.
-   */
-  void undo();
+    /**
+     * Undo the action.
+     */
+    void undo();
 
-  /**
-   * Convert the action to XML for saving.
-   *
-   * @return the XML representation of the action
-   */
-  Element toXML();
+    /**
+     * Convert the action to XML for saving.
+     *
+     * @return the XML representation of the action
+     */
+    Element toXML();
 }
