@@ -99,8 +99,8 @@ public class Base extends JFrame {
      */
     public void startGame() {
         if (Load.previousGamePresent()) {
-            int time = Load.previousGame();
-            loadLevel(time); //TODO Persistency should tell me which level is loaded?
+            Load.previousGame();
+            loadLevel(); //TODO Persistency should tell me which level is loaded?
 
             recorder = new Recorder(1);
             recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -163,8 +163,8 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
-        int time = Load.resumeGame();
-        loadLevel(time); //TODO ask persistency which level was loaded
+        Load.resumeGame();
+        loadLevel(); //TODO ask persistency which level was loaded
 
         recorder = new Recorder(1);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -177,7 +177,7 @@ public class Base extends JFrame {
         System.out.println("New level" + lvl);
         level = lvl;
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(60);
+        loadLevel();
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
@@ -186,7 +186,7 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
-        Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
+        Save.saveGame(); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
         saveDialog.visibleFocus();
     }
@@ -356,7 +356,7 @@ public class Base extends JFrame {
      *
      * @param seconds number of seconds into level
      */
-    public void loadLevel(int seconds) {
+    public void loadLevel() {
         assert Maze.player != null;
 
         runClosePhase();
@@ -366,7 +366,6 @@ public class Base extends JFrame {
         side.setTime(timeSec);
         final JPanel level = new PhasePanel(game,side);
 
-        timeSec = seconds;
         timeMS = 0;
         gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
