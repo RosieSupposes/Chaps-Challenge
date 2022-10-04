@@ -41,7 +41,9 @@ public class SidePanel extends JPanel implements ActionListener {
 
     /***
      * Initialises a new side panel upon the loading of a level.
+     * 
      * @param timer The timer counting down the remaining time for the level.
+     * @param lvl The current game level.
     */
     public SidePanel(int time, int lvl){ 
         this.timer = time;
@@ -111,6 +113,7 @@ public class SidePanel extends JPanel implements ActionListener {
     public void setLabelFont(JLabel jl){ jl.setFont(new Font("Verdana", Font.BOLD, 20)); }
 
     /***
+     * Displays the image of the keys collected.
      * 
      * @param c The key that has been collected by the player.
      * @return The image of the key that will be displayed in the inventory.
