@@ -28,7 +28,7 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
-    private int timeSec = 60;
+    private static int timeSec = 60;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
@@ -79,6 +79,10 @@ public class Base extends JFrame {
 
     public static void setLevel(int lvl){
         level = lvl;
+    }
+
+    public static void setTime(int t){
+        timeSec = t;
     }
 
     /**
