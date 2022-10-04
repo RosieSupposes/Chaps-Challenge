@@ -77,19 +77,19 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
-    public static void setLevel(int lvl){
+    public static void setLevel(int lvl) {
         level = lvl;
     }
 
-    public static void setTime(int t){
+    public static void setTime(int t) {
         timeSec = t;
     }
 
-    public static int getLevel(){
+    public static int getLevel() {
         return level;
     }
 
-    public static int getTime(){
+    public static int getTime() {
         return timeSec;
     }
 
@@ -286,10 +286,26 @@ public class Base extends JFrame {
                 switch (object) {
                     case "UnlockDoor" -> {
                         switch (color) {
-                            case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
-                            case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
-                            case "Blue" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Blue));
-                            case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
+                            case "Red" -> {
+                                Maze.player.addKey(ColorableTile.Color.Red);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
+
+                            }
+                            case "Green" -> {
+                                Maze.player.addKey(ColorableTile.Color.Green);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
+
+                            }
+                            case "Blue" -> {
+                                Maze.player.addKey(ColorableTile.Color.Blue);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Blue));
+
+                            }
+                            case "Yellow" -> {
+                                Maze.player.addKey(ColorableTile.Color.Yellow);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
+
+                            }
                         }
                     }
                     case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
@@ -299,10 +315,26 @@ public class Base extends JFrame {
                 switch (object) {
                     case "PickupKey" -> {
                         switch (color) {
-                            case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
-                            case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
-                            case "Blue" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Blue));
-                            case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
+                            case "Red" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Red);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
+
+                            }
+                            case "Green" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Green);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
+
+                            }
+                            case "Blue" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Blue);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Blue));
+
+                            }
+                            case "Yellow" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Yellow);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
+
+                            }
                         }
                     }
                     case "PickupTreasure" -> {
@@ -323,8 +355,7 @@ public class Base extends JFrame {
     public JPanel getGameWindow() {
         assert Maze.player != null;
         JPanel game = new Viewport();
-        JPanel side = new JPanel(); //TODO link to renderer side panel
-        side.setBackground(GameConstants.LIGHT_YELLOW_COLOR);
+        JPanel side = new SidePanel(timeSec, level);
         return new PhasePanel(game, side);
     }
 
@@ -356,8 +387,6 @@ public class Base extends JFrame {
 
     /**
      * Create, run and draw new level
-     *
-     * @param seconds number of seconds into level
      */
     public void loadLevel() {
         assert Maze.player != null;
