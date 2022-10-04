@@ -14,17 +14,21 @@ import javax.imageio.ImageIO;
  */
 public enum Img {
     // images to be displayed for level 1 of Chap's Challenge
-    BlueKey, BlueLockedDoor, GreenKey, GreenLockedDoor, RedKey, RedLockedDoor, YellowKey, YellowLockedDoor,
-    FreeTile, Exit, LockedExit, InfoField, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall; 
+    Title, BlueKey, BlueLockedDoor, GreenKey, GreenLockedDoor, RedKey, RedLockedDoor, YellowKey, YellowLockedDoor,
+    FreeTile, Exit, LockedExit, InfoField, GameInfo, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall, 
     
-    // TODO: images to be displayed for level 2 of Chap's Challenge
+    // images to be displayed for the inventory
+    BlueKeyNB, GreenKeyNB, RedKeyNB, YellowKeyNB, 
+
+    // images to be displayed for level 2 of Chap's Challenge
+    EnemyDown, EnemyLeft, EnemyRight, EnemyUp;
 
     public final BufferedImage image;
 
     Img(){ image = loadImage(this.name()); }
     static private BufferedImage loadImage(String name){
         URL imagePath = Img.class.getResource("/imgs/"+name+".png");
-        try{ return ImageIO.read(imagePath); }
+        try{ return ImageIO.read(imagePath);}
         catch(IOException e) { throw new Error(e); }
     }
 }
