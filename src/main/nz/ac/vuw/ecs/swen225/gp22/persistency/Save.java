@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -28,9 +29,8 @@ public class Save {
      * Store player position, direction and inventory if present
      * Store tilemap
      *
-     * @param gameTime the time that has passed so far
      **/
-    public static void saveGame(int gameTime){
+    public static void saveGame(){
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("maze");
         Element mapInfo = root.addElement("mapInfo");
@@ -39,10 +39,12 @@ public class Save {
         mapInfo.addElement("height").addText(String.valueOf(dimensions.y()));
         mapInfo.addElement("treasures").addText(String.valueOf(Maze.getTreasuresLeft()));
         mapInfo.addElement("nextLevel").addText(Maze.getNextLevel());
-        Element saveInfo = root.addElement("saveInfo");
+
         int keyCount = Maze.player.keyCount();
-        saveInfo.addElement("time").addText(String.valueOf(gameTime));
+        Element saveInfo = root.addElement("saveInfo");
+        saveInfo.addElement("time").addText(String.valueOf(Base.getTime()));
         saveInfo.addElement("keysCollected").addText(String.valueOf(keyCount));
+        saveInfo.addElement("level").addText(String.valueOf(Base.getLevel()));
         Element player = root.addElement("player");
         addPoint(player,Maze.player.getPos());
         player.addAttribute("direction",Maze.player.getDir().name());

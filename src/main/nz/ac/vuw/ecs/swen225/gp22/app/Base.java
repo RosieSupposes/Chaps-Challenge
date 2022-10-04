@@ -28,7 +28,7 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
-    private int timeSec = 60;
+    private static int timeSec = 60;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
@@ -37,6 +37,8 @@ public class Base extends JFrame {
     private GameDialog saveDialog;
     private GameDialog gameOverDialog;
     private GameDialog gameWinDialog;
+
+    private static int level = 1;
 
     /**
      * Begin program here. Run menu phase.
@@ -75,14 +77,30 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    public static void setLevel(int lvl){
+        level = lvl;
+    }
+
+    public static void setTime(int t){
+        timeSec = t;
+    }
+
+    public static int getLevel(){
+        return level;
+    }
+
+    public static int getTime(){
+        return timeSec;
+    }
+
     /**
      * When you click start button, check for last save file
      * and run the level
      */
     public void startGame() {
         if (Load.previousGamePresent()) {
-            int time = Load.previousGame();
-            loadLevel(time, 1); //TODO Persistency should tell me which level is loaded?
+            Load.previousGame();
+            loadLevel(); //TODO Persistency should tell me which level is loaded?
 
             recorder = new Recorder(1);
             recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -145,8 +163,8 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
-        int time = Load.resumeGame();
-        loadLevel(time, 1); //TODO ask persistency which level was loaded
+        Load.resumeGame();
+        loadLevel(); //TODO ask persistency which level was loaded
 
         recorder = new Recorder(1);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -157,8 +175,9 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
+        level = lvl;
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(60, 1);
+        loadLevel();
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
@@ -167,7 +186,7 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
-        Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
+        Save.saveGame(); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
         saveDialog.visibleFocus();
     }
@@ -340,17 +359,16 @@ public class Base extends JFrame {
      *
      * @param seconds number of seconds into level
      */
-    public void loadLevel(int seconds, int lvl) {
+    public void loadLevel() {
         assert Maze.player != null;
 
         runClosePhase();
 
         JPanel game = new Viewport();
-        SidePanel side = new SidePanel(timeSec, lvl);
+        SidePanel side = new SidePanel(timeSec, level);
         side.setTime(timeSec);
         final JPanel level = new PhasePanel(game, side);
 
-        timeSec = seconds;
         timeMS = 0;
         gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
