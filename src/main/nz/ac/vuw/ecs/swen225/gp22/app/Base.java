@@ -38,6 +38,8 @@ public class Base extends JFrame {
     private GameDialog gameOverDialog;
     private GameDialog gameWinDialog;
 
+    private static int level = 1;
+
     /**
      * Begin program here. Run menu phase.
      */
@@ -75,6 +77,10 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    public static void setLevel(int lvl){
+        level = lvl;
+    }
+
     /**
      * When you click start button, check for last save file
      * and run the level
@@ -82,7 +88,7 @@ public class Base extends JFrame {
     public void startGame() {
         if (Load.previousGamePresent()) {
             int time = Load.previousGame();
-            loadLevel(time,1); //TODO Persistency should tell me which level is loaded?
+            loadLevel(time); //TODO Persistency should tell me which level is loaded?
 
             recorder = new Recorder(1);
             recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -146,7 +152,7 @@ public class Base extends JFrame {
      */
     public void loadGame() {
         int time = Load.resumeGame();
-        loadLevel(time,1); //TODO ask persistency which level was loaded
+        loadLevel(time); //TODO ask persistency which level was loaded
 
         recorder = new Recorder(1);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -157,8 +163,9 @@ public class Base extends JFrame {
 
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
+        level = lvl;
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(60,1);
+        loadLevel(60);
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
@@ -337,13 +344,13 @@ public class Base extends JFrame {
      *
      * @param seconds number of seconds into level
      */
-    public void loadLevel(int seconds, int lvl) {
+    public void loadLevel(int seconds) {
         assert Maze.player != null;
 
         runClosePhase();
 
         JPanel game = new Viewport();
-        SidePanel side = new SidePanel(timeSec, lvl);
+        SidePanel side = new SidePanel(timeSec, level);
         side.setTime(timeSec);
         final JPanel level = new PhasePanel(game,side);
 
