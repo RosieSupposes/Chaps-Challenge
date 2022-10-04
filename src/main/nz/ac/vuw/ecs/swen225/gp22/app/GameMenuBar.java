@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,9 +28,9 @@ public class GameMenuBar extends JMenuBar {
      */
     public GameMenuBar(Base base) {
         this.base = base;
-        menuItemWidth = GameDimensions.GAME_WINDOW_SIZE / 6;
+        menuItemWidth = GameConstants.GAME_WINDOW_SIZE / 6;
         addHomeButton();
-        this.setBackground(Main.BUTTON_COLOR);
+        this.setBackground(GameConstants.BUTTON_COLOR);
     }
 
     /**
@@ -74,8 +74,8 @@ public class GameMenuBar extends JMenuBar {
         components.add(pause);
 
         JMenu newLevel = new JMenu("New");
-        newLevel.setBackground(Main.BUTTON_COLOR);
-        newLevel.setForeground(Main.TEXT_COLOR);
+        newLevel.setBackground(GameConstants.BUTTON_COLOR);
+        newLevel.setForeground(GameConstants.TEXT_COLOR);
         newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
 
         GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newGame(1));

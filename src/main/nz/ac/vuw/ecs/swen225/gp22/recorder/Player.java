@@ -65,11 +65,11 @@ public class Player extends JPanel {
                 scrub(source.getValue());
             }
         });
-        scrubber.setBackground(Main.BG_COLOR);
+        scrubber.setBackground(Color.MAGENTA);
         scrubber.setUI(new BasicSliderUI(scrubber) {
             @Override
             public void paintThumb(Graphics g) {
-                g.setColor(Main.BUTTON_COLOR);
+                g.setColor(Color.MAGENTA);
                 g.fillOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
                 g.setColor(Color.GRAY);
                 g.drawOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
@@ -109,11 +109,11 @@ public class Player extends JPanel {
 
                 JSpinner speed = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
                 speed.addChangeListener(e -> Player.this.speed = (int) ((JSpinner) e.getSource()).getValue());
-                speed.setBackground(Main.BUTTON_COLOR);
-                speed.getEditor().getComponent(0).setBackground(Main.BUTTON_COLOR);
+                speed.setBackground(Color.MAGENTA);
+                speed.getEditor().getComponent(0).setBackground(Color.MAGENTA);
                 speed.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-                setBackground(Main.BUTTON_COLOR);
+                setBackground(Color.MAGENTA);
                 add(speedLabel, BorderLayout.WEST);
                 add(speed, BorderLayout.EAST);
             }
@@ -132,7 +132,7 @@ public class Player extends JPanel {
         add(speedPanel);
 
         setPreferredSize(new Dimension(800, 520));
-        setBackground(Main.BG_COLOR);
+        setBackground(Color.MAGENTA);
     }
 
     /**
