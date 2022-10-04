@@ -10,7 +10,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The player for the recorder. Used to play back recorded actions.
@@ -26,7 +25,6 @@ public class Player extends JPanel {
   private boolean isPlaying = false;
   private boolean isRewinding = false;
   private int speed = 1;
-  private int level;
   private GameButton playPause;
   private JPanel gamePanel;
 
