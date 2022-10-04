@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
-import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile.Color;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +20,7 @@ import java.awt.event.ActionListener;
  * for this game level, and the items in the player's inventory.
  * 
  * @author Diana Batoon, 300475111 
- * @version 1.1
+ * @version 1.2
  */
 public class SidePanel extends JPanel implements ActionListener {
 
