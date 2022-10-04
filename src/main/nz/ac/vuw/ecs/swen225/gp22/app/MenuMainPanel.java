@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class MenuMainPanel extends JPanel {
     public MenuMainPanel(Base base) {
         this.base = base;
 
-        this.setBackground(Main.BG_COLOR);
+        this.setBackground(GameConstants.BG_COLOR);
 
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -61,7 +62,7 @@ public class MenuMainPanel extends JPanel {
      */
     private JPanel buttonPanelForMenu() {
         JPanel buttons = new JPanel();
-        buttons.setBackground(Main.BG_COLOR);
+        buttons.setBackground(GameConstants.BG_COLOR);
         buttons.setPreferredSize(new Dimension(fullButtonSize.width + 3 * buttonGap.width, 4 * fullButtonSize.height + 10 * buttonGap.height));
         buttons.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -100,7 +101,7 @@ public class MenuMainPanel extends JPanel {
 
         c.gridx = 1;
         JLabel info = new JLabel(Load.previousGameInfo());
-        info.setForeground(Main.TEXT_COLOR);
+        info.setForeground(GameConstants.TEXT_COLOR);
         buttons.add(info, c);
     }
 
@@ -112,8 +113,8 @@ public class MenuMainPanel extends JPanel {
         c.gridx = 1;
         String[] choices = {"Level One", "Level Two"};
         JComboBox<String> dropDownMenu = new JComboBox<>(choices);
-        dropDownMenu.setBackground(Main.BUTTON_COLOR);
-        dropDownMenu.setForeground(Main.TEXT_COLOR);
+        dropDownMenu.setBackground(GameConstants.BUTTON_COLOR);
+        dropDownMenu.setForeground(GameConstants.TEXT_COLOR);
         dropDownMenu.setPreferredSize(halfButtonSize);
         dropDownMenu.setSelectedIndex(0);
         dropDownMenu.addActionListener(e -> {

@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.Img;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,7 +27,7 @@ public class ImagePanel extends JPanel {
      * Side panel for menu
      */
     public ImagePanel(String filename, Dimension dim, double scale) {
-        this.setBackground(Main.BG_COLOR);
+        this.setBackground(GameConstants.BG_COLOR);
 
         width = (int) (scale * dim.width);
         height = (int) (scale * dim.height);

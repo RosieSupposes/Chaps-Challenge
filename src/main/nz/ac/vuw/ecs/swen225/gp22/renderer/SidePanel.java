@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Main;
 import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 
@@ -48,6 +49,7 @@ public class SidePanel extends JPanel implements ActionListener {
     public SidePanel(int time, int lvl){ 
         this.timer = time;
         this.lvl = lvl;
+        setBackground(GameConstants.BG_COLOR_DARKER);
     }
 
     /**
@@ -79,7 +81,7 @@ public class SidePanel extends JPanel implements ActionListener {
         // inventory is a 3x4 grid
         for (int x = 0; x < numRowsTiles; x++){
             for (int y = 0; y < numColsTiles; y++){   
-                g.drawImage(Img.Wall.image, x*GameDimensions.TILE_SIZE+xOffset, y*GameDimensions.TILE_SIZE+yOffset, this);
+                g.drawImage(Img.Wall.image, x*GameConstants.TILE_SIZE+xOffset, y*GameConstants.TILE_SIZE+yOffset, this);
             }
         }
 
@@ -89,7 +91,7 @@ public class SidePanel extends JPanel implements ActionListener {
         for (int x = 0; x < Maze.player.getAllKeys().size(); x++){
             if (x % 2 == 0){ keyJPos++; }
             BufferedImage key = getKeyImg(Maze.player.getAllKeys().get(x)); // check the key colour
-            g.drawImage(key, x*GameDimensions.TILE_SIZE+xOffset, keyJPos*GameDimensions.TILE_SIZE+yOffset, this);
+            g.drawImage(key, x*GameConstants.TILE_SIZE+xOffset, keyJPos*GameConstants.TILE_SIZE+yOffset, this);
             keyXPos = (keyXPos == 0 ? 1 : 0); // if a tile is occuppied, place the next collected key to the right side
         }
 
