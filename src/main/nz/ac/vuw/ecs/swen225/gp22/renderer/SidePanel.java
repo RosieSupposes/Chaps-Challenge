@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp22.renderer;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import java.awt.Font;
 import java.awt.Graphics;
