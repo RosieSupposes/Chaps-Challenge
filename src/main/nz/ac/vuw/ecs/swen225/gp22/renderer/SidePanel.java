@@ -116,17 +116,15 @@ public class SidePanel extends JPanel implements ActionListener {
      * @param c The key that has been collected by the player.
      * @return The image of the key that will be displayed in the inventory.
      */
-    private BufferedImage getKeyImg(Color c) {
-        if (c instanceof ColorableTile.Color col){ // check the colours against the four different ones available
-            switch (col){
+    private BufferedImage getKeyImg(ColorableTile.Color c) {
+        // check the colours against the four different ones available
+            switch (c){
               case Blue: return Img.BlueKeyNB.image;
               case Green: return Img.GreenKeyNB.image;
               case Red: return Img.RedKeyNB.image;
               case Yellow: return Img.YellowKeyNB.image;
               default: throw new IllegalArgumentException("Invalid colour./n");
             }
-        }
-        return Img.Wall.image;
     }
 
     @Override
