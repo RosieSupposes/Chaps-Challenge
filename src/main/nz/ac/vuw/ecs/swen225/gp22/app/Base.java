@@ -85,6 +85,14 @@ public class Base extends JFrame {
         timeSec = t;
     }
 
+    public static int getLevel(){
+        return level;
+    }
+
+    public static int getTime(){
+        return timeSec;
+    }
+
     /**
      * When you click start button, check for last save file
      * and run the level
