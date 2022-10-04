@@ -82,7 +82,7 @@ public class Base extends JFrame {
     public void startGame() {
         if (Load.previousGamePresent()) {
             int time = Load.previousGame();
-            loadLevel(time,1); //TODO Persistency should tell me which level is loaded?
+            loadLevel(time, 1); //TODO Persistency should tell me which level is loaded?
 
             recorder = new Recorder(1);
             recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -146,7 +146,7 @@ public class Base extends JFrame {
      */
     public void loadGame() {
         int time = Load.resumeGame();
-        loadLevel(time,1); //TODO ask persistency which level was loaded
+        loadLevel(time, 1); //TODO ask persistency which level was loaded
 
         recorder = new Recorder(1);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -158,7 +158,7 @@ public class Base extends JFrame {
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(60,1);
+        loadLevel(60, 1);
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
@@ -286,7 +286,10 @@ public class Base extends JFrame {
                             case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
                         }
                     }
-                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> {
+                        Maze.setTile(pos, new Treasure(pos));
+                        Maze.addTreasure();
+                    }
                 }
             }
         }
@@ -345,7 +348,7 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         SidePanel side = new SidePanel(timeSec, lvl);
         side.setTime(timeSec);
-        final JPanel level = new PhasePanel(game,side);
+        final JPanel level = new PhasePanel(game, side);
 
         timeSec = seconds;
         timeMS = 0;
