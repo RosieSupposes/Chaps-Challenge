@@ -31,6 +31,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
 
     @Override
     public Action ping(){
+        System.out.println("PINGA");
         return moveAndTurn(getDir());
     }
 
