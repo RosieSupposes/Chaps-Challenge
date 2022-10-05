@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maze>
+<maze level="2">
     <mapInfo>
         <width>16</width>
         <height>16</height>

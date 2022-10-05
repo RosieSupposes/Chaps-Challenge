@@ -33,6 +33,7 @@ public class Save {
     public static void saveGame(){
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("maze");
+        root.addAttribute("level",String.valueOf(Base.getLevel()));
         Element mapInfo = root.addElement("mapInfo");
         Maze.Point dimensions = Maze.getDimensions();
         mapInfo.addElement("width").addText(String.valueOf(dimensions.x()));
@@ -44,7 +45,6 @@ public class Save {
         Element saveInfo = root.addElement("saveInfo");
         saveInfo.addElement("time").addText(String.valueOf(Base.getTime()));
         saveInfo.addElement("keysCollected").addText(String.valueOf(keyCount));
-        saveInfo.addElement("level").addText(String.valueOf(Base.getLevel()));
         Element player = root.addElement("player");
         addPoint(player,Maze.player.getPos());
         player.addAttribute("direction",Maze.player.getDir().name());
