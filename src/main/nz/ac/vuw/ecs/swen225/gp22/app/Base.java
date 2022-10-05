@@ -176,7 +176,7 @@ public class Base extends JFrame {
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         level = lvl;
-        Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel(lvl); //TODO change 1 to lvl when level2.xml exists
         loadLevel();
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
