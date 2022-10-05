@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -28,20 +29,21 @@ public class Save {
      * Store player position, direction and inventory if present
      * Store tilemap
      *
-     * @param gameTime the time that has passed so far
      **/
-    public static void saveGame(int gameTime){
+    public static void saveGame(){
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("maze");
+        root.addAttribute("level",String.valueOf(Base.getLevel()));
         Element mapInfo = root.addElement("mapInfo");
         Maze.Point dimensions = Maze.getDimensions();
         mapInfo.addElement("width").addText(String.valueOf(dimensions.x()));
         mapInfo.addElement("height").addText(String.valueOf(dimensions.y()));
         mapInfo.addElement("treasures").addText(String.valueOf(Maze.getTreasuresLeft()));
         mapInfo.addElement("nextLevel").addText(Maze.getNextLevel());
-        Element saveInfo = root.addElement("saveInfo");
+
         int keyCount = Maze.player.keyCount();
-        saveInfo.addElement("time").addText(String.valueOf(gameTime));
+        Element saveInfo = root.addElement("saveInfo");
+        saveInfo.addElement("time").addText(String.valueOf(Base.getTime()));
         saveInfo.addElement("keysCollected").addText(String.valueOf(keyCount));
         Element player = root.addElement("player");
         addPoint(player,Maze.player.getPos());
@@ -56,8 +58,8 @@ public class Save {
                                       .addAttribute("color",k));
         }
         Element tiles = root.addElement("tiles");
-        for(int x = 0; x < 16; x++){
-            for(int y = 0; y < 16; y++) {
+        for(int x = 0; x < dimensions.x(); x++){
+            for(int y = 0; y < dimensions.y(); y++) {
                 Maze.Point p = new Maze.Point(x,y);
                 Tile tile = Maze.getTile(p);
                 String tileID = TileDatabase.getID(tile);

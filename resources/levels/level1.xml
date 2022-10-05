@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maze>
+<maze level="1">
     <mapInfo>
         <width>16</width>
         <height>16</height>
@@ -10,9 +10,6 @@
     <tiles>
         <tile ID="info" x="4" y="4">
             <text>helpful stuff, you can't walk through walls, keys open doors</text>
-        </tile>
-        <tile ID="door" x="4" y="2">
-            <color>Red</color>
         </tile>
         <tile ID="door" x="2" y="2">
             <color>Green</color>
@@ -33,10 +30,6 @@
             <color>Blue</color>
         </tile>
 
-        <tile ID="door" x="7" y="7">
-            <color>Blue</color>
-        </tile>
-
         <tile ID="key" x="2" y="4">
             <color>Blue</color>
         </tile>
@@ -44,7 +37,8 @@
             <color>Red</color>
         </tile>
 
-        <tile ID="exit-gate" x="4" y="1"/>
+        <tile ID="exit-gate" x="4" y="2"/>
+        <tile ID="exit" x="4" y="1"/>
 
         <tile ID="treasure" x="2" y="5"/>
         <tile ID="treasure" x="6" y="5"/>

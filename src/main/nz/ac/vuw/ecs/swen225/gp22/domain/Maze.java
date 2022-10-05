@@ -1,8 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Queue;
+
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
 
 /**
  * This class stores the game state (player, tilemap, entities, and treasures). 
@@ -10,11 +13,16 @@ import java.util.Queue;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.8
+ * @version 1.9
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
     public static Player player;
+
+    /** Contains all non-player entities. Suppressed the raw types warning as 
+     * the generic type is only used for observers and does not affect this use case.  */
+    @SuppressWarnings("rawtypes")
+    public static ArrayList<Entity> entities = new ArrayList<>();
 
     /** A 2D array that stores the level {@link Tile} instances in a 
      *  way where they can be accessed by position.  */
@@ -26,7 +34,10 @@ public class Maze{
     /** Stores the name of the next level to load. If empty or null then the {@link #gameComplete() game over flag} returns true. */
     private static String nextLevel;
 
+    /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
+
+    private static boolean gameLost;
 
     /** 
      * Generates a new map. This will be used by the persistency module for level loading. 
@@ -37,15 +48,22 @@ public class Maze{
     public static void generateMap(Point dimensions, int treasures){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
+
+        gameLost = false;
+        entities.clear();
+
         tileMap = new Tile[dimensions.x()][dimensions.y()];
         for(int x = 0; x < dimensions.x(); x++){
             for(int y = 0; y < dimensions.y(); y++){
                 tileMap[x][y] = new Ground(new Point(x, y));
             }
         }
+
         treasuresLeft = treasures;
-        if(player == null) player = new Player(new Point(0, 0), Entity.Direction.Down);
+        player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
+
+        entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
@@ -95,6 +113,9 @@ public class Maze{
         treasuresLeft--;
     }
 
+    /** Increases the number of treasures left by 1. */
+    public static void addTreasure(){ treasuresLeft++; }
+
     /** @return Whether or not all the {@link Treasure} tiles on the map have been collected. */
     public static boolean collectedAllTreasures(){ return treasuresLeft == 0; }
 
@@ -106,6 +127,12 @@ public class Maze{
 
     /** @return Whether or not there are more levels to load. */
     public static boolean gameComplete(){ return nextLevel == null || nextLevel.equals(""); }
+
+    /** @return Whether or not the player has lost the game. */
+    public static boolean isGameLost(){ return gameLost; }
+
+    /** Flags the game as over. */
+    public static void loseGame(){ gameLost = true; }
 
     /** Represents a point on the {@link Maze#tileMap tilemap}. */
     public record Point(int x, int y){ 

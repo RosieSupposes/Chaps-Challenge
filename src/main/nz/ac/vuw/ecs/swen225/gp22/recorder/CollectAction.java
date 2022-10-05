@@ -12,25 +12,25 @@ import org.dom4j.tree.BaseElement;
  * @param item the item to collect
  */
 public record CollectAction(int x, int y, String item, String color) implements Action {
-  @Override
-  public void execute() {
-    Base.setAction(x, y, "Pick-up", item, color);
-  }
+    @Override
+    public void execute() {
+        Base.setAction(x, y, "Pick-up", item, color);
+    }
 
-  @Override
-  public void undo() {
-    Base.setAction(x, y, "Drop", item, color);
-  }
+    @Override
+    public void undo() {
+        Base.setAction(x, y, "Drop", item, color);
+    }
 
-  @Override
-  public Element toXML() {
-    Element element = new BaseElement("collect")
-        .addAttribute("x", String.valueOf(x))
-        .addAttribute("y", String.valueOf(y))
-        .addAttribute("item", item);
+    @Override
+    public Element toXML() {
+        Element element = new BaseElement("collect")
+            .addAttribute("x", String.valueOf(x))
+            .addAttribute("y", String.valueOf(y))
+            .addAttribute("item", item);
 
-    if (!color.equals("None")) { element.addAttribute("color", color); }
+        if (!color.equals("None")) { element.addAttribute("color", color); }
 
-    return element;
-  }
+        return element;
+    }
 }
