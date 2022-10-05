@@ -22,7 +22,7 @@ public class Maze{
     /** Contains all non-player entities. Suppressed the raw types warning as 
      * the generic type is only used for observers and does not affect this use case.  */
     @SuppressWarnings("rawtypes")
-    public static ArrayList<Entity> entities;
+    public static ArrayList<Entity> entities = new ArrayList<>();
 
     /** A 2D array that stores the level {@link Tile} instances in a 
      *  way where they can be accessed by position.  */
