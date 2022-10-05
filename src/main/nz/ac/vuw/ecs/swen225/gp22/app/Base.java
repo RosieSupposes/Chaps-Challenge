@@ -5,7 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameDimensions;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SidePanel;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 
@@ -28,7 +28,7 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
-    private int timeSec = 60;
+    private static int timeSec = 60;
     private int pingTime = 0;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
@@ -38,6 +38,8 @@ public class Base extends JFrame {
     private GameDialog saveDialog;
     private GameDialog gameOverDialog;
     private GameDialog gameWinDialog;
+
+    private static int level = 1;
 
     /**
      * Begin program here. Run menu phase.
@@ -76,14 +78,30 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    public static void setLevel(int lvl) {
+        level = lvl;
+    }
+
+    public static void setTime(int t) {
+        timeSec = t;
+    }
+
+    public static int getLevel() {
+        return level;
+    }
+
+    public static int getTime() {
+        return timeSec;
+    }
+
     /**
      * When you click start button, check for last save file
      * and run the level
      */
     public void startGame() {
         if (Load.previousGamePresent()) {
-            int time = Load.previousGame();
-            loadLevel(time, 1); //TODO Persistency should tell me which level is loaded?
+            Load.previousGame();
+            loadLevel(); //TODO Persistency should tell me which level is loaded?
 
             recorder = new Recorder(1);
             recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -135,7 +153,7 @@ public class Base extends JFrame {
         Player playerWindow = new Player(this);
 
         add(BorderLayout.CENTER, playerWindow);
-        setMinimumSize(new Dimension(GameDimensions.WINDOW_WIDTH, GameDimensions.WINDOW_HEIGHT + 150));
+        setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
         pack();
         playerWindow.requestFocus(); //need to be after pack
 
@@ -146,8 +164,8 @@ public class Base extends JFrame {
      * load a game from file
      */
     public void loadGame() {
-        int time = Load.resumeGame();
-        loadLevel(time, 1); //TODO ask persistency which level was loaded
+        Load.resumeGame();
+        loadLevel(); //TODO ask persistency which level was loaded
 
         recorder = new Recorder(1);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -159,7 +177,7 @@ public class Base extends JFrame {
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(60, 1);
+        loadLevel();
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
@@ -168,7 +186,7 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
-        Save.saveGame(timeSec); //TODO persistency should choose name, App should pass current time
+        Save.saveGame(); //TODO persistency should choose name, App should pass current time
         System.out.println("Save");
         saveDialog.visibleFocus();
     }
@@ -268,10 +286,26 @@ public class Base extends JFrame {
                 switch (object) {
                     case "UnlockDoor" -> {
                         switch (color) {
-                            case "Red" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
-                            case "Green" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
-                            case "Blue" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Blue));
-                            case "Yellow" -> Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
+                            case "Red" -> {
+                                Maze.player.addKey(ColorableTile.Color.Red);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
+
+                            }
+                            case "Green" -> {
+                                Maze.player.addKey(ColorableTile.Color.Green);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
+
+                            }
+                            case "Blue" -> {
+                                Maze.player.addKey(ColorableTile.Color.Blue);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Blue));
+
+                            }
+                            case "Yellow" -> {
+                                Maze.player.addKey(ColorableTile.Color.Yellow);
+                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
+
+                            }
                         }
                     }
                     case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
@@ -281,13 +315,32 @@ public class Base extends JFrame {
                 switch (object) {
                     case "PickupKey" -> {
                         switch (color) {
-                            case "Red" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
-                            case "Green" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
-                            case "Blue" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Blue));
-                            case "Yellow" -> Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
+                            case "Red" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Red);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
+
+                            }
+                            case "Green" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Green);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
+
+                            }
+                            case "Blue" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Blue);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Blue));
+
+                            }
+                            case "Yellow" -> {
+                                Maze.player.consumeKey(ColorableTile.Color.Yellow);
+                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
+
+                            }
                         }
                     }
-                    case "PickupTreasure" -> Maze.setTile(pos, new Treasure(pos));
+                    case "PickupTreasure" -> {
+                        Maze.setTile(pos, new Treasure(pos));
+                        Maze.addTreasure();
+                    }
                 }
             }
         }
@@ -302,8 +355,7 @@ public class Base extends JFrame {
     public JPanel getGameWindow() {
         assert Maze.player != null;
         JPanel game = new Viewport();
-        JPanel side = new JPanel(); //TODO link to renderer side panel
-        side.setBackground(Main.LIGHT_YELLOW_COLOR);
+        JPanel side = new SidePanel(timeSec, level);
         return new PhasePanel(game, side);
     }
 
@@ -318,7 +370,7 @@ public class Base extends JFrame {
 //        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
 //        PhasePanel menu = new PhasePanel(testGame,testSide);
 
-        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameDimensions.SIDE_SIZE, 0.8);
+        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameConstants.SIDE_SIZE, 0.8);
         PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
         currentPanel = menu;
@@ -328,27 +380,24 @@ public class Base extends JFrame {
         components.add(menu);
         components.addAll(menu.getAllComponents());
 
-        setMinimumSize(GameDimensions.WINDOW_SIZE);
+        setMinimumSize(GameConstants.WINDOW_SIZE);
         pack();
         menu.requestFocus();
     }
 
     /**
      * Create, run and draw new level
-     *
-     * @param seconds number of seconds into level
      */
-    public void loadLevel(int seconds, int lvl) {
+    public void loadLevel() {
         assert Maze.player != null;
 
         runClosePhase();
 
         JPanel game = new Viewport();
-        SidePanel side = new SidePanel(timeSec, lvl);
+        SidePanel side = new SidePanel(timeSec, level);
         side.setTime(timeSec);
         final JPanel level = new PhasePanel(game, side);
 
-        timeSec = seconds;
         timeMS = 0;
         pingTime = 0;
         gameTimer = new Timer(20, unused -> {

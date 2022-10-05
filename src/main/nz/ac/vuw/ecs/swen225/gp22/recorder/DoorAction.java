@@ -15,25 +15,25 @@ import org.dom4j.tree.BaseElement;
  * @param color the color of the door
  */
 public record DoorAction(int x, int y, String type, String color) implements Action {
-  @Override
-  public void execute() {
-    Base.setAction(x, y, "Open", type, color);
-  }
+    @Override
+    public void execute() {
+        Base.setAction(x, y, "Open", type, color);
+    }
 
-  @Override
-  public void undo() {
-    Base.setAction(x, y, "Close", type, color);
-  }
+    @Override
+    public void undo() {
+        Base.setAction(x, y, "Close", type, color);
+    }
 
-  @Override
-  public Element toXML() {
-    Element door = new BaseElement("door")
-        .addAttribute("x", String.valueOf(x))
-        .addAttribute("y", String.valueOf(y))
-        .addAttribute("type", type);
+    @Override
+    public Element toXML() {
+        Element door = new BaseElement("door")
+            .addAttribute("x", String.valueOf(x))
+            .addAttribute("y", String.valueOf(y))
+            .addAttribute("type", type);
 
-    if (!color.equals("None")) { door.addAttribute("color", color); }
+        if (!color.equals("None")) { door.addAttribute("color", color); }
 
-    return door;
-  }
+        return door;
+    }
 }

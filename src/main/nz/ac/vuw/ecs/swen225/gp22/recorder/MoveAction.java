@@ -14,22 +14,22 @@ import org.dom4j.tree.BaseElement;
  * @param direction The direction the player is facing.
  */
 public record MoveAction(int x, int y, String direction) implements Action {
-  @Override
-  public void execute() {
-    Base.setMove(x, y, direction);
-    System.out.println("MoveAction: " + x + ", " + y + ", " + direction);
-  }
+    @Override
+    public void execute() {
+        Base.setMove(x, y, direction);
+        System.out.println("MoveAction: " + x + ", " + y + ", " + direction);
+    }
 
-  @Override
-  public void undo() {
-    // Undoing a move is handled by the Player class
-  }
+    @Override
+    public void undo() {
+        // Undoing a move is handled by the Player class
+    }
 
-  @Override
-  public Element toXML() {
-    return new BaseElement("move")
-        .addAttribute("x", String.valueOf(x))
-        .addAttribute("y", String.valueOf(y))
-        .addAttribute("direction", direction);
-  }
+    @Override
+    public Element toXML() {
+        return new BaseElement("move")
+            .addAttribute("x", String.valueOf(x))
+            .addAttribute("y", String.valueOf(y))
+            .addAttribute("direction", direction);
+    }
 }
