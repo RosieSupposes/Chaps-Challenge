@@ -2,6 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile.Color;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
 
 /**
  * The entity that will be controller by user input, this functions just like
@@ -22,6 +25,19 @@ public class Player extends Entity<Player>{
      */
     public Player(Maze.Point entityPos, Direction facingDir) {
         super(entityPos, facingDir);
+    }
+
+    // Returns null because the player should not be pinged.
+    @Override
+    public Action ping(){ return null; }
+
+    @Override 
+    public Action moveAndTurn(Direction dir){
+        super.moveAndTurn(dir);
+
+        Action.Interaction interaction = new Interaction(ActionType.None, Color.None);
+        if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
+        return new Action(getPos(), getDir(), interaction);
     }
 
     /** Clears all the keys that the player has. */

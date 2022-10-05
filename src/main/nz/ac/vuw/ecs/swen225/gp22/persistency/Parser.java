@@ -39,7 +39,6 @@ public class Parser {
         int height = intFromElement(mapInfo,"height");
         Maze.Point dimensions = new Maze.Point(width,height);
         Maze.generateMap(dimensions,intFromElement(mapInfo,"treasures"));
-        Maze.player = parsePlayer();
     }
 
     /**
@@ -61,7 +60,7 @@ public class Parser {
         return intFromElement(document.getRootElement().element("saveInfo"),"keysCollected");
     }
     public int getLevel(){
-        return intFromElement(document.getRootElement().element("saveInfo"),"level");
+        return intFromAttribute(document.getRootElement(),"level");
     }
     /**
      * Parse the saved player information from the file
@@ -69,14 +68,14 @@ public class Parser {
      *
      * @return player
      */
-    public Player parsePlayer(){
+    public void parsePlayer(Player player){
         Element playerNode = document.getRootElement().element("player");
         Maze.Point position = getPoint(playerNode);
         Entity.Direction direction = Entity.Direction.valueOf(playerNode.attributeValue("direction"));
-        Player p = new Player(position,direction);
         Element inventory = playerNode.element("inventory");
-        if(inventory != null) parseInventory(p,inventory);
-        return p;
+        if(inventory != null) parseInventory(player,inventory);
+        player.setPos(position);
+        player.setDir(direction);
     }
 
     /**
@@ -93,6 +92,27 @@ public class Parser {
                 p.addKey(color);
             }
         }
+    }
+
+    public boolean entitiesPresent(){
+        Element entities = document.getRootElement().element("entities");
+        return entities != null && !entities.elements().isEmpty();
+    }
+    public List<Entity> getEntities(){
+        List<Element> nodes = document.getRootElement().element("entities").elements();
+        return nodes.stream().map(this::parseEntity).toList();
+    }
+
+    private Entity parseEntity(Element entity){
+        Maze.Point position = getPoint(entity);
+        Entity.Direction direction = Entity.Direction.valueOf(entity.attributeValue("direction"));
+        String ID = entity.attributeValue("ID");
+        switch (ID){
+            case "gummyGuard" ->{
+                return new GummyGuard(position,direction);
+            }
+        }
+        return null;
     }
 
     /**

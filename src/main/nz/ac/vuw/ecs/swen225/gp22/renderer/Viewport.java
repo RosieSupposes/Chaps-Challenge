@@ -3,7 +3,8 @@ package nz.ac.vuw.ecs.swen225.gp22.renderer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -47,10 +48,6 @@ public class Viewport extends JPanel implements ActionListener {
                 g.drawImage(getTileImg(Maze.getTile(new Maze.Point(x,y))), 
                 (x*GameConstants.TILE_SIZE) + xOffset, (y*GameConstants.TILE_SIZE) + yOffset, this);
             } 
-            
-            // if(Maze.player.getPos() == Maze.getTile(new Maze.Point(x, y))){
-            //   displayInfo(tile, g);
-            // } TODO: where to check this?
         }
     }
   }
@@ -96,7 +93,7 @@ public class Viewport extends JPanel implements ActionListener {
    * @param g Graphics object needed to render images on the canvas.
   */
   public void displayInfo(Tile t, Graphics g){
-    g.drawImage(Img.GameInfo.image, 100, 200, this); //TODO: where to call this?
+    g.drawImage(Img.GameInfo.image, 100, 200, this); 
   }
 
   /**
@@ -111,16 +108,11 @@ public class Viewport extends JPanel implements ActionListener {
     // draws the player based on the direction it is facing
     g.drawImage(getEntityImg(Maze.player.getDir(), true), getFocusX(Maze.player.getPos().x()*GameConstants.TILE_SIZE),
     getFocusY(Maze.player.getPos().y()*GameConstants.TILE_SIZE), this);
-
-
-    // g.drawImage(getEntityImg(Maze.player.getDir(), true), Maze.player.getPos().x()*GameConstants.TILE_SIZE,
-    // Maze.player.getPos().y()*GameConstants.TILE_SIZE, this);
-
     
     //TODO: display the enemy for level 2
-    //g.drawImage(getEntityImg(enemy.getDir(), false), getFocusX(Maze.player.getPos().x()*GameConstants.TILE_SIZE),
-    //getFocusY(Maze.player.getPos().y()*GameConstants.TILE_SIZE), this);
-
+    for (Entity enemy: Maze.entities){
+      g.drawImage(Img.EnemyRight.image, enemy.getPos().x()*GameConstants.TILE_SIZE, enemy.getPos().y()*GameConstants.TILE_SIZE, this);
+    }
   }
 
   /**
@@ -226,13 +218,6 @@ public class Viewport extends JPanel implements ActionListener {
     
     //g2D.dispose(); // releases the graphics object
   }
-
-  // @Override
-  // public void actionPerformed(ActionEvent e) {
-    
-  //   repaint();
-  //   updateUI();
-  // }
 
 }
 
