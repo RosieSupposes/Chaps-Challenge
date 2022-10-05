@@ -109,11 +109,9 @@ public class Parser {
         String ID = entity.attributeValue("ID");
         switch (ID){
             case "gummyGuard" ->{
-                System.out.println("yay");
                 return new GummyGuard(position,direction);
             }
         }
-        System.out.println("nay");
         return null;
     }
 
