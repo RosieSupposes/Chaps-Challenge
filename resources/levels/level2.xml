@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<maze>
+    <mapInfo>
+        <width>16</width>
+        <height>16</height>
+        <treasures>3</treasures>
+        <nextLevel>"Level2"</nextLevel>
+    </mapInfo>
+    <player x="4" y="5" direction="Down"/>
+    <tiles>
+        <tile ID="info" x="4" y="4">
+            <text>helpful stuff, you can't walk through walls, keys open doors</text>
+        </tile>
+        <tile ID="door" x="4" y="2">
+            <color>Red</color>
+        </tile>
+        <tile ID="door" x="2" y="0">
+            <color>Green</color>
+        </tile>
+        <tile ID="door" x="6" y="0">
+            <color>Green</color>
+        </tile>
+        <tile ID="door" x="1" y="0">
+            <color>Blue</color>
+        </tile>
+        <tile ID="door" x="7" y="0">
+            <color>Red</color>
+        </tile>
+        <tile ID="door" x="3" y="0">
+            <color>Yellow</color>
+        </tile>
+        <tile ID="door" x="5" y="0">
+            <color>Yellow</color>
+        </tile>
+
+        <tile ID="key" x="2" y="4">
+            <color>Blue</color>
+        </tile>
+        <tile ID="key" x="1" y="4">
+            <color>Blue</color>
+        </tile>
+        <tile ID="key" x="2" y="7">
+            <color>Red</color>
+        </tile>
+        <tile ID="key" x="1" y="7">
+            <color>Red</color>
+        </tile>
+        <tile ID="key" x="2" y="3">
+            <color>Yellow</color>
+        </tile>
+        <tile ID="key" x="3" y="3">
+            <color>Yellow</color>
+        </tile>
+        <tile ID="key" x="4" y="3">
+            <color>Yellow</color>
+        </tile>
+        <tile ID="key" x="5" y="3">
+            <color>Yellow</color>
+        </tile>
+        <tile ID="key" x="2" y="6">
+            <color>Green</color>
+        </tile>
+        <tile ID="key" x="3" y="6">
+            <color>Green</color>
+        </tile>
+        <tile ID="key" x="4" y="6">
+            <color>Green</color>
+        </tile>
+        <tile ID="key" x="5" y="6">
+            <color>Green</color>
+        </tile>
+        <tile ID="key" x="6" y="6">
+            <color>Green</color>
+        </tile>
+        <tile ID="key" x="7" y="6">
+            <color>Green</color>
+        </tile>
+
+        <tile ID="exit-gate" x="4" y="1"/>
+        <tile ID="exit" x="4" y="0"/>
+
+        <tile ID="treasure" x="2" y="5"/>
+        <tile ID="treasure" x="6" y="5"/>
+        <tile ID="treasure" x="4" y="7"/>
+
+    </tiles>
+</maze>

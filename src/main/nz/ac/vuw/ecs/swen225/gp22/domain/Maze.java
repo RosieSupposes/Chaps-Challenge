@@ -43,7 +43,7 @@ public class Maze{
     public static void generateMap(Point dimensions, int treasures){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
-
+        entities = new ArrayList<>();
         entities.forEach(n -> n.deleteEntity());
         entities.clear();
 

@@ -58,8 +58,8 @@ public class Save {
                                       .addAttribute("color",k));
         }
         Element tiles = root.addElement("tiles");
-        for(int x = 0; x < 16; x++){
-            for(int y = 0; y < 16; y++) {
+        for(int x = 0; x < dimensions.x(); x++){
+            for(int y = 0; y < dimensions.y(); y++) {
                 Maze.Point p = new Maze.Point(x,y);
                 Tile tile = Maze.getTile(p);
                 String tileID = TileDatabase.getID(tile);
