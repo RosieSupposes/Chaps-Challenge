@@ -1,10 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
-import nz.ac.vuw.ecs.swen225.gp22.domain.GummyGuard;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
+import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -103,8 +100,8 @@ public class Load {
         parser.parsePlayer(Maze.player);
         List<Tile> tiles = parser.getTiles();
         if (parser.entitiesPresent()) {
-            List<Entity> entities = parser.getEntities();
-            Maze.entities.add(entities.get(0));
+            List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof EnemyEntity<?>).toList();
+            Maze.entities.addAll(entities);
         }
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);

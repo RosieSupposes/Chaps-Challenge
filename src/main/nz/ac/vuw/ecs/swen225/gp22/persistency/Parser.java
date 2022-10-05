@@ -106,9 +106,14 @@ public class Parser {
     private Entity parseEntity(Element entity){
         Maze.Point position = getPoint(entity);
         Entity.Direction direction = Entity.Direction.valueOf(entity.attributeValue("direction"));
-        switch (entity.attributeValue("ID")){
-            case "GummyGuard" -> new GummyGuard(position,direction);
+        String ID = entity.attributeValue("ID");
+        switch (ID){
+            case "gummyGuard" ->{
+                System.out.println("yay");
+                return new GummyGuard(position,direction);
+            }
         }
+        System.out.println("nay");
         return null;
     }
 
