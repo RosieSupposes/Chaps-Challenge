@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Queue;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
+
 /**
  * This class stores the game state (player, tilemap, entities, and treasures). 
  * As such, it is accessed by other packages to query the game state for specific tiles 
@@ -20,7 +22,7 @@ public class Maze{
     /** Contains all non-player entities. Suppressed the raw types warning as 
      * the generic type is only used for observers and does not affect this use case.  */
     @SuppressWarnings("rawtypes")
-    public static ArrayList<Entity> entities;
+    public static ArrayList<Entity> entities = new ArrayList<>();
 
     /** A 2D array that stores the level {@link Tile} instances in a 
      *  way where they can be accessed by position.  */
@@ -43,7 +45,7 @@ public class Maze{
     public static void generateMap(Point dimensions, int treasures){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
-        entities = new ArrayList<>();
+
         entities.forEach(n -> n.deleteEntity());
         entities.clear();
 
@@ -57,6 +59,8 @@ public class Maze{
         treasuresLeft = treasures;
         if(player == null) player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
+
+        entities.add(new GummyGuard(new Point(2, 2), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
