@@ -100,7 +100,7 @@ public class Load {
     private static Parser loadGame(File file) {
         Parser parser = new Parser(file);
         parser.parseMapInfo();
-        Maze.player = parser.parsePlayer();
+        parser.parsePlayer(Maze.player);
         List<Tile> tiles = parser.getTiles();
         if (parser.entitiesPresent()) {
             List<Entity> entities = parser.getEntities();

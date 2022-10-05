@@ -106,12 +106,12 @@ public class Viewport extends JPanel implements ActionListener {
    */
   public void renderEntities(Graphics g, int xOffset, int yOffset){
     // draws the player based on the direction it is facing
-    g.drawImage(getEntityImg(Maze.player.getDir(), true), getFocusX(Maze.player.getPos().x()*GameDimensions.TILE_SIZE),
-    getFocusY(Maze.player.getPos().y()*GameDimensions.TILE_SIZE), this);
+    g.drawImage(getEntityImg(Maze.player.getDir(), true), getFocusX(Maze.player.getPos().x()*GameConstants.TILE_SIZE),
+    getFocusY(Maze.player.getPos().y()*GameConstants.TILE_SIZE), this);
     
     //TODO: display the enemy for level 2
     for (Entity enemy: Maze.entities){
-      g.drawImage(Img.EnemyRight.image, enemy.getPos().x()*GameDimensions.TILE_SIZE, enemy.getPos().y()*GameDimensions.TILE_SIZE, this);
+      g.drawImage(Img.EnemyRight.image, enemy.getPos().x()*GameConstants.TILE_SIZE, enemy.getPos().y()*GameConstants.TILE_SIZE, this);
     }
   }
 

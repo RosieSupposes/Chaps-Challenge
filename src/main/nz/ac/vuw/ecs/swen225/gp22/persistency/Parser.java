@@ -68,14 +68,14 @@ public class Parser {
      *
      * @return player
      */
-    public Player parsePlayer(){
+    public void parsePlayer(Player player){
         Element playerNode = document.getRootElement().element("player");
         Maze.Point position = getPoint(playerNode);
         Entity.Direction direction = Entity.Direction.valueOf(playerNode.attributeValue("direction"));
-        Player p = new Player(position,direction);
         Element inventory = playerNode.element("inventory");
-        if(inventory != null) parseInventory(p,inventory);
-        return p;
+        if(inventory != null) parseInventory(player,inventory);
+        player.setPos(position);
+        player.setDir(direction);
     }
 
     /**
