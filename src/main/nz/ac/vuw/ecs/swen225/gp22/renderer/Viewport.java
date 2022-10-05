@@ -111,7 +111,7 @@ public class Viewport extends JPanel implements ActionListener {
     
     //TODO: display the enemy for level 2
     for (Entity enemy: Maze.entities){
-      g.drawImage(Img.EnemyRight.image, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, this);
+      g.drawImage(Img.EnemyRight.image, enemy.getPos().x()*GameDimensions.TILE_SIZE, enemy.getPos().y()*GameDimensions.TILE_SIZE, this);
     }
   }
 
