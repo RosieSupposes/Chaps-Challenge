@@ -34,7 +34,10 @@ public class Maze{
     /** Stores the name of the next level to load. If empty or null then the {@link #gameComplete() game over flag} returns true. */
     private static String nextLevel;
 
+    /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
+
+    private static boolean gameLost;
 
     /** 
      * Generates a new map. This will be used by the persistency module for level loading. 
@@ -46,6 +49,7 @@ public class Maze{
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
 
+        gameLost = false;
         entities.clear();
 
         tileMap = new Tile[dimensions.x()][dimensions.y()];
@@ -120,6 +124,12 @@ public class Maze{
 
     /** @return Whether or not there are more levels to load. */
     public static boolean gameComplete(){ return nextLevel == null || nextLevel.equals(""); }
+
+    /** @return Whether or not the player has lost the game. */
+    public static boolean gameLost(){ return gameLost; }
+
+    /** Flags the game as over. */
+    public static void loseGame(){ gameLost = true; }
 
     /** Represents a point on the {@link Maze#tileMap tilemap}. */
     public record Point(int x, int y){ 
