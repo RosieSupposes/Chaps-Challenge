@@ -21,11 +21,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
         super(entityPos, facingDir, 400);
 
         playerObserver = player -> {
-            System.out.println("UPDATE");
-            if(player.getPos().equals(entityPos)){
-                // DEATH AND TAXES
-                System.out.println("Goodbye, I have died.");
-            }
+            if(player.getPos().equals(getPos())) Maze.loseGame();
         };
         Maze.player.addObserver(playerObserver);
     }
@@ -33,7 +29,6 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
     @Override
     public Action ping(){
         Action action = moveAndTurn(getDir());
-        System.out.println("PINGA");
         switch(getDir()){
             case Down: 
                 setDir(Direction.Left);
@@ -50,8 +45,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
             default:
                 break;
         }
-        System.out.println(getDir());
-        System.out.println(getPos());
+        if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
         return action;
     }
 

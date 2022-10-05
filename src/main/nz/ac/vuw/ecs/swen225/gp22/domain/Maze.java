@@ -129,7 +129,7 @@ public class Maze{
     public static boolean gameComplete(){ return nextLevel == null || nextLevel.equals(""); }
 
     /** @return Whether or not the player has lost the game. */
-    public static boolean gameLost(){ return gameLost; }
+    public static boolean isGameLost(){ return gameLost; }
 
     /** Flags the game as over. */
     public static void loseGame(){ gameLost = true; }
