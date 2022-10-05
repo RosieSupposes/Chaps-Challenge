@@ -29,7 +29,7 @@ public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
     private static int timeSec = 60;
-    private int pingTime = 0;
+    private int pingTime = 1;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
@@ -405,20 +405,14 @@ public class Base extends JFrame {
             level.repaint(); //draws game
             timeMS += 20;
             if (timeMS % 1000 == 0) {
-                //TODO tell viewport current time
-
                 timeSec--;
                 side.setTime(timeSec);
             }
 
-            for (Entity entity : Maze.entities) {
-                if (entity instanceof EnemyEntity<?> e) {
-                    if (pingTime % e.getSpeed() == 0) {
-                        e.ping();
-                    }
-                }
-            }
-            pingTime++;
+            Maze.entities.stream()
+                    .filter(e -> e instanceof EnemyEntity<?> ee && pingTime % ee.getSpeed() == 0)
+                    .forEach(Entity::ping);
+            pingTime += 20;
 
             //TODO uncomment when ready for game ending/level switching
             if (timeSec <= 0) {
