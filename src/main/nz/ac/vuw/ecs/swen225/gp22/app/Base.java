@@ -29,6 +29,7 @@ public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
     private int timeSec = 60;
+    private int pingTime = 0;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
@@ -82,7 +83,7 @@ public class Base extends JFrame {
     public void startGame() {
         if (Load.previousGamePresent()) {
             int time = Load.previousGame();
-            loadLevel(time,1); //TODO Persistency should tell me which level is loaded?
+            loadLevel(time, 1); //TODO Persistency should tell me which level is loaded?
 
             recorder = new Recorder(1);
             recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -146,7 +147,7 @@ public class Base extends JFrame {
      */
     public void loadGame() {
         int time = Load.resumeGame();
-        loadLevel(time,1); //TODO ask persistency which level was loaded
+        loadLevel(time, 1); //TODO ask persistency which level was loaded
 
         recorder = new Recorder(1);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
@@ -158,7 +159,7 @@ public class Base extends JFrame {
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         Load.loadLevel(1); //TODO change 1 to lvl when level2.xml exists
-        loadLevel(60,1);
+        loadLevel(60, 1);
         recorder = new Recorder(lvl);
         recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
     }
@@ -345,10 +346,11 @@ public class Base extends JFrame {
         JPanel game = new Viewport();
         SidePanel side = new SidePanel(timeSec, lvl);
         side.setTime(timeSec);
-        final JPanel level = new PhasePanel(game,side);
+        final JPanel level = new PhasePanel(game, side);
 
         timeSec = seconds;
         timeMS = 0;
+        pingTime = 0;
         gameTimer = new Timer(20, unused -> {
             assert SwingUtilities.isEventDispatchThread();
             level.repaint(); //draws game
@@ -359,6 +361,15 @@ public class Base extends JFrame {
                 timeSec--;
                 side.setTime(timeSec);
             }
+
+            for (Entity entity : Maze.entities) {
+                if (entity instanceof EnemyEntity<?> e) {
+                    if (pingTime % e.getSpeed() == 0) {
+                        e.ping();
+                    }
+                }
+            }
+            pingTime++;
 
             //TODO uncomment when ready for game ending/level switching
             if (timeSec <= 0) {
