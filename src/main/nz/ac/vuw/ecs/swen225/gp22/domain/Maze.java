@@ -46,7 +46,6 @@ public class Maze{
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
 
-        entities.forEach(n -> n.deleteEntity());
         entities.clear();
 
         tileMap = new Tile[dimensions.x()][dimensions.y()];
@@ -57,10 +56,10 @@ public class Maze{
         }
 
         treasuresLeft = treasures;
-        if(player == null) player = new Player(new Point(0, 0), Entity.Direction.Down);
+        player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
 
-        entities.add(new GummyGuard(new Point(2, 2), Direction.Left));
+        entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */

@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * A basic enemy that INSERT BEHAVIOR HERE.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.2
+ * @version 1.3
  */
 public class GummyGuard extends EnemyEntity<GummyGuard>{
     /** Used for if the player walks into the enemy. */
@@ -21,6 +21,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
         super(entityPos, facingDir, 400);
 
         playerObserver = player -> {
+            System.out.println("UPDATE");
             if(player.getPos().equals(entityPos)){
                 // DEATH AND TAXES
                 System.out.println("Goodbye, I have died.");
@@ -31,8 +32,27 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
 
     @Override
     public Action ping(){
+        Action action = moveAndTurn(getDir());
         System.out.println("PINGA");
-        return moveAndTurn(getDir());
+        switch(getDir()){
+            case Down: 
+                setDir(Direction.Left);
+                break;
+            case Left:
+                setDir(Direction.Up);
+                break;
+            case Right:
+                setDir(Direction.Down);
+                break;
+            case Up:
+                setDir(Direction.Right);
+                break;
+            default:
+                break;
+        }
+        System.out.println(getDir());
+        System.out.println(getPos());
+        return action;
     }
 
     @Override
