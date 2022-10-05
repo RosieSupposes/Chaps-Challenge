@@ -21,6 +21,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
         super(entityPos, facingDir, 400);
 
         playerObserver = player -> {
+            System.out.println("UPDATE");
             if(player.getPos().equals(entityPos)){
                 // DEATH AND TAXES
                 System.out.println("Goodbye, I have died.");
@@ -31,6 +32,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
 
     @Override
     public Action ping(){
+        Action action = moveAndTurn(getDir());
         System.out.println("PINGA");
         switch(getDir()){
             case Down: 
@@ -50,7 +52,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
         }
         System.out.println(getDir());
         System.out.println(getPos());
-        return moveAndTurn(getDir());
+        return action;
     }
 
     @Override

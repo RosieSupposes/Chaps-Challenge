@@ -56,10 +56,10 @@ public class Maze{
         }
 
         treasuresLeft = treasures;
-        if(player == null) player = new Player(new Point(0, 0), Entity.Direction.Down);
+        player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
 
-        entities.add(new GummyGuard(new Point(1, 2), Direction.Left));
+        entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
