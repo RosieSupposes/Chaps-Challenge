@@ -415,12 +415,12 @@ public class Base extends JFrame {
             pingTime += 20;
 
             //TODO uncomment when ready for game ending/level switching
-            if (timeSec <= 0) {
+            if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();
             }
 //            else if (Maze.gameComplete()) {
 //                playerWon();
-//            }
+//           }
         });
         gameTimer.start();
 
