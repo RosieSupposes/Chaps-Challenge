@@ -16,6 +16,7 @@ public class GameConstants {
     public static final int TILE_SIZE = 60;
     public static final int NUM_GAME_TILE = 9;
     public static final int FOCUS_AREA = NUM_GAME_TILE/2;
+    public static final int NUM_INVENTORY_TILES = 12;
 
     // window dimensions
     public static final int SIDEBAR_WIDTH = 5 * TILE_SIZE;
