@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.Timer;
-import javax.swing.plaf.FontUIResource;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
