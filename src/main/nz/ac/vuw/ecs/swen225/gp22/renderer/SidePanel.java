@@ -77,6 +77,20 @@ public class SidePanel extends JPanel implements ActionListener {
         setLabelFont(uncollectedTreasures);
         setLabelFont(inventory);
 
+        renderInventory(g);
+
+        add(level);
+        add(time);
+        add(uncollectedTreasures);
+        add(inventory);
+    }
+
+    /**
+     * Displays the updated inventory.
+     * 
+     * @param g The graphics object needed to render images on the canvas.
+     */
+    private void renderInventory(Graphics g) {
         // inventory is a 3x4 grid
         for (int x = 0; x < numRowsTiles; x++){
             for (int y = 0; y < numColsTiles; y++){   
@@ -93,11 +107,6 @@ public class SidePanel extends JPanel implements ActionListener {
             g.drawImage(key, x*GameConstants.TILE_SIZE+xOffset, keyJPos*GameConstants.TILE_SIZE+yOffset, this);
             keyXPos = (keyXPos == 0 ? 1 : 0); // if a tile is occuppied, place the next collected key to the right side
         }
-
-        add(level);
-        add(time);
-        add(uncollectedTreasures);
-        add(inventory);
     }
 
     /**
