@@ -102,12 +102,12 @@ public class SidePanel extends JPanel implements ActionListener {
         int keyXPos = 0;
         int keyYPos = -1;
         for (int x = 0; x < Maze.player.getAllKeys().size(); x++){
-            if ( x % 4 == 0 ){ keyYPos++; keyXPos = 0; }
-            BufferedImage key = getKeyImg(Maze.player.getAllKeys().get(x)); // check the key colour
-            g.drawImage(key, keyXPos*GameConstants.TILE_SIZE+xOffset, keyYPos*GameConstants.TILE_SIZE+yOffset, this);
-            keyXPos++; // place key to the next unoccupied tile
-
-            //TODO: stop displaying keys when getAllKeys > 12
+            if (x < GameConstants.NUM_INVENTORY_TILES){ // stop displaying when the inventory tiles are full
+                if ( x % 4 == 0 ){ keyYPos++; keyXPos = 0; } // move to the start of the next row when the current one is full
+                BufferedImage key = getKeyImg(Maze.player.getAllKeys().get(x)); // check the key colour
+                g.drawImage(key, keyXPos*GameConstants.TILE_SIZE+xOffset, keyYPos*GameConstants.TILE_SIZE+yOffset, this);
+                keyXPos++; // place key to the next unoccupied tile
+            }            
         }
     }
 
