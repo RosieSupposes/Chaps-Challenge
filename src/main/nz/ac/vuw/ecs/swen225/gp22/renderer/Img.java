@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 public enum Img {
     // images to be displayed for level 1 of Chap's Challenge
     Title, BlueKey, BlueLockedDoor, GreenKey, GreenLockedDoor, RedKey, RedLockedDoor, YellowKey, YellowLockedDoor,
-    FreeTile, Exit, LockedExit, InfoField, GameInfo, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall, 
+    FreeTile, Exit, LockedExit, InfoField, InfoPost, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall, 
     
     // images to be displayed for the inventory
     BlueKeyNB, GreenKeyNB, RedKeyNB, YellowKeyNB, 
