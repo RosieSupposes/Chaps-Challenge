@@ -105,7 +105,7 @@ public class Base extends JFrame {
             Load.previousGame();
             loadLevel();
 
-            recorder = new Recorder(level,timeSec);
+            recorder = new Recorder(level, timeSec);
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -165,7 +165,7 @@ public class Base extends JFrame {
         Load.resumeGame();
         loadLevel();
 
-        recorder = new Recorder(level,timeSec);
+        recorder = new Recorder(level, timeSec);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -176,7 +176,7 @@ public class Base extends JFrame {
         level = lvl;
         Load.loadLevel(lvl);
         loadLevel();
-        recorder = new Recorder(lvl,timeSec);
+        recorder = new Recorder(lvl, timeSec);
     }
 
     /**
@@ -269,6 +269,57 @@ public class Base extends JFrame {
         menu.requestFocus();
     }
 
+    public void undo(Action action) {
+        int entity = action.entityHash();
+        Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
+        Entity.Direction oldDir = getDirection(action.prevDir());
+        Entity.Direction newDir = getDirection(action.currDir());
+        ColorableTile.Color color = getColor(action.color());
+        //TODO tell Domain to undo
+    }
+
+    public void apply(Action action) {
+        int entity = action.entityHash();
+        Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
+        Entity.Direction oldDir = getDirection(action.prevDir());
+        Entity.Direction newDir = getDirection(action.currDir());
+        ColorableTile.Color color = getColor(action.color());
+
+    }
+
+    private Entity.Direction getDirection(String dir) {
+        return switch (dir) {
+            case "Up" -> Entity.Direction.Up;
+            case "Down" -> Entity.Direction.Down;
+            case "Left" -> Entity.Direction.Left;
+            case "Right" -> Entity.Direction.Right;
+            default -> throw new IllegalStateException("Unexpected direction: " + dir);
+        };
+    }
+
+    private ColorableTile.Color getColor(String color) {
+        return switch (color) {
+            case "Red" -> ColorableTile.Color.Red;
+            case "Yellow" -> ColorableTile.Color.Yellow;
+            case "Green" -> ColorableTile.Color.Green;
+            case "Blue" -> ColorableTile.Color.Blue;
+            default -> throw new IllegalStateException("Unexpected Color: " + color);
+        };
+    }
+
+    private Entity.Action.Interaction.ActionType getActionType(String actionType) {
+        return switch (actionType) {
+            case "Pinged" -> Pinged;
+            case "PickupKey" -> PickupKey;
+            case "PickupTreasure" -> PickupTreasure;
+            case "UnlockDoor" -> UnlockDoor;
+            case "UnlockExit" -> UnlockExit;
+            case "None" -> None;
+            default -> throw new IllegalStateException("Unexpected action type: " + actionType);
+        };
+    }
+
+
     /**
      * Create, run and draw new level
      */
@@ -295,8 +346,8 @@ public class Base extends JFrame {
             Maze.entities.stream()
                     .filter(e -> e instanceof EnemyEntity<?> ee && timeMS % ee.getSpeed() == 0)
                     .forEach(Entity::ping);
-            
-            transformActions(Maze.getChangeMap()).forEach(a->recorder.addAction(a,timeSec));
+
+            transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeSec));
 
             if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();
@@ -324,12 +375,15 @@ public class Base extends JFrame {
 
     private List<Action> transformActions(List<Entity.Action> actions) {
         List<Action> actionRecords = new ArrayList<>();
-        for(Entity.Action action: actions){
+        for (Entity.Action action : actions) {
             String actionType = action.interaction().type().toString();
             String oldDir = action.oldDir().toString();
             String newDir = action.newDir().toString();
             String color = action.interaction().color().toString();
-            actionRecords.add(new Action(actionType,oldDir,newDir,color));
+            int entityHash = action.hashcode();
+            int vx = action.moveVector().x();
+            int vy = action.moveVector().y();
+            actionRecords.add(new Action(entityHash, actionType, vx, vy, oldDir, newDir, color));
         }
         return actionRecords;
     }

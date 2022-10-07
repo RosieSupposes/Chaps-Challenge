@@ -10,6 +10,6 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
  * @param currDir The current direction.
  * @param color The color of the tile. Can be None.
  */
-public record Action(int entityHash, String actionType, String prevDir, String currDir, String color) {
+public record Action(int entityHash, String actionType, int x, int y, String prevDir, String currDir, String color) {
 
 }
