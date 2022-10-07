@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
 
 /**
  * This class stores the game state (player, tilemap, entities, and treasures). 
@@ -15,7 +16,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.11
+ * @version 1.12
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -114,6 +115,21 @@ public class Maze{
         List<Entity.Action> changeMap = entities.stream().filter(Entity::hasAction).map(n -> n.pollAction()).collect(Collectors.toList());
         if(player.hasAction()) changeMap.add(player.pollAction());
         return changeMap;
+    }
+
+    /**
+     * Applies a change map to the current game, updating the game state.
+     * 
+     * @param changeMap A list of changes to apply.
+     */
+    public static void apply(List<Entity.Action> changeMap){
+        changeMap.forEach(a -> {
+            if(a.interaction().type() == ActionType.Pinged) getEntity(a.hashCode()).ping();
+            else{
+                getEntity(a.hashCode()).setDir(a.newDir());
+                getEntity(a.hashCode()).move(a.moveVector());
+            }
+        });
     }
 
     /**
