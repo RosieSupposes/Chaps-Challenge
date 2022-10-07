@@ -367,6 +367,7 @@ public class Base extends JFrame {
             case "Yellow" -> ColorableTile.Color.Yellow;
             case "Green" -> ColorableTile.Color.Green;
             case "Blue" -> ColorableTile.Color.Blue;
+            case "None" -> ColorableTile.Color.None;
             default -> throw new IllegalStateException("Unexpected Color: " + color);
         };
     }
