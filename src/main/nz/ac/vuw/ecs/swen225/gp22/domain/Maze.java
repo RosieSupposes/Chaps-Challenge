@@ -109,10 +109,26 @@ public class Maze{
         assert getTile(point) instanceof Ground : "Tile not reset properly.";
     }
 
+    /** @return A list of changes that have occurred since this was last called. */
     public static List<Entity.Action> getChangeMap(){
         List<Entity.Action> changeMap = entities.stream().filter(Entity::hasAction).map(n -> n.pollAction()).collect(Collectors.toList());
         if(player.hasAction()) changeMap.add(player.pollAction());
         return changeMap;
+    }
+
+    /**
+     * Finds an entity based on its hash code, used for
+     * replaying and rewinding moves. Suppresses raw types 
+     * warning because the generic type is only used for observers
+     * and does not affect the implementation of this method.
+     * 
+     * @param hashcode Hash code of the entity.
+     * @return The entity that matches the hash code.
+     */
+    @SuppressWarnings("rawtypes")
+    public static Entity getEntity(int hashcode){
+        if(player.hashCode() == hashcode) return player;
+        return entities.stream().filter(n -> n.hashCode() == hashcode).findFirst().get();
     }
 
     /** Reduce the number of treasures left by 1. */

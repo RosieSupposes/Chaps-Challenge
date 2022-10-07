@@ -47,7 +47,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
                 break;
         }
         if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
-        action = new Action(oldDir, getDir(), new Action.Interaction(Action.Interaction.ActionType.Pinged, ColorableTile.Color.None));
+        action = new Action(hashCode(), oldDir, getDir(), new Action.Interaction(Action.Interaction.ActionType.Pinged, ColorableTile.Color.None));
     }
 
     @Override

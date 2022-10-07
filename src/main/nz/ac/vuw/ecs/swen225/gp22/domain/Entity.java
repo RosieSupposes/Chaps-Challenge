@@ -29,7 +29,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * A record used to store an action taken. This will be 
      * used to revert actions when replaying a game.
      */
-    public record Action(Direction oldDir, Direction newDir, Interaction interaction){
+    public record Action(int hashcode, Direction oldDir, Direction newDir, Interaction interaction){
         public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
             public enum ActionType{

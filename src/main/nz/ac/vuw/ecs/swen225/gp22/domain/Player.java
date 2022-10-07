@@ -38,7 +38,7 @@ public class Player extends Entity<Player>{
 
         Action.Interaction interaction = new Interaction(ActionType.None, Color.None);
         if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
-        action = new Action(oldDir, getDir(), interaction);
+        action = new Action(hashCode(), oldDir, getDir(), interaction);
     }
 
     /** Clears all the keys that the player has. */
