@@ -16,7 +16,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.12
+ * @version 1.13
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -128,6 +128,22 @@ public class Maze{
             else{
                 getEntity(a.hashCode()).setDir(a.newDir());
                 getEntity(a.hashCode()).move(a.moveVector());
+            }
+        });
+    }
+
+    /**
+     * Undoes a change map to the current game, updating the game state.
+     * 
+     * @param changeMap A list of changes to undo.
+     */
+    public static void undo(List<Entity.Action> changeMap){
+        changeMap.forEach(a -> {
+            if(a.interaction().type() == ActionType.Pinged) getEntity(a.hashCode()).unping();
+            else{
+                a.interaction().type().undo(getEntity(a.hashCode()), a.interaction().color());
+                getEntity(a.hashCode()).setDir(a.oldDir());
+                getEntity(a.hashCode()).move(a.moveVector().x() * -1, a.moveVector().y() * -1);
             }
         });
     }

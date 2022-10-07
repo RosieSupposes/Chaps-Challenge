@@ -11,7 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
  * a base {@link Entity} but with an inventory to hold keys.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.7
+ * @version 1.8
  */
 public class Player extends Entity<Player>{
     /** Stores all the keys that the player has. */
@@ -30,6 +30,9 @@ public class Player extends Entity<Player>{
     // Does not do anything because the player should not be pinged.
     @Override
     public void ping(){ }
+
+    @Override
+    public void unping(){ }
 
     @Override 
     public void moveAndTurn(Direction dir){

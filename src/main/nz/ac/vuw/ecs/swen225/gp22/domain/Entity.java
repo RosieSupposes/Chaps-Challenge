@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.12
+ * @version 1.13
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -29,6 +29,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * A record used to store an action taken. This will be 
      * used to revert actions when replaying a game.
      */
+    @SuppressWarnings("rawtypes")
     public record Action(int hashcode, Maze.Point moveVector, Direction oldDir, Direction newDir, Interaction interaction){
         public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
@@ -39,6 +40,8 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
                 UnlockDoor,
                 UnlockExit,
                 Pinged;
+
+                public void undo(Entity entity, ColorableTile.Color undoColor){ }
             }
         }
     }
@@ -65,6 +68,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
 
     /** Non-player entities will act based on how often this is called. */
     abstract public void ping();
+
+    /** Undoes the effects of {@link #ping ping()}. */
+    abstract public void unping();
 
     /** @return Whether or not this entity has done an action since the last call of {@link Maze#getChangeMap()}. */
     public boolean hasAction(){ return action != null; }
@@ -103,6 +109,17 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         setPos(newPos);
         assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
         updateObservers(); 
+    }
+
+    /**
+     * Overloaded method for {@link #move move()}, that accepts two individual numbers 
+     * that represent X and Y, respectively.
+     * 
+     * @param addX The amount to change X by.
+     * @param addY The amount to change Y by.
+     */
+    public void move(int moveX, int moveY){
+        move(new Maze.Point(moveX, moveY));
     }
 
     /**
