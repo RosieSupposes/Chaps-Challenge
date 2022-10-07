@@ -31,6 +31,8 @@ public class Player extends JPanel {
     private GameButton speedBtn;
 
     private static final Dimension BUTTON_DIM = new Dimension(50, 30);
+    private static final Dimension LONG_BTN = new Dimension(BUTTON_DIM.width * 2, BUTTON_DIM.height);
+    private static final Dimension SLIDER_DIM = new Dimension(700, 30);
 
     /**
      * Create a new player.
@@ -59,7 +61,7 @@ public class Player extends JPanel {
         }, "stepback");
 
         scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
-        scrubber.setPreferredSize(new Dimension(700, 25));
+        scrubber.setPreferredSize(SLIDER_DIM);
         scrubber.setValue(0);
         scrubber.addChangeListener(e -> {
             JSlider source = (JSlider) e.getSource();
@@ -80,7 +82,7 @@ public class Player extends JPanel {
 
         JButton home = new GameButton("", BUTTON_DIM, e -> base.menuScreen(), "home");
 
-        JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
+        JButton load = new GameButton("Load", new Dimension(75, 30), e -> {
             load();
             if (actions != null) scrubber.setMaximum(actions.size());
         });
@@ -92,7 +94,7 @@ public class Player extends JPanel {
             gamePanel.repaint();
         }, "stepforward");
 
-        JButton rewind = new GameButton("", BUTTON_DIM, e -> {
+        JButton rewind = new GameButton("", LONG_BTN, e -> {
             playPause.changeIcon("pause");
             rewind();
         }, "rewind");
@@ -102,7 +104,7 @@ public class Player extends JPanel {
         }, "play");
 
 
-        speedBtn = new GameButton("", BUTTON_DIM, e -> {
+        speedBtn = new GameButton("", LONG_BTN, e -> {
             updateSpeed();
         }, "speed" + this.speed);
 
