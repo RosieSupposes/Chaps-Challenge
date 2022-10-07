@@ -9,7 +9,7 @@ import java.util.List;
  * The game state class to store the game state.
  *
  * @author Christopher Sa, 300570735
- * @version 1.2
+ * @version 1.3
  */
 public class GameState {
     private final int id;
@@ -44,5 +44,23 @@ public class GameState {
      */
     public int getTime() {
         return time;
+    }
+
+    /**
+     * Apply this game state.
+     *
+     * @param base the base to call the apply method on
+     */
+    public void apply(Base base) {
+        base.apply(actions);
+    }
+
+    /**
+     * Undo this game state.
+     *
+     * @param base the base to call the undo method on
+     */
+    public void undo(Base base) {
+        base.undo(actions);
     }
 }
