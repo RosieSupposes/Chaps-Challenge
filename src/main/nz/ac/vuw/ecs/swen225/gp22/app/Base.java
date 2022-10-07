@@ -106,7 +106,7 @@ public class Base extends JFrame {
             Load.previousGame();
             loadLevel();
 
-            recorder = new Recorder(level, timeSec, this);
+            recorder = new Recorder(level, timeMS, this);
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -166,7 +166,7 @@ public class Base extends JFrame {
         Load.resumeGame();
         loadLevel();
 
-        recorder = new Recorder(level, timeSec, this);
+        recorder = new Recorder(level, timeMS, this);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -177,7 +177,7 @@ public class Base extends JFrame {
         level = lvl;
         Load.loadLevel(lvl);
         loadLevel();
-        recorder = new Recorder(lvl, timeSec, this);
+        recorder = new Recorder(lvl, timeMS, this);
     }
 
     /**
@@ -349,7 +349,7 @@ public class Base extends JFrame {
                     .filter(e -> e instanceof EnemyEntity<?> ee && timeMS % ee.getSpeed() == 0)
                     .forEach(Entity::ping);
 
-            transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeSec));
+            transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
 
             if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();
