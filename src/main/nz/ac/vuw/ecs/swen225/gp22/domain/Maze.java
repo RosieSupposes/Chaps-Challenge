@@ -15,7 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.10
+ * @version 1.11
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -193,6 +193,41 @@ public class Maze{
          */
         public Point add(int addX, int addY){
             return add(new Point(addX, addY));
+        }
+
+        /**
+         * Subtract this point from another, then returns the result.
+         * 
+         * @param addX The amount to subtract from the X.
+         * @param addY The amount to subtract from the Y.
+         * @return Point object representing the result of the two points.
+         */
+        public Point subtract(Point point){
+            if(point == null) throw new IllegalArgumentException("Given point is null");
+            return new Point(x - point.x(),y - point.y());
+        }
+
+        /**
+         * Overloaded method for {@link #subtract subtract()} that accepts an {@link Entity.Direction} enum.
+         * 
+         * @param dir Direction to get point from.
+         * @return Point object representing the result of the point minus the direction.
+         */
+        public Point subtract(Entity.Direction dir){
+            if(dir == null) throw new IllegalArgumentException("Given direction is null");
+            return subtract(new Point(dir.posChange.x(), dir.posChange.y()));
+        }
+
+        /**
+         * Overloaded method for {@link #subtract subtract()} that accepts two individual numbers 
+         * that represent X and Y, respectively.
+         * 
+         * @param addX The amount to subtract from the X.
+         * @param addY The amount to subtract from the Y.
+         * @return Point object representing the result of the point minus the two numbers.
+         */
+        public Point subtract(int addX, int addY){
+            return subtract(new Point(addX, addY));
         }
 
         /** @return Whether or not the point exists on the {@link Maze#tileMap tilemap}. */
