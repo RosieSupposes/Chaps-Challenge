@@ -9,19 +9,24 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 public class GameButton extends JButton {
-    public GameButton(String name, Dimension dim, ActionListener action){
+    private Image image;
+    private Dimension dim;
+
+    public GameButton(String name, Dimension dim, ActionListener action) {
         super(name);
-        setUp(dim,action);
+        this.dim = dim;
+        setUp(dim, action);
     }
 
-    public GameButton(String name, Dimension dim, ActionListener action, String filename){
+    public GameButton(String name, Dimension dim, ActionListener action, String filename) {
         super(name);
-        setUp(dim,action);
-        ImageIcon icon = getIcon(filename);
-        this.setIcon(icon);
+        setUp(dim, action);
+        this.dim = dim;
+        image = getIcon(filename);
+//        this.setIcon(icon);
     }
 
-    public void setUp(Dimension dim, ActionListener action){
+    private void setUp(Dimension dim, ActionListener action) {
         this.setBackground(GameConstants.BUTTON_COLOR);
         this.setForeground(GameConstants.TEXT_COLOR);
 
@@ -31,25 +36,40 @@ public class GameButton extends JButton {
         this.addActionListener(action);
     }
 
-    public ImageIcon getIcon(String filename) {
+    private Image getIcon(String filename) {
         URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
         ImageIcon imageIcon = new ImageIcon(imagePath);
-        Image img = imageIcon.getImage();
-        Image image = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        return new ImageIcon(image);
+        return imageIcon.getImage();
+//        Image image = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+//        return new ImageIcon(image);
     }
 
-    public void changeName(String name){
+    public void changeName(String name) {
         this.setText(name);
     }
 
-    public void changeIcon(String filename){
-        ImageIcon icon = getIcon(filename);
-        this.setIcon(icon);
+    public void changeIcon(String filename) {
+        image = getIcon(filename);
+//        this.setIcon(icon);
     }
 
-    public void changeActionListener(ActionListener actionListener){
+    public void changeActionListener(ActionListener actionListener) {
         this.removeActionListener(this.getActionListeners()[0]);
         this.addActionListener(actionListener);
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g.create();
+        if (image != null) {
+//            System.out.println("imaage width: " + image.getWidth(this));
+            double scale = 0.45;
+            int imgWidth = (int) (image.getWidth(this) * scale);
+            int imgHeight = (int) (image.getHeight(this) * scale);
+            int x = dim.width / 2 - imgWidth / 2;
+            int y = dim.height / 2 - imgHeight / 2;
+            g2D.drawImage(image, x, y, imgWidth, imgHeight, this);
+        }
     }
 }
