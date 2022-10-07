@@ -93,6 +93,36 @@ public class Parser {
         }
     }
 
+    public boolean entitiesPresent(){
+        Element entities = document.getRootElement().element("entities");
+        return entities != null && !entities.elements().isEmpty();
+    }
+
+    public List<Object> getEntities() {
+        List<Element> nodes = document.getRootElement().element("entities").elements();
+        return nodes.stream().map(this::parseEntity).toList();
+    }
+
+    private Object parseEntity(Element entity) {
+
+        Maze.Point position = getPoint(entity);
+        Entity.Direction direction = Entity.Direction.valueOf(entity.attributeValue("direction"));
+        String ID = entity.attributeValue("ID");
+        Class entityClass;
+        try {
+            entityClass = Load.getClassLoader().loadClass("nz.ac.vuw.ecs.swen225.gp22.entities."+ID);
+            switch (ID) {
+                case "GummyGuard" -> {
+                    return entityClass.getConstructor(Maze.Point.class, Entity.Direction.class).newInstance(position, direction);
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+
+        return null;
+    }
+
     /**
      * Parses all the tiles in the file into a list of tile objects
      *
