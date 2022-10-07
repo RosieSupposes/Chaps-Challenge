@@ -26,7 +26,7 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
  * Base is the base window that all actions occur on.
  *
  * @author Molly Henry, 300562038
- * @version 1.6
+ * @version 1.8
  */
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
@@ -343,7 +343,7 @@ public class Base extends JFrame {
      * Gets Domain direction from String
      *
      * @param dir direction from Recorder
-     * @return
+     * @return Direction from Domain
      */
     private Entity.Direction getDirection(String dir) {
         return switch (dir) {
@@ -355,6 +355,12 @@ public class Base extends JFrame {
         };
     }
 
+    /**
+     * Gets Domain Color from String
+     *
+     * @param color color from Recorder
+     * @return Color from Domain
+     */
     private ColorableTile.Color getColor(String color) {
         return switch (color) {
             case "Red" -> ColorableTile.Color.Red;
@@ -365,6 +371,12 @@ public class Base extends JFrame {
         };
     }
 
+    /**
+     * Gets Domain action from String
+     *
+     * @param actionType action from Recorder
+     * @return Domain action
+     */
     private Entity.Action.Interaction.ActionType getActionType(String actionType) {
         return switch (actionType) {
             case "Pinged" -> Pinged;
@@ -376,7 +388,6 @@ public class Base extends JFrame {
             default -> throw new IllegalStateException("Unexpected action type: " + actionType);
         };
     }
-
 
     /**
      * Create, run and draw new level
@@ -431,6 +442,12 @@ public class Base extends JFrame {
         level.requestFocus();  //need to be after pack
     }
 
+    /**
+     * transforms list of Domain actions into list of Recorder actions.
+     *
+     * @param actions list of Domain actions
+     * @return list of Recorder actions
+     */
     private List<Action> transformActions(List<Entity.Action> actions) {
         List<Action> actionRecords = new ArrayList<>();
         for (Entity.Action action : actions) {
