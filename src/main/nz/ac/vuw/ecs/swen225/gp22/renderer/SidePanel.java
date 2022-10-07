@@ -23,7 +23,7 @@ import java.awt.event.ActionListener;
  * @version 1.2
  */
 public class SidePanel extends JPanel implements ActionListener {
-
+    // inventory is 3X4 grid
     private int numColsTiles = 3;
     private int numRowsTiles = 4;
 
@@ -77,7 +77,7 @@ public class SidePanel extends JPanel implements ActionListener {
         setLabelFont(uncollectedTreasures);
         setLabelFont(inventory);
 
-        renderInventory(g);
+        renderInventory(g); // display the collected keys
 
         add(level);
         add(time);
@@ -98,7 +98,6 @@ public class SidePanel extends JPanel implements ActionListener {
             }
         }
 
-        // put the keys side by side on the inventory tiles
         int keyXPos = 0;
         int keyYPos = -1;
         for (int x = 0; x < Maze.player.getAllKeys().size(); x++){
