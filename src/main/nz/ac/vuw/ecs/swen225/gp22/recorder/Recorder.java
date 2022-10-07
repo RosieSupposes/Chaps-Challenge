@@ -24,21 +24,17 @@ public class Recorder {
     private final int level;
     private final List<GameState> gameStates;
     private GameState prevState;
-    private final Base base;
-
 
     /**
      * Create a new recorder.
      *
      * @param lvl the level to record
      * @param time the time of the game
-     * @param base the base of the game
      */
-    public Recorder(int lvl, int time, Base base) {
+    public Recorder(int lvl, int time) {
         level = lvl;
-        this.base = base;
         gameStates = new ArrayList<>();
-        prevState = new GameState(0, time, base);
+        prevState = new GameState(0, time);
         gameStates.add(prevState);
     }
 
@@ -50,7 +46,7 @@ public class Recorder {
      */
     public void addAction(Action action, int time) {
         if (prevState.getTime() != time) {
-            prevState = new GameState(gameStates.size(), time, base);
+            prevState = new GameState(gameStates.size(), time);
             gameStates.add(prevState);
         }
         prevState.addAction(action);

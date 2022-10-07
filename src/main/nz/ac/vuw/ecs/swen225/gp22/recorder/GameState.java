@@ -9,7 +9,7 @@ import java.util.List;
  * The game state class to store the game state.
  *
  * @author Christopher Sa, 300570735
- * @version 1.1
+ * @version 1.2
  */
 public class GameState {
     private final int id;
@@ -21,9 +21,8 @@ public class GameState {
      *
      * @param id the id of the game state
      * @param time the time of the game state
-     * @param base the base of the game
      */
-    protected GameState(int id, int time, Base base) {
+    protected GameState(int id, int time) {
         this.id = id;
         this.time = time;
         this.actions = new ArrayList<>();
