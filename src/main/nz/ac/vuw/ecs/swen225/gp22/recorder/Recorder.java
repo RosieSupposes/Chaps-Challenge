@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -23,17 +24,21 @@ public class Recorder {
     private final int level;
     private final List<GameState> gameStates;
     private final GameState prevState;
+    private final Base base;
 
 
     /**
      * Create a new recorder.
      *
      * @param lvl the level to record
+     * @param time the time of the game
+     * @param base the base of the game
      */
-    public Recorder(int lvl, int time) {
+    public Recorder(int lvl, int time, Base base) {
         level = lvl;
+        this.base = base;
         gameStates = new ArrayList<>();
-        prevState = new GameState(0, time);
+        prevState = new GameState(0, time, base);
     }
 
     /**
@@ -43,7 +48,7 @@ public class Recorder {
      */
     public void addAction(Action action, int time) {
         if (gameStates.isEmpty() || prevState.getTime() != time) {
-            gameStates.add(new GameState(gameStates.size(), time));
+            gameStates.add(new GameState(gameStates.size(), time, base));
         }
         gameStates.get(gameStates.size() - 1).addAction(action);
     }

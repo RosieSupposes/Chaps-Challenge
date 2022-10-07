@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class GameState {
     private final int time;
     private final List<Action> actions;
 
-    protected GameState(int id, int time) {
+    protected GameState(int id, int time, Base base) {
         this.id = id;
         this.time = time;
         this.actions = new ArrayList<>();
