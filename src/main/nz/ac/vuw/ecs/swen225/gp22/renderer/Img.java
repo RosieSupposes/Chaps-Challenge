@@ -18,10 +18,10 @@ public enum Img {
     FreeTile, Exit, LockedExit, InfoField, InfoPost, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall, 
     
     // images to be displayed for the inventory
-    BlueKeyNB, GreenKeyNB, RedKeyNB, YellowKeyNB, 
+    BlueKeyNB, GreenKeyNB, RedKeyNB, YellowKeyNB;
 
     // images to be displayed for level 2 of Chap's Challenge
-    EnemyDown, EnemyLeft, EnemyRight, EnemyUp;
+    //EnemyDown, EnemyLeft, EnemyRight, EnemyUp;
 
     public final BufferedImage image;
 

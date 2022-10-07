@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Queue;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
+//import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
 
 /**
  * This class stores the game state (player, tilemap, entities, and treasures). 
@@ -63,7 +63,7 @@ public class Maze{
         player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
 
-        entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
+        //entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */

@@ -6,6 +6,9 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 /**
@@ -16,8 +19,9 @@ import java.util.List;
  * @version 1.4
  */
 public class Load {
-    private static final String resourceDirectory = System.getProperty("user.dir")+"/resources/";
-    private static final String previousGame = "saves/previousGame";
+    private static final String resourceDirectory = System.getProperty("user.dir") + "/resources/";
+    private static final String previousGame = "saves/previousGame.xml";
+    private static URLClassLoader classLoader;
 
     /**
      * Load saved game from xml.
@@ -82,6 +86,10 @@ public class Load {
         return "Time: " + parser.getTime() + ", Keys: " + parser.getNumKeysCollected();
     }
 
+    public static URLClassLoader getClassLoader() {
+        return classLoader != null ? classLoader : null;
+    }
+
     /**
      * Parses a game from the provided file
      * @param file the file to parse and load the game from
@@ -90,6 +98,11 @@ public class Load {
         Parser parser = new Parser(file);
         parser.parseMapInfo();
         List<Tile> tiles = parser.getTiles();
+        if (parser.entitiesPresent()) {
+            loadJar(parser.getLevel());
+            List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof EnemyEntity<?>).map(e -> (Entity) e).toList();
+            Maze.entities.addAll(entities);
+        }
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
         }
@@ -104,6 +117,24 @@ public class Load {
      */
     private static File getFile(String file){
         return new File(resourceDirectory + file + ".xml");
+    }
+
+    /**
+     * Loads classes from a jar file
+     *
+     * @param levelNum level number to load associated jar for
+     */
+    private static void loadJar(int levelNum){
+        File file = getFile("level/level" + levelNum + ".jar");
+        try{
+            URLClassLoader child = new URLClassLoader(
+                new URL[]{file.toURI().toURL()},
+                Load.class.getClassLoader()
+            );
+            classLoader = child;
+        } catch (MalformedURLException e) {
+            classLoader = null;
+        }
     }
 
 }
