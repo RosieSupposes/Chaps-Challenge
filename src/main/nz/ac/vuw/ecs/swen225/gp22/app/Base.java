@@ -211,6 +211,7 @@ public class Base extends JFrame {
     public void saveGame() {
         Save.saveGame();
         System.out.println("Save");
+        recorder.save();
         saveDialog.visibleFocus();
     }
 
