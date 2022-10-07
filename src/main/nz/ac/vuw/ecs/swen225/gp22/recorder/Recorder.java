@@ -45,6 +45,7 @@ public class Recorder {
      * Add an action to the recorder.
      *
      * @param action The action to add.
+     * @param time The time of the action.
      */
     public void addAction(Action action, int time) {
         if (gameStates.isEmpty() || prevState.getTime() != time) {
