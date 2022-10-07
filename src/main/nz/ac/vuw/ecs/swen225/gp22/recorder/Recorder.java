@@ -58,7 +58,7 @@ public class Recorder {
     public void save() {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("game").addAttribute("level", String.valueOf(level));
-//        actions.forEach(action -> root.add(action.toXML()));
+        gameStates.forEach(state -> root.add(state.toxml()));
 
         String filename = System.getProperty("user.dir") + "/resources/recordings/"
             + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
