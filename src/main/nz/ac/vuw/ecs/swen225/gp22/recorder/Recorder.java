@@ -17,20 +17,23 @@ import org.dom4j.io.XMLWriter;
  * The recorder for the game. Used to record actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.2
+ * @version 1.3
  */
 public class Recorder {
     private final int level;
-    private final List<Action> actions;
+    private final List<GameState> gameStates;
+    private final GameState prevState;
+
 
     /**
      * Create a new recorder.
      *
      * @param lvl the level to record
      */
-    public Recorder(int lvl) {
+    public Recorder(int lvl, int time) {
         level = lvl;
-        actions = new ArrayList<>();
+        gameStates = new ArrayList<>();
+        prevState = new GameState(0, time);
     }
 
     /**
@@ -38,8 +41,11 @@ public class Recorder {
      *
      * @param action The action to add.
      */
-    public void addAction(Action action) {
-        actions.add(action);
+    public void addAction(Action action, int time) {
+        if (gameStates.isEmpty() || prevState.getTime() != time) {
+            gameStates.add(new GameState(gameStates.size(), time));
+        }
+        gameStates.get(gameStates.size() - 1).addAction(action);
     }
 
     /**
@@ -48,7 +54,7 @@ public class Recorder {
     public void save() {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("game").addAttribute("level", String.valueOf(level));
-        actions.forEach(action -> root.add(action.toXML()));
+//        actions.forEach(action -> root.add(action.toXML()));
 
         String filename = System.getProperty("user.dir") + "/resources/recordings/"
             + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
