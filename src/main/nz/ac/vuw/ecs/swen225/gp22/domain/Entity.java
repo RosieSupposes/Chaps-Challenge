@@ -1,15 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile.Color;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
-
 /**
  * Template for entities in a level, including the player. 
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.9
+ * @version 1.10
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -33,7 +29,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * A record used to store an action taken. This will be 
      * used to revert actions when replaying a game.
      */
-    public record Action(Maze.Point pos, Direction dir, Interaction interaction){
+    public record Action(Direction oldDir, Direction newDir, Interaction interaction){
         public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
             public enum ActionType{
@@ -41,7 +37,8 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
                 PickupKey,
                 PickupTreasure,
                 UnlockDoor,
-                UnlockExit;
+                UnlockExit,
+                Pinged;
             }
         }
     }
@@ -51,6 +48,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
 
     /** The direction the entity is facing. */
     private Direction facingDir;
+
+    /** The action which the entity has taken, used for recorder. */
+    public Action action; 
 
     /**
      * Default constructor, sets the position and direction of the entity.
@@ -64,7 +64,16 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     }
 
     /** Non-player entities will act based on how often this is called. */
-    abstract public Action ping();
+    abstract public void ping();
+
+    /** @return Whether or not this entity has done an action since the last call of {@link Maze#getChangeMap()}. */
+    public boolean hasAction(){ return action != null; }
+
+    public Action pollAction(){
+        Action storedAction = action;
+        action = null;
+        return storedAction;
+    }
 
     /**
      * Moves the entity in a given direction. 
@@ -95,11 +104,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * 
      * @param dir The new {@link Direction direction} of the entity. 
      */
-    public Action moveAndTurn(Direction dir){
+    public void moveAndTurn(Direction dir){
         setDir(dir);
         move();
-
-        return new Action(entityPos, facingDir, new Interaction(ActionType.None, Color.None));
     }
 
     /** @return The {@link #entityPos position} of the entity. */

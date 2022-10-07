@@ -2,8 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
 
@@ -13,7 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.9
+ * @version 1.10
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -105,6 +107,12 @@ public class Maze{
         if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
         setTile(point, new Ground(point));
         assert getTile(point) instanceof Ground : "Tile not reset properly.";
+    }
+
+    public static List<Entity.Action> getChangeMap(){
+        List<Entity.Action> changeMap = entities.stream().filter(Entity::hasAction).map(n -> n.pollAction()).collect(Collectors.toList());
+        if(player.hasAction()) changeMap.add(player.pollAction());
+        return changeMap;
     }
 
     /** Reduce the number of treasures left by 1. */

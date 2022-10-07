@@ -4,7 +4,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * A basic enemy that INSERT BEHAVIOR HERE.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.4
  */
 public class GummyGuard extends EnemyEntity<GummyGuard>{
     /** Used for if the player walks into the enemy. */
@@ -27,8 +27,9 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
     }
 
     @Override
-    public Action ping(){
-        Action action = moveAndTurn(getDir());
+    public void ping(){
+        Direction oldDir = getDir();
+        moveAndTurn(getDir());
         switch(getDir()){
             case Down: 
                 setDir(Direction.Left);
@@ -46,7 +47,7 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
                 break;
         }
         if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
-        return action;
+        action = new Action(oldDir, getDir(), new Action.Interaction(Action.Interaction.ActionType.Pinged, ColorableTile.Color.None));
     }
 
     @Override
