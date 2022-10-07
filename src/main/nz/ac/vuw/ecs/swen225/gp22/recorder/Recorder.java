@@ -23,7 +23,7 @@ import org.dom4j.io.XMLWriter;
 public class Recorder {
     private final int level;
     private final List<GameState> gameStates;
-    private final GameState prevState;
+    private GameState prevState;
     private final Base base;
 
 
@@ -39,6 +39,7 @@ public class Recorder {
         this.base = base;
         gameStates = new ArrayList<>();
         prevState = new GameState(0, time, base);
+        gameStates.add(prevState);
     }
 
     /**
@@ -48,10 +49,11 @@ public class Recorder {
      * @param time The time of the action.
      */
     public void addAction(Action action, int time) {
-        if (gameStates.isEmpty() || prevState.getTime() != time) {
-            gameStates.add(new GameState(gameStates.size(), time, base));
+        if (prevState.getTime() != time) {
+            prevState = new GameState(gameStates.size(), time, base);
+            gameStates.add(prevState);
         }
-        gameStates.get(gameStates.size() - 1).addAction(action);
+        prevState.addAction(action);
     }
 
     /**
