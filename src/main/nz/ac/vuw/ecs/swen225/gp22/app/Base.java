@@ -81,32 +81,52 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    /**
+     * Sets current level.
+     *
+     * @param lvl current level
+     */
     public static void setLevel(int lvl) {
         level = lvl;
     }
 
+    /**
+     * Sets current game time
+     *
+     * @param t time in seconds
+     */
     public static void setTime(int t) {
         timeSec = t;
     }
 
+    /**
+     * Returns current level
+     *
+     * @return current level number
+     */
     public static int getLevel() {
         return level;
     }
 
+    /**
+     * Returns current game time
+     *
+     * @return game time in seconds
+     */
     public static int getTime() {
         return timeSec;
     }
 
     /**
      * When you click start button, check for last save file
-     * and run the level
+     * and run the level.
      */
     public void startGame() {
         if (Load.previousGamePresent()) {
             Load.previousGame();
             loadLevel();
 
-            recorder = new Recorder(level, timeMS, this);
+            recorder = new Recorder(level, timeMS);
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -114,7 +134,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * pauses game
+     * pauses game.
      */
     public void pause() {
         System.out.println("Pause");
@@ -129,7 +149,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * un-pauses game
+     * un-pauses game.
      */
     public void unPause() {
         System.out.println("Un Pause");
@@ -143,7 +163,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * Creates and runs replayer window
+     * Creates and runs re-player window.
      */
     public void replayPhase() {
         System.out.println("Replay");
@@ -160,28 +180,33 @@ public class Base extends JFrame {
     }
 
     /**
-     * load a game from file
+     * load a game from file.
      */
     public void loadGame() {
         Load.resumeGame();
         loadLevel();
 
-        recorder = new Recorder(level, timeMS, this);
+        recorder = new Recorder(level, timeMS);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
     }
 
+    /**
+     * Loads new level, makes new recorder.
+     *
+     * @param lvl level number to load
+     */
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         level = lvl;
         Load.loadLevel(lvl);
         loadLevel();
-        recorder = new Recorder(lvl, timeMS, this);
+        recorder = new Recorder(lvl, timeMS);
     }
 
     /**
-     * save the current game
+     * Save the current game.
      */
     public void saveGame() {
         Save.saveGame();
@@ -189,10 +214,16 @@ public class Base extends JFrame {
         saveDialog.visibleFocus();
     }
 
+    /**
+     * Resets focus to Base window.
+     */
     public void resetFocus() {
         currentPanel.requestFocus();
     }
 
+    /**
+     * Saves recorder, pops up game over screen.
+     */
     public void playerDied() {
         System.out.println("Level lost");
         recorder.save();
@@ -200,6 +231,9 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    /**
+     * Saves recorder, pops up game won screen.
+     */
     public void playerWon() {
         System.out.println("Level won");
         recorder.save();
@@ -208,7 +242,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * exit the game
+     * exit the game.
      */
     public void exitGame() {
         System.out.println("Exit");
@@ -217,7 +251,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * When key is pressed, move player and tell recorder
+     * When key is pressed, move player and tell recorder.
      *
      * @param dir direction player moves
      */
@@ -270,14 +304,30 @@ public class Base extends JFrame {
         menu.requestFocus();
     }
 
+    /**
+     * Undoes action.
+     *
+     * @param actions List of Recorder actionRecords.
+     */
     public void undo(List<Action> actions) {
         Maze.undo(actions.stream().map(this::getAction).toList());
     }
 
+    /**
+     * Apply action.
+     *
+     * @param actions List of Recorder actionRecords.
+     */
     public void apply(List<Action> actions) {
         Maze.apply(actions.stream().map(this::getAction).toList());
     }
 
+    /**
+     * Transforms Recorder Action into Domain Action.
+     *
+     * @param action Recorder action.
+     * @return Domain Action.
+     */
     public Entity.Action getAction(Action action) {
         int entity = action.entityHash();
         Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
@@ -289,6 +339,12 @@ public class Base extends JFrame {
         return new Entity.Action(entity, point, oldDir, newDir, interaction);
     }
 
+    /**
+     * Gets Domain direction from String
+     *
+     * @param dir direction from Recorder
+     * @return
+     */
     private Entity.Direction getDirection(String dir) {
         return switch (dir) {
             case "Up" -> Entity.Direction.Up;
