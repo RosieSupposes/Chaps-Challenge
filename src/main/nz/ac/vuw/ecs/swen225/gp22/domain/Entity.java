@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.11
+ * @version 1.12
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -83,6 +83,21 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public void move(Direction direction){
         if(direction == null) throw new IllegalArgumentException("Given direction is null");
         Maze.Point newPos = entityPos.add(direction);
+        if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
+        if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
+        setPos(newPos);
+        assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
+        updateObservers(); 
+    }
+
+    /**
+     * Overloaded method for {@link #move move()}, takes in a point.
+     * 
+     * @param moveVector Amount to move by.
+     */
+    public void move(Maze.Point moveVector){
+        if(moveVector == null) throw new IllegalArgumentException("Given point is null");
+        Maze.Point newPos = entityPos.add(moveVector);
         if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
         setPos(newPos);
