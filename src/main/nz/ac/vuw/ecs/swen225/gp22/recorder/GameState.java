@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  * The game state class to store the game state.
  *
  * @author Christopher Sa, 300570735
- * @version 1.4
+ * @version 1.5
  */
 public class GameState {
     private final int id;
@@ -75,5 +77,18 @@ public class GameState {
      */
     public void undo(Base base) {
         base.undo(actions);
+    }
+
+    /**
+     * Convert the game state to xml.
+     *
+     * @return The xml element of the game state.
+     */
+    public Element toxml() {
+        Element element = DocumentHelper.createElement("state")
+                .addAttribute("id", String.valueOf(id))
+                .addAttribute("time", String.valueOf(time));
+        actions.forEach(action -> element.add(action.toxml()));
+        return element;
     }
 }
