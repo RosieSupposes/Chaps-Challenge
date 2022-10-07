@@ -18,6 +18,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType.*;
 
@@ -105,7 +106,7 @@ public class Base extends JFrame {
             Load.previousGame();
             loadLevel();
 
-            recorder = new Recorder(level, timeSec);
+            recorder = new Recorder(level, timeSec, this);
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -165,7 +166,7 @@ public class Base extends JFrame {
         Load.resumeGame();
         loadLevel();
 
-        recorder = new Recorder(level, timeSec);
+        recorder = new Recorder(level, timeSec, this);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
@@ -176,7 +177,7 @@ public class Base extends JFrame {
         level = lvl;
         Load.loadLevel(lvl);
         loadLevel();
-        recorder = new Recorder(lvl, timeSec);
+        recorder = new Recorder(lvl, timeSec, this);
     }
 
     /**
@@ -269,22 +270,23 @@ public class Base extends JFrame {
         menu.requestFocus();
     }
 
-    public void undo(Action action) {
-        int entity = action.entityHash();
-        Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
-        Entity.Direction oldDir = getDirection(action.prevDir());
-        Entity.Direction newDir = getDirection(action.currDir());
-        ColorableTile.Color color = getColor(action.color());
-        //TODO tell Domain to undo
+    public void undo(List<Action> actions) {
+        Maze.undo(actions.stream().map(this::getAction).toList());
     }
 
-    public void apply(Action action) {
+    public void apply(List<Action> actions) {
+        Maze.apply(actions.stream().map(this::getAction).toList());
+    }
+
+    public Entity.Action getAction(Action action) {
         int entity = action.entityHash();
         Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
         Entity.Direction oldDir = getDirection(action.prevDir());
         Entity.Direction newDir = getDirection(action.currDir());
         ColorableTile.Color color = getColor(action.color());
-
+        Maze.Point point = new Maze.Point(action.x(), action.y());
+        Entity.Action.Interaction interaction = new Entity.Action.Interaction(actionType, color);
+        return new Entity.Action(entity, point, oldDir, newDir, interaction);
     }
 
     private Entity.Direction getDirection(String dir) {
