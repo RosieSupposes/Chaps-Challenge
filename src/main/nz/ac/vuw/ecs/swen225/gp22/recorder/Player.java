@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
-import nz.ac.vuw.ecs.swen225.gp22.app.Main;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 
 import javax.swing.*;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class Player extends JPanel {
     private final Base base;
-    private List<Action> actions;
+    private List<GameState> gameStates;
     private JSlider scrubber;
     private int currentAction = 0;
     private boolean isPlaying = false;
@@ -56,7 +55,7 @@ public class Player extends JPanel {
             gamePanel.repaint();
         }, "stepback");
 
-        scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
+        scrubber = gameStates == null ? new JSlider() : new JSlider(0, gameStates.size() - 1);
         scrubber.setPreferredSize(new Dimension(700, 25));
         scrubber.setValue(0);
         scrubber.addChangeListener(e -> {
@@ -80,7 +79,7 @@ public class Player extends JPanel {
 
         JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
             load();
-            if (actions != null) scrubber.setMaximum(actions.size());
+            if (gameStates != null) scrubber.setMaximum(gameStates.size());
         });
 
         JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
@@ -164,10 +163,10 @@ public class Player extends JPanel {
         // Only load if a file was selected
         if (fileChooser.getSelectedFile() != null) {
             Parser parser = new Parser(fileChooser.getSelectedFile());
-            actions = parser.getActions();
+            gameStates = parser.getActions();
             Load.loadLevel(parser.getLevel());
             if (scrubber != null) {
-                scrubber.setMaximum(actions.size() - 1);
+                scrubber.setMaximum(gameStates.size() - 1);
                 currentAction = 0;
                 scrubber.setValue(0);
                 gamePanel.repaint();
@@ -181,23 +180,21 @@ public class Player extends JPanel {
      * @param position the position to scrub to
      */
     private void scrub(int position) {
-        if (actions == null) return;
+        if (gameStates == null) return;
         if (position > currentAction) {
             // scrub forward
             for (int i = currentAction; i < position; i++) {
-                actions.get(i).execute();
+                gameStates.get(i).apply(base);
                 gamePanel.repaint();
             }
         } else if (position < currentAction) {
             // scrub backward
             for (int i = currentAction; i > position; i--) {
-                Action prevAction = actions.get(i - 1);
-                if (prevAction instanceof MoveAction m) { m.execute(); }
-                actions.get(i).undo();
+                gameStates.get(i).undo(base);
                 gamePanel.repaint();
             }
         }
-        currentAction = position < actions.size() ? position : actions.size() - 1;
+        currentAction = position < gameStates.size() ? position : gameStates.size() - 1;
     }
 
     /**
@@ -209,9 +206,7 @@ public class Player extends JPanel {
         new Thread(() -> {
             for (int i = currentAction; i > 0; i--) {
                 if (!isPlaying && !isRewinding) break;
-                Action prevAction = actions.get(i - 1);
-                if (prevAction instanceof MoveAction m) { m.execute(); }
-                actions.get(i).undo();
+                gameStates.get(i).undo(base);
                 gamePanel.repaint();
                 if (progress(i, isRewinding)) break;
             }
@@ -227,9 +222,9 @@ public class Player extends JPanel {
         isPlaying = true;
         isRewinding = false;
         new Thread(() -> {
-            for (int i = currentAction; i < actions.size(); i++) {
+            for (int i = currentAction; i < gameStates.size(); i++) {
                 if (!isPlaying && !isRewinding) break;
-                actions.get(i).execute();
+                gameStates.get(i).apply(base);
                 gamePanel.repaint();
                 if (progress(i, isPlaying)) break;
             }
@@ -246,7 +241,7 @@ public class Player extends JPanel {
      * @return true if the player should stop progressing.
      */
     private boolean progress(int i, boolean isProgressing) {
-        currentAction = i < actions.size() ? i : actions.size() - 1;
+        currentAction = i < gameStates.size() ? i : gameStates.size() - 1;
         scrubber.setValue(i);
         try {
             Thread.sleep(1000 / speed);
