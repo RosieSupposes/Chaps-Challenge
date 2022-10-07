@@ -26,7 +26,8 @@ public class Viewport extends JPanel implements ActionListener {
 
     private Tile[][] currentMaze = new Tile[GameConstants.NUM_GAME_TILE][GameConstants.NUM_GAME_TILE]; // 9x9 maze displayed on screen
     private Timer timer;
-    private int boundaries = 7; // maze is from 0-15 and the focus area is 4 to the left and right so 15-8
+    private int boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
+    private int boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
     private JLabel infofield = new JLabel("");
 
     /**
@@ -62,10 +63,10 @@ public class Viewport extends JPanel implements ActionListener {
         int playerY = Maze.player.getPos().y();
 
         if(playerX < focusX){ focusX = playerX; } // checking for the far left 
-        else if(playerX > Maze.getDimensions().x() - focusX - 1){ focusX = playerX - boundaries; } // checking for the far right
+        else if(playerX > Maze.getDimensions().x() - focusX - 1){ focusX = playerX - boundariesX; } // checking for the far right
         
         if(playerY < focusY){ focusY = playerY; } // checking for the top
-        else if(playerY > Maze.getDimensions().y() - focusY - 1){ focusY = playerY - boundaries; } // checking for bottom
+        else if(playerY > Maze.getDimensions().y() - focusY - 1){ focusY = playerY - boundariesY; } // checking for bottom
         
         focusX *= GameConstants.TILE_SIZE;
         focusY *= GameConstants.TILE_SIZE;
@@ -112,13 +113,12 @@ public class Viewport extends JPanel implements ActionListener {
         focusX = (focusX < 0) ? 0 : focusX;
         focusY = (focusY < 0) ? 0 : focusY; 
 
-        focusX = (focusX > 7) ? 7 : focusX;
-        focusY = (focusY > 7) ? 7 : focusY; 
+        focusX = (focusX > boundariesX) ? boundariesX : focusX;
+        focusY = (focusY > boundariesY) ? boundariesY : focusY; 
 
         for(int i = 0; i < GameConstants.NUM_GAME_TILE; i++) {
             for(int j = 0; j < GameConstants.NUM_GAME_TILE; j++) {
                 currentMaze[i][j] = Maze.getTile(new Maze.Point(i + focusX, j + focusY));
-
             }
         }
     }
