@@ -34,7 +34,7 @@ public class Viewport extends JPanel implements ActionListener {
      * Initialises a new maze upon the loading of a level.
      */
     public Viewport(){ 
-        timer = new Timer(300, this);
+        timer = new Timer(50, this);
         timer.start();
     }
 
