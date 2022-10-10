@@ -224,7 +224,7 @@ public class Base extends JFrame {
     public void exitGame() {
         System.out.println("Exit");
         runClosePhase();
-        System.exit(0);
+        this.dispose();
     }
 
     public Maze.Point getBoardSize(){
