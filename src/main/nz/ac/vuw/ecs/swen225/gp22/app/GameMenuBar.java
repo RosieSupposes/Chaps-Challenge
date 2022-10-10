@@ -78,7 +78,7 @@ public class GameMenuBar extends JMenuBar {
         newLevel.setForeground(GameConstants.TEXT_COLOR);
         newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
 
-        GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newGame(1));
+        GameMenuItem levelOne = new GameMenuItem("Level One", e -> base.newGame(1));
         newLevel.add(levelOne);
         components.add(levelOne);
 
@@ -111,7 +111,7 @@ public class GameMenuBar extends JMenuBar {
     }
 
     public ImageIcon getIcon(String filename) {
-        URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
+        URL imagePath = this.getClass().getResource("/UI/" + filename + "_icon.png");
         ImageIcon imageIcon = new ImageIcon(imagePath);
         Image img = imageIcon.getImage();
         Image image = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
