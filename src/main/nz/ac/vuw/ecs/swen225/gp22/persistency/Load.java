@@ -107,7 +107,6 @@ public class Load {
             loadJar(parser.getLevel());
             List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof Entity).map(e -> (Entity) e).toList();
             Maze.entities.addAll(entities);
-            System.out.println(Maze.entities);
         }
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
