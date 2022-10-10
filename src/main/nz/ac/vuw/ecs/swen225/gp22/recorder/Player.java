@@ -14,9 +14,10 @@ import java.util.List;
  * The player for the recorder. Used to play back recorded actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.12
+ * @version 1.13
  */
 public class Player extends JPanel {
+    private static final int MAX_SPEED = 5;
     private final Base base;
     private List<GameState> gameStates;
     private JSlider scrubber;
@@ -26,8 +27,11 @@ public class Player extends JPanel {
     private int speed = 1;
     private GameButton playPause;
     private JPanel gamePanel;
+    private GameButton speedBtn;
 
     private static final Dimension BUTTON_DIM = new Dimension(50, 30);
+    private static final Dimension LONG_BTN = new Dimension(BUTTON_DIM.width * 2, BUTTON_DIM.height);
+    private static final Dimension SLIDER_DIM = new Dimension(700, 30);
 
     /**
      * Create a new player.
@@ -55,8 +59,8 @@ public class Player extends JPanel {
             gamePanel.repaint();
         }, "stepback");
 
-        scrubber = gameStates == null ? new JSlider() : new JSlider(0, gameStates.size() - 1);
-        scrubber.setPreferredSize(new Dimension(700, 25));
+        scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
+        scrubber.setPreferredSize(SLIDER_DIM);
         scrubber.setValue(0);
         scrubber.addChangeListener(e -> {
             JSlider source = (JSlider) e.getSource();
@@ -81,7 +85,7 @@ public class Player extends JPanel {
             isPlaying = false;
         }, "home");
 
-        JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
+        JButton load = new GameButton("Load", new Dimension(75, 30), e -> {
             load();
             if (gameStates != null) scrubber.setMaximum(gameStates.size());
         });
@@ -93,7 +97,7 @@ public class Player extends JPanel {
             gamePanel.repaint();
         }, "stepforward");
 
-        JButton rewind = new GameButton("", BUTTON_DIM, e -> {
+        JButton rewind = new GameButton("", LONG_BTN, e -> {
             playPause.changeIcon("pause");
             rewind();
         }, "rewind");
@@ -103,24 +107,9 @@ public class Player extends JPanel {
         }, "play");
 
 
-        JPanel speedPanel = new JPanel() {
-            {
-                setLayout(new BorderLayout());
-                setPreferredSize(new Dimension(75, 25));
-
-                JLabel speedLabel = new JLabel("Speed:");
-
-                JSpinner speed = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
-                speed.addChangeListener(e -> Player.this.speed = (int) ((JSpinner) e.getSource()).getValue());
-                speed.setBackground(Color.MAGENTA);
-                speed.getEditor().getComponent(0).setBackground(Color.MAGENTA);
-                speed.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-
-                setBackground(Color.MAGENTA);
-                add(speedLabel, BorderLayout.WEST);
-                add(speed, BorderLayout.EAST);
-            }
-        };
+        speedBtn = new GameButton("", LONG_BTN, e -> {
+            updateSpeed();
+        }, "speed" + this.speed);
 
 
         setLayout(new FlowLayout());
@@ -132,10 +121,19 @@ public class Player extends JPanel {
         add(load);
         add(rewind);
         add(playPause);
-        add(speedPanel);
+        add(speedBtn);
 
         setPreferredSize(new Dimension(800, 520));
         setBackground(Color.MAGENTA);
+    }
+
+    /**
+     * Update the speed of the replay.
+     */
+    private void updateSpeed() {
+        speed = speed == MAX_SPEED ? 1 : speed + 1;
+        System.out.println(this.speed);
+        speedBtn.changeIcon("speed" + this.speed);
     }
 
     /**

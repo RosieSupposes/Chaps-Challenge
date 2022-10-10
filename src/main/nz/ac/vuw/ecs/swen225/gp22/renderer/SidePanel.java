@@ -23,7 +23,7 @@ import java.awt.event.ActionListener;
  * @version 1.2
  */
 public class SidePanel extends JPanel implements ActionListener {
-
+    // inventory is 3X4 grid
     private int numColsTiles = 3;
     private int numRowsTiles = 4;
 
@@ -77,7 +77,7 @@ public class SidePanel extends JPanel implements ActionListener {
         setLabelFont(uncollectedTreasures);
         setLabelFont(inventory);
 
-        renderInventory(g);
+        renderInventory(g); // display the collected keys
 
         add(level);
         add(time);
@@ -98,14 +98,15 @@ public class SidePanel extends JPanel implements ActionListener {
             }
         }
 
-        // put the keys side by side on the inventory tiles
         int keyXPos = 0;
-        int keyJPos = -1;
+        int keyYPos = -1;
         for (int x = 0; x < Maze.player.getAllKeys().size(); x++){
-            if (x % 2 == 0){ keyJPos++; }
-            BufferedImage key = getKeyImg(Maze.player.getAllKeys().get(x)); // check the key colour
-            g.drawImage(key, x*GameConstants.TILE_SIZE+xOffset, keyJPos*GameConstants.TILE_SIZE+yOffset, this);
-            keyXPos = (keyXPos == 0 ? 1 : 0); // if a tile is occuppied, place the next collected key to the right side
+            if (x < GameConstants.NUM_INVENTORY_TILES){ // stop displaying when the inventory tiles are full
+                if ( x % 4 == 0 ){ keyYPos++; keyXPos = 0; } // move to the start of the next row when the current one is full
+                BufferedImage key = getKeyImg(Maze.player.getAllKeys().get(x)); // check the key colour
+                g.drawImage(key, keyXPos*GameConstants.TILE_SIZE+xOffset, keyYPos*GameConstants.TILE_SIZE+yOffset, this);
+                keyXPos++; // place key to the next unoccupied tile
+            }            
         }
     }
 
@@ -130,13 +131,13 @@ public class SidePanel extends JPanel implements ActionListener {
      */
     private BufferedImage getKeyImg(ColorableTile.Color c) {
         // check the colours against the four different ones available
-            switch (c){
-              case Blue: return Img.BlueKeyNB.image;
-              case Green: return Img.GreenKeyNB.image;
-              case Red: return Img.RedKeyNB.image;
-              case Yellow: return Img.YellowKeyNB.image;
-              default: throw new IllegalArgumentException("Invalid colour./n");
-            }
+        switch (c){
+            case Blue: return Img.BlueKeyNB.image;
+            case Green: return Img.GreenKeyNB.image;
+            case Red: return Img.RedKeyNB.image;
+            case Yellow: return Img.YellowKeyNB.image;
+            default: throw new IllegalArgumentException("Invalid colour./n");
+        }
     }
 
     @Override

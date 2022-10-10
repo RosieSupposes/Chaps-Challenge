@@ -55,10 +55,10 @@ public class Base extends JFrame {
         menuScreen();
         System.out.println(this.getSize());
 
-        pauseDialog = new GameDialog(this, "Pause");
-        saveDialog = new GameDialog(this, "Save");
-        gameOverDialog = new GameDialog(this, "GameOver");
-        gameWinDialog = new GameDialog(this, "GameCompleted");
+        pauseDialog = new GameDialog(this, GameDialog.PopUp.Pause);
+        saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
+        gameOverDialog = new GameDialog(this, GameDialog.PopUp.GameOver);
+        gameWinDialog = new GameDialog(this, GameDialog.PopUp.GameCompleted);
 
         setVisible(true);
         setResizable(false);
@@ -211,14 +211,20 @@ public class Base extends JFrame {
      */
     public void saveGame() {
         Save.saveGame();
+        recorder.save();
         System.out.println("Save");
         recorder.save();
         saveDialog.visibleFocus();
     }
 
     /**
-     * Resets focus to Base window.
+     * Saves the game and then exits
      */
+    public void saveExit() {
+        this.saveGame();
+        this.exitGame();
+    }
+
     public void resetFocus() {
         currentPanel.requestFocus();
     }
@@ -411,6 +417,8 @@ public class Base extends JFrame {
             level.repaint(); //draws game
             timeMS += delay;
             if (timeMS % 1000 == 0) {
+                //TODO tell viewport current time
+
                 timeSec--;
                 side.setTime(timeSec);
             }
@@ -426,7 +434,7 @@ public class Base extends JFrame {
             }
 //            else if (Maze.gameComplete()) { //TODO uncomment when ready for game ending/level switching
 //                playerWon();
-//           }
+//            }
         });
         gameTimer.start();
 

@@ -28,9 +28,10 @@ public class GameMenuBar extends JMenuBar {
      */
     public GameMenuBar(Base base) {
         this.base = base;
-        menuItemWidth = GameConstants.GAME_WINDOW_SIZE / 6;
+        menuItemWidth = GameConstants.GAME_WINDOW_SIZE / 7;
         addHomeButton();
         this.setBackground(GameConstants.BUTTON_COLOR);
+        this.setAlignmentX(JComponent.LEFT_ALIGNMENT);
     }
 
     /**
@@ -76,9 +77,9 @@ public class GameMenuBar extends JMenuBar {
         JMenu newLevel = new JMenu("New");
         newLevel.setBackground(GameConstants.BUTTON_COLOR);
         newLevel.setForeground(GameConstants.TEXT_COLOR);
-        newLevel.setMaximumSize(new Dimension(menuItemWidth, 30));
+        newLevel.setPreferredSize(new Dimension(menuItemWidth, 30));
 
-        GameMenuItem levelOne = new GameMenuItem("level One", e -> base.newGame(1));
+        GameMenuItem levelOne = new GameMenuItem("Level One", e -> base.newGame(1));
         newLevel.add(levelOne);
         components.add(levelOne);
 
@@ -89,9 +90,13 @@ public class GameMenuBar extends JMenuBar {
         this.add(newLevel);
         components.add(newLevel);
 
-        GameMenuItem save = new GameMenuItem("Save", e -> base.saveGame(), menuItemWidth);
-        this.add(save);
-        components.add(save);
+        GameMenuItem saveExit = new GameMenuItem("Save and Exit", e -> base.saveExit(), menuItemWidth);
+        this.add(saveExit);
+        components.add(saveExit);
+
+        GameMenuItem quickSave = new GameMenuItem("Quick Save", e -> base.saveGame(), menuItemWidth);
+        this.add(quickSave);
+        components.add(quickSave);
     }
 
     public void addLoadButton() {
@@ -111,7 +116,7 @@ public class GameMenuBar extends JMenuBar {
     }
 
     public ImageIcon getIcon(String filename) {
-        URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
+        URL imagePath = this.getClass().getResource("/UI/" + filename + "_icon.png");
         ImageIcon imageIcon = new ImageIcon(imagePath);
         Image img = imageIcon.getImage();
         Image image = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
