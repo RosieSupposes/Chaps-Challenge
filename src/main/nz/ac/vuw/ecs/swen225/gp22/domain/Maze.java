@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
 
 /**
@@ -70,8 +69,6 @@ public class Maze{
         treasuresLeft = treasures;
         player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
-
-        entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
@@ -146,9 +143,9 @@ public class Maze{
         changeMap.forEach(a -> {
             if(a.interaction().type() == ActionType.Pinged) getEntity(a.id()).unping();
             else{
-                a.interaction().type().undo(getEntity(a.id()), a.interaction().color());
                 getEntity(a.id()).setDir(a.oldDir());
                 getEntity(a.id()).move(a.moveVector().x() * -1, a.moveVector().y() * -1);
+                a.interaction().type().undo(getEntity(a.id()).getPos().add(a.moveVector()), a.interaction().color());
             }
         });
     }

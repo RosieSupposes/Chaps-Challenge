@@ -29,19 +29,35 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * A record used to store an action taken. This will be 
      * used to revert actions when replaying a game.
      */
-    @SuppressWarnings("rawtypes")
     public record Action(int id, Maze.Point moveVector, Direction oldDir, Direction newDir, Interaction interaction){
         public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
             public enum ActionType{
                 None,
-                PickupKey,
-                PickupTreasure,
-                UnlockDoor,
-                UnlockExit,
+                PickupKey{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new Key(pos, undoColor));
+                    }
+                },
+                PickupTreasure{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new Treasure(pos));
+                        Maze.addTreasure();
+                    }
+                },
+                UnlockDoor{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new LockedDoor(pos, undoColor));
+                    }
+                },
+                UnlockExit{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new LockedExit(pos));
+                    }
+                },
                 Pinged;
 
-                public void undo(Entity entity, ColorableTile.Color undoColor){ }
+                public void undo(Maze.Point pos, ColorableTile.Color undoColor){ }
             }
         }
     }
