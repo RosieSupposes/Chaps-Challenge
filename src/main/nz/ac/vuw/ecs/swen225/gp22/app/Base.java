@@ -227,6 +227,10 @@ public class Base extends JFrame {
         System.exit(0);
     }
 
+    public Maze.Point getBoardSize(){
+        return Maze.getDimensions();
+    }
+
     /**
      * When key is pressed, move player and tell recorder
      *

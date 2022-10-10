@@ -7,7 +7,6 @@ import java.time.Duration;
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.junit.jupiter.api.Test;
 import java.util.*;
-import java.util.stream.IntStream;
 import javax.swing.SwingUtilities;
 import java.awt.Robot;
 import java.awt.AWTException;
@@ -17,26 +16,44 @@ import java.awt.event.KeyEvent;
  * Class for Fuzz Testing
  * 
  * @author Gavin Lim, 300585341
- * @version 1.2
+ * @version 1.3
  */
 public class FuzzTest {
 
     static final Random r = new Random();
 
     // List of possible inputs
-    List<Integer> inputs = List.of(KeyEvent.VK_UP,
+    private final List<Integer> inputs = List.of(KeyEvent.VK_UP,
             KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN);
 
+    //Map of inputs and their opposite inputs
+    private final Map<Integer, Integer> inputsAndOpposite =
+            Map.of(KeyEvent.VK_UP, KeyEvent.VK_DOWN,
+                    KeyEvent.VK_DOWN, KeyEvent.VK_UP,
+                    KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+                    KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT);
+
     /**
-     * Generates a list of 100 valid inputs
+     * Generates a list of 500 valid inputs
+     * Chap will not move back to the tile he was previously on
      * 
-     * @return list of 100 valid inputs
+     * @return list of 500 valid inputs
      */
     private List<Integer> generateInputs() {
-        return IntStream.range(0, 100)
-                .map(i -> r.nextInt(inputs.size()))
-                .mapToObj(j -> inputs.get(j))
-                .toList();
+        int prev = -1;
+        List<Integer> moves = new ArrayList<>();
+        for(int i = 0; i < 500; i++) {
+            while(true) {
+                int random = r.nextInt(inputs.size());
+                int move = inputs.get(random);
+                if (prev == - 1 || move != inputsAndOpposite.get(prev)) {
+                    moves.add(move);
+                    prev = move;
+                    break;
+                }
+            }
+        }
+        return moves;
     }
 
     /**
