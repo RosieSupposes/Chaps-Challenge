@@ -234,8 +234,8 @@ public class GameDialog extends JDialog {
      * @return save button
      */
     public GameButton saveButton() {
-        return new GameButton("Save Game", BUTTON_SIZE, e -> {
-            base.saveGame();
+        return new GameButton("Save and Exit", BUTTON_SIZE, e -> {
+            base.saveExit();
         });
     }
 
