@@ -104,7 +104,7 @@ public class FuzzTest {
         try {
             Robot robot = new Robot();
             try {
-                SwingUtilities.invokeLater(() -> new Base().newGame(1));
+                SwingUtilities.invokeLater(() -> new Base().newGame(2));
             } catch (Error e) {
 
             }
