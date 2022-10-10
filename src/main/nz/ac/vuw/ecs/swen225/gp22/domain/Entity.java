@@ -49,6 +49,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
                 UnlockDoor{
                     public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
                         Maze.setTile(pos, new LockedDoor(pos, undoColor));
+                        Maze.player.addKey(undoColor);
                     }
                 },
                 UnlockExit{
