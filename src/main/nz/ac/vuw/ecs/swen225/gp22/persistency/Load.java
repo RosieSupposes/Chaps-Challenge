@@ -6,7 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -87,7 +87,7 @@ public class Load {
     }
 
     public static URLClassLoader getClassLoader() {
-        return classLoader != null ? classLoader : null;
+        return classLoader;
     }
 
     /**
@@ -100,8 +100,9 @@ public class Load {
         List<Tile> tiles = parser.getTiles();
         if (parser.entitiesPresent()) {
             loadJar(parser.getLevel());
-            List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof EnemyEntity<?>).map(e -> (Entity) e).toList();
+            List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof Entity).map(e -> (Entity) e).toList();
             Maze.entities.addAll(entities);
+            System.out.println(Maze.entities);
         }
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
@@ -124,15 +125,16 @@ public class Load {
      *
      * @param levelNum level number to load associated jar for
      */
-    private static void loadJar(int levelNum){
+    private static void loadJar(int levelNum) {
         File file = getFile("level/level" + levelNum + ".jar");
-        try{
+        try {
             URLClassLoader child = new URLClassLoader(
-                new URL[]{file.toURI().toURL()},
-                Load.class.getClassLoader()
+                    new URL[]{file.toURI().toURL()},
+                    Load.class.getClassLoader()
             );
             classLoader = child;
-        } catch (MalformedURLException e) {
+            //BufferedImage img = ImageIO.read(classLoader.getResource("resources/imgs/EnemyDown.png"));
+        } catch (IOException e) {
             classLoader = null;
         }
     }

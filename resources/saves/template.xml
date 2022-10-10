@@ -19,9 +19,9 @@
         </inventory>
     </player>
     <entities>
-        <entity ID="gummyGuard" x="5" y="5" direction="Right"/>
-        <entity ID="gummyGuard" x="5" y="6" direction="Right"/>
-        <entity ID="gummyGuard" x="5" y="7" direction="Right"/>
+        <entity ID="GummyGuard" x="5" y="5" direction="Right"/>
+        <entity ID="GummyGuard" x="5" y="6" direction="Right"/>
+        <entity ID="GummyGuard" x="5" y="7" direction="Right"/>
     </entities>
     <tiles>
         <tile ID="info" x="0" y="1">
