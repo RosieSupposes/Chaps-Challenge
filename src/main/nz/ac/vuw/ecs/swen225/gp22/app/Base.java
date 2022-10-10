@@ -1,11 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.*;
+import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
+import nz.ac.vuw.ecs.swen225.gp22.domain.EnemyEntity;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Action;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
-import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SidePanel;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
@@ -16,9 +19,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType.*;
 
@@ -37,10 +38,10 @@ public class Base extends JFrame {
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
     private JPanel currentPanel; //for setting keylistener on
-    private GameDialog pauseDialog;
-    private GameDialog saveDialog;
-    private GameDialog gameOverDialog;
-    private GameDialog gameWinDialog;
+    private final GameDialog pauseDialog;
+    private final GameDialog saveDialog;
+    private final GameDialog gameOverDialog;
+    private final GameDialog gameWinDialog;
 
     private static int level = 1;
 
@@ -457,7 +458,7 @@ public class Base extends JFrame {
             String oldDir = action.oldDir().toString();
             String newDir = action.newDir().toString();
             String color = action.interaction().color().toString();
-            int entityHash = action.hashcode();
+            int entityHash = action.id();
             int vx = action.moveVector().x();
             int vy = action.moveVector().y();
             actionRecords.add(new Action(entityHash, actionType, vx, vy, oldDir, newDir, color));
