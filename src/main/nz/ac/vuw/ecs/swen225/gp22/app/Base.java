@@ -50,10 +50,10 @@ public class Base extends JFrame {
         menuScreen();
         System.out.println(this.getSize());
 
-        pauseDialog = new GameDialog(this, "Pause");
-        saveDialog = new GameDialog(this, "Save");
-        gameOverDialog = new GameDialog(this, "GameOver");
-        gameWinDialog = new GameDialog(this, "GameCompleted");
+        pauseDialog = new GameDialog(this, GameDialog.PopUp.Pause);
+        saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
+        gameOverDialog = new GameDialog(this, GameDialog.PopUp.GameOver);
+        gameWinDialog = new GameDialog(this, GameDialog.PopUp.GameCompleted);
 
         setVisible(true);
         setResizable(false);
