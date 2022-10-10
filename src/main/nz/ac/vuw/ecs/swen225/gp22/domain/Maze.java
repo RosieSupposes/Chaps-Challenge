@@ -33,9 +33,6 @@ public class Maze{
     /** Represents how many more {@link Treasure} tiles are still on the map. */
     private static int treasuresLeft;
 
-    /** Stores the name of the next level to load. If empty or null then the {@link #gameComplete() game over flag} returns true. */
-    private static String nextLevel;
-
     /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
 
@@ -68,7 +65,6 @@ public class Maze{
 
         treasuresLeft = treasures;
         player = new Player(new Point(0, 0), Entity.Direction.Down);
-        nextLevel = "";
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
@@ -180,11 +176,8 @@ public class Maze{
     /** @return The number of treasures left to collect. */
     public static int getTreasuresLeft(){ return treasuresLeft; }
 
-    /** @return The name of the next level to load. */
-    public static String getNextLevel(){ return nextLevel; }
-
     /** @return Whether or not there are more levels to load. */
-    public static boolean gameComplete(){ return nextLevel == null || nextLevel.equals(""); }
+    public static boolean gameComplete(){ return getTile(player.getPos()) instanceof Exit; }
 
     /** @return Whether or not the player has lost the game. */
     public static boolean isGameLost(){ return gameLost; }
