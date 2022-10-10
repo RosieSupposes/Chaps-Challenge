@@ -60,6 +60,10 @@ public class Parser {
     public int getNumKeysCollected(){
         return intFromElement(document.getRootElement().element("saveInfo"),"keysCollected");
     }
+
+    public int getLevel(){
+        return intFromAttribute(document.getRootElement(),"level");
+    }
     /**
      * Parse the saved player information from the file
      * create player at saved position and direction

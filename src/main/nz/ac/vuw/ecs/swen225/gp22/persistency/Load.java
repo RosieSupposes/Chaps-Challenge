@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
 
@@ -102,7 +103,6 @@ public class Load {
             loadJar(parser.getLevel());
             List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof Entity).map(e -> (Entity) e).toList();
             Maze.entities.addAll(entities);
-            System.out.println(Maze.entities);
         }
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
