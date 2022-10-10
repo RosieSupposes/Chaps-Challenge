@@ -9,13 +9,11 @@ import java.awt.event.ActionListener;
 
 public class GameMenuItem extends JMenuItem {
 
-    ImageIcon imageIcon;
-
     public GameMenuItem(String name, ActionListener actionList, int width) {
         super(name);
         setUp(actionList);
 
-        this.setMaximumSize(new Dimension(width, 30));
+//        this.setMaximumSize(new Dimension(width, 30));
     }
 
     public GameMenuItem(String name, ActionListener actionList, int width, ImageIcon imageIcon) {
@@ -24,7 +22,6 @@ public class GameMenuItem extends JMenuItem {
 
         this.setMaximumSize(new Dimension(width, 30));
 
-        this.imageIcon = imageIcon;
         this.setIcon(imageIcon);
     }
 
@@ -37,6 +34,7 @@ public class GameMenuItem extends JMenuItem {
         this.addActionListener(actionList);
         this.setBackground(GameConstants.BUTTON_COLOR);
         this.setForeground(GameConstants.TEXT_COLOR);
+        this.setHorizontalAlignment(SwingConstants.LEFT);
     }
 
     public void changeActionListener(ActionListener action) {

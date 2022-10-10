@@ -186,9 +186,18 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
-        Save.saveGame(); //TODO persistency should choose name, App should pass current time
+        Save.saveGame();
+        recorder.save();
         System.out.println("Save");
         saveDialog.visibleFocus();
+    }
+
+    /**
+     * Saves the game and then exits
+     */
+    public void saveExit() {
+        this.saveGame();
+        this.exitGame();
     }
 
     public void resetFocus() {
