@@ -436,9 +436,9 @@ public class Base extends JFrame {
             if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();
             }
-//            else if (Maze.gameComplete()) { //TODO uncomment when ready for game ending/level switching
-//                playerWon();
-//            }
+            else if (Maze.gameComplete()) {
+                playerWon();
+            }
         });
         gameTimer.start();
 
