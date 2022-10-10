@@ -55,6 +55,8 @@ public class Load {
         Base.setTime(60);
         Base.setLevel(levelNum);
         loadGame(getFile("levels/level" + levelNum));
+        Base.setLevel(levelNum);
+        Base.setTime(60);
     }
 
     /**
@@ -71,12 +73,13 @@ public class Load {
      * @return an int representing how long the previous game was played for
      */
     public static void previousGame() {
-        if(!previousGamePresent()){
+        if(previousGamePresent()){
+            Parser parser = loadGame(getFile(previousGame));
+            Base.setTime(parser.getTime());
+            Base.setLevel(parser.getLevel());
+        } else {
             loadLevel(1);
         }
-        Parser parser = loadGame(getFile(previousGame));
-        Base.setTime(parser.getTime());
-        Base.setLevel(parser.getLevel());
     }
 
     /**
