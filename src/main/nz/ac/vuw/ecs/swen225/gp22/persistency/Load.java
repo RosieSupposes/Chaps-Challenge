@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
 
