@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.13
+ * @version 1.14
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -30,7 +30,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * used to revert actions when replaying a game.
      */
     @SuppressWarnings("rawtypes")
-    public record Action(int hashcode, Maze.Point moveVector, Direction oldDir, Direction newDir, Interaction interaction){
+    public record Action(int id, Maze.Point moveVector, Direction oldDir, Direction newDir, Interaction interaction){
         public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
             public enum ActionType{
@@ -55,6 +55,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /** The action which the entity has taken, used for recorder. */
     public Action action; 
 
+    /** Used to identify an entity during playback. */
+    private final int id;
+
     /**
      * Default constructor, sets the position and direction of the entity.
      * 
@@ -64,6 +67,8 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public Entity(Maze.Point entityPos, Direction facingDir){
         setPos(entityPos);
         setDir(facingDir);
+        id = Maze.globalID;
+        Maze.globalID++;
     }
 
     /** Non-player entities will act based on how often this is called. */
@@ -146,6 +151,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
 
     /** @return The {@link #facingDir direction} the entity is facing. */
     public Direction getDir(){ return facingDir; }
+
+    /** @return The ID of the entity. */
+    public int id(){ return id; }
 
     /**
      * Sets the {@link #entityPos position} of the entity.

@@ -40,7 +40,11 @@ public class Maze{
     /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
 
+    /** Flag used to check if the player was killed. */
     private static boolean gameLost;
+
+    /** Used to make entity IDs. */
+    public static int globalID;
 
     /** 
      * Generates a new map. This will be used by the persistency module for level loading. 
@@ -53,6 +57,7 @@ public class Maze{
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
 
         gameLost = false;
+        globalID = 0;
         entities.clear();
 
         tileMap = new Tile[dimensions.x()][dimensions.y()];
@@ -124,10 +129,10 @@ public class Maze{
      */
     public static void apply(List<Entity.Action> changeMap){
         changeMap.forEach(a -> {
-            if(a.interaction().type() == ActionType.Pinged) getEntity(a.hashCode()).ping();
+            if(a.interaction().type() == ActionType.Pinged) getEntity(a.id()).ping();
             else{
-                getEntity(a.hashCode()).setDir(a.newDir());
-                getEntity(a.hashCode()).move(a.moveVector());
+                getEntity(a.id()).setDir(a.newDir());
+                getEntity(a.id()).move(a.moveVector());
             }
         });
     }
@@ -139,11 +144,11 @@ public class Maze{
      */
     public static void undo(List<Entity.Action> changeMap){
         changeMap.forEach(a -> {
-            if(a.interaction().type() == ActionType.Pinged) getEntity(a.hashCode()).unping();
+            if(a.interaction().type() == ActionType.Pinged) getEntity(a.id()).unping();
             else{
                 a.interaction().type().undo(getEntity(a.hashCode()), a.interaction().color());
-                getEntity(a.hashCode()).setDir(a.oldDir());
-                getEntity(a.hashCode()).move(a.moveVector().x() * -1, a.moveVector().y() * -1);
+                getEntity(a.id()).setDir(a.oldDir());
+                getEntity(a.id()).move(a.moveVector().x() * -1, a.moveVector().y() * -1);
             }
         });
     }
@@ -158,9 +163,9 @@ public class Maze{
      * @return The entity that matches the hash code.
      */
     @SuppressWarnings("rawtypes")
-    public static Entity getEntity(int hashcode){
-        if(player.hashCode() == hashcode) return player;
-        return entities.stream().filter(n -> n.hashCode() == hashcode).findFirst().get();
+    public static Entity getEntity(int id){
+        if(player.id() == id) return player;
+        return entities.stream().filter(n -> n.id() == id).findFirst().orElseThrow(() -> new IllegalArgumentException("No entity exists with given ID."));
     }
 
     /** Reduce the number of treasures left by 1. */
