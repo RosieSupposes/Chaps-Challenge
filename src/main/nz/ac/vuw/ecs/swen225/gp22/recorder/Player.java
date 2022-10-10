@@ -75,7 +75,11 @@ public class Player extends JPanel {
             }
         });
 
-        JButton home = new GameButton("", BUTTON_DIM, e -> base.menuScreen(), "home");
+        JButton home = new GameButton("", BUTTON_DIM, e -> {
+            base.menuScreen();
+            isRewinding = false;
+            isPlaying = false;
+        }, "home");
 
         JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
             load();
