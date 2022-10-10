@@ -104,23 +104,16 @@ public class Parser {
     }
 
     private Object parseEntity(Element entity) {
-
         Maze.Point position = getPoint(entity);
         Entity.Direction direction = Entity.Direction.valueOf(entity.attributeValue("direction"));
         String ID = entity.attributeValue("ID");
-        Class entityClass;
         try {
-            entityClass = Load.getClassLoader().loadClass("nz.ac.vuw.ecs.swen225.gp22.entities."+ID);
-            switch (ID) {
-                case "GummyGuard" -> {
-                    return entityClass.getConstructor(Maze.Point.class, Entity.Direction.class).newInstance(position, direction);
-                }
-            }
+            Class entityClass = Load.getClassLoader().loadClass("nz.ac.vuw.ecs.swen225.gp22.entities." + ID);
+            return entityClass.getConstructor(Maze.Point.class, Entity.Direction.class).newInstance(position, direction);
         } catch (Exception e) {
+            System.out.println("class not found"+e);
             return null;
         }
-
-        return null;
     }
 
     /**
@@ -192,5 +185,4 @@ public class Parser {
     private int intFromAttribute(Element element,String attributeName){
         return Integer.parseInt(element.attributeValue(attributeName));
     }
-
 }
