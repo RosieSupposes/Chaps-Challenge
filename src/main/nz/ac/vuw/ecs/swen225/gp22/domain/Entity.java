@@ -37,6 +37,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
                 PickupKey{
                     public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
                         Maze.setTile(pos, new Key(pos, undoColor));
+                        Maze.player.consumeKey(undoColor);
                     }
                 },
                 PickupTreasure{
