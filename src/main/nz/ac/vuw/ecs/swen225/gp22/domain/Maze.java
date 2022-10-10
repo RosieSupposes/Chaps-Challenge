@@ -146,7 +146,7 @@ public class Maze{
         changeMap.forEach(a -> {
             if(a.interaction().type() == ActionType.Pinged) getEntity(a.id()).unping();
             else{
-                a.interaction().type().undo(getEntity(a.hashCode()), a.interaction().color());
+                a.interaction().type().undo(getEntity(a.id()), a.interaction().color());
                 getEntity(a.id()).setDir(a.oldDir());
                 getEntity(a.id()).move(a.moveVector().x() * -1, a.moveVector().y() * -1);
             }
