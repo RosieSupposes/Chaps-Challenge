@@ -39,6 +39,7 @@ public class Save {
         mapInfo.addElement("width").addText(String.valueOf(dimensions.x()));
         mapInfo.addElement("height").addText(String.valueOf(dimensions.y()));
         mapInfo.addElement("treasures").addText(String.valueOf(Maze.getTreasuresLeft()));
+        mapInfo.addElement("nextLevel").addText(Maze.getNextLevel());
 
         int keyCount = Maze.player.keyCount();
         Element saveInfo = root.addElement("saveInfo");

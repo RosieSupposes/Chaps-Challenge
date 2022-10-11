@@ -5,6 +5,7 @@
         <width>16</width>
         <height>16</height>
         <treasures>5</treasures>
+        <nextLevel>1</nextLevel>
     </mapInfo>
     <saveInfo>
         <time>55</time>
