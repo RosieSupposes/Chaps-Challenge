@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
 
@@ -23,7 +24,7 @@ public class Load {
      * Load saved game from xml.
      * Open fileChooser.
      */
-    public static int resumeGame(){
+    public static void resumeGame(){
         JFileChooser fileChooser = new JFileChooser(resourceDirectory+"/saves");
         fileChooser.setDialogTitle("Select a game to load");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -34,10 +35,11 @@ public class Load {
         // only load if a file was selected
         if (fileChooser.getSelectedFile() != null) {
             Parser parser = loadGame(fileChooser.getSelectedFile());
-            return parser.getTime();
+            Base.setTime(parser.getTime());
+            Base.setLevel(parser.getLevel());
+        } else {
+            loadLevel(1);
         }
-        loadLevel(1);
-        return 0;
     }
 
     /**
@@ -46,6 +48,8 @@ public class Load {
      * @param levelNum level to load.
      */
     public static void loadLevel(int levelNum){
+        Base.setTime(60);
+        Base.setLevel(levelNum);
         loadGame(getFile("levels/level" + levelNum));
     }
 
@@ -62,13 +66,13 @@ public class Load {
      *
      * @return an int representing how long the previous game was played for
      */
-    public static int previousGame() {
+    public static void previousGame() {
         if(!previousGamePresent()){
             loadLevel(1);
-            return 0;
         }
         Parser parser = loadGame(getFile(previousGame));
-        return parser.getTime();
+        Base.setTime(parser.getTime());
+        Base.setLevel(parser.getLevel());
     }
 
     /**
