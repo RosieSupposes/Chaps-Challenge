@@ -6,6 +6,7 @@ import java.time.Duration;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.junit.jupiter.api.Test;
+
 import java.util.*;
 import javax.swing.SwingUtilities;
 import java.awt.Robot;
@@ -43,11 +44,11 @@ public class FuzzTest {
     private List<Integer> generateInputs() {
         int prev = -1;
         List<Integer> moves = new ArrayList<>();
-        for(int i = 0; i < 50; i++) {
-            while(true) {
+        for (int i = 0; i < 500; i++) {
+            while (true) {
                 int random = r.nextInt(inputs.size());
                 int move = inputs.get(random);
-                if (prev == - 1 || move != inputsAndOpposite.get(prev)) {
+                if (prev == -1 || move != inputsAndOpposite.get(prev)) {
                     moves.add(move);
                     prev = move;
                     break;
@@ -55,15 +56,6 @@ public class FuzzTest {
             }
         }
         return moves;
-    }
-
-    /**
-     * Generates a single valid input.
-     *
-     * @return single valid input.
-     */
-    private int generateOneInput() {
-        return inputs.get(r.nextInt(inputs.size()));
     }
 
     /**
@@ -98,18 +90,15 @@ public class FuzzTest {
             for (int i : generatedInputs) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        robot.keyPress(i);
+                        try {
+                            robot.keyPress(i);
+                            Thread.sleep(100);
+                            robot.keyRelease(i);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
-                try {
-                    Thread.sleep(100);
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            robot.keyRelease(i);
-                        }
-                    });
-                } catch (InterruptedException e) {
-                }
             }
         } catch (AWTException e) {
             e.printStackTrace();
@@ -124,10 +113,9 @@ public class FuzzTest {
     public void fuzzTests() {
         try {
             assertTimeout(Duration.ofSeconds(60), () -> test1());
-            Thread.sleep(5000);
+            Thread.sleep(1000);
             assertTimeout(Duration.ofSeconds(60), () -> test2());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
     }
