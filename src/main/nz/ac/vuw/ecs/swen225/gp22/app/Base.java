@@ -410,7 +410,7 @@ public class Base extends JFrame {
 
         runClosePhase();
 
-        JPanel game = new Viewport();
+        Viewport game = new Viewport();
         SidePanel side = new SidePanel(timeSec, level);
         side.setTime(timeSec);
         final JPanel level = new PhasePanel(game, side);
@@ -421,8 +421,6 @@ public class Base extends JFrame {
             level.repaint(); //draws game
             timeMS += delay;
             if (timeMS % 1000 == 0) {
-                //TODO tell viewport current time
-
                 timeSec--;
                 side.setTime(timeSec);
             }
@@ -432,6 +430,8 @@ public class Base extends JFrame {
                     .forEach(Entity::ping);
 
             transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
+
+            Maze.getChangeMap().forEach(e -> game.setAction(e.interaction().type().toString()));
 
             if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();
