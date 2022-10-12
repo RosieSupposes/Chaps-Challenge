@@ -20,7 +20,7 @@ import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
  * such as the player, free tiles, walls, keys, locked doors, treasures, locked exit, and exit.
  * 
  * @author Diana Batoon, 300475111 
- * @version 1.4
+ * @version 1.5
  */
 public class Viewport extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -82,7 +82,6 @@ public class Viewport extends JPanel implements ActionListener {
             displayInfo(inField, g2D);
         }
 
-        //TODO: draw the enemy for level 2
     }
 
 
@@ -92,7 +91,7 @@ public class Viewport extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!this.isValid()){ 
-            timer.stop(); // method doesn't get called anymore after new level is created
+            timer.stop(); // method doesn't get called anymore
             timer = null; // removes reference to the Viewport class
             return; 
         }
