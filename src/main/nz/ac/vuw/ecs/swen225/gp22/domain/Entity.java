@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.14
+ * @version 1.15
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -13,16 +13,31 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * representing the change in position.
      */
     public enum Direction{
-        Up(0, -1),
-        Down(0, 1),
-        Left(-1, 0),
-        Right(1, 0);
+        Up(0, -1){
+            @Override
+            public Direction opposite(){ return Down; }
+        },
+        Down(0, 1){
+            @Override
+            public Direction opposite(){ return Up; }
+        },
+        Left(-1, 0){
+            @Override
+            public Direction opposite(){ return Right; }
+        },
+        Right(1, 0){
+            @Override
+            public Direction opposite(){ return Left; }
+        };
 
         /** Amount the position of the entity will change by if it takes a step. */
         Maze.Point posChange;
 
         /** Default constructor to set {@link #posChange}. */
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
+
+        /** @return The opposite direction. */
+        public Direction opposite(){ return null; }
     }
 
     /**
