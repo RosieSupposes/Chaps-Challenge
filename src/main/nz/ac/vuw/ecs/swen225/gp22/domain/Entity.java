@@ -180,6 +180,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      */
     public void setPos(Maze.Point pos){ 
         if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
+        if(Maze.getTile(pos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         entityPos = pos; 
         updateObservers(); 
     }
