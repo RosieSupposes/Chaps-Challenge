@@ -2,7 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
+import nz.ac.vuw.ecs.swen225.gp22.app.GameDialog;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+import org.dom4j.DocumentException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -85,8 +87,8 @@ public class Player extends JPanel {
             isPlaying = false;
         }, "home");
 
-        JButton load = new GameButton("Load", new Dimension(75, 30), e -> {
-            load();
+        JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
+            try { load(); } catch (RuntimeException ignored) {} // If the user cancels the load, ignore it.
             if (gameStates != null) scrubber.setMaximum(gameStates.size());
         });
 
@@ -164,16 +166,24 @@ public class Player extends JPanel {
 
         // Only load if a file was selected
         if (fileChooser.getSelectedFile() != null) {
-            Parser parser = new Parser(fileChooser.getSelectedFile());
-            gameStates = parser.getActions();
-            Load.loadLevel(parser.getLevel());
-            if (scrubber != null) {
-                scrubber.setMaximum(gameStates.size() - 1);
-                currentAction = 0;
-                scrubber.setValue(0);
-                gamePanel.repaint();
+            try {
+                Parser parser = new Parser(fileChooser.getSelectedFile());
+                gameStates = parser.getActions();
+                Load.loadLevel(parser.getLevel());
+                if (scrubber != null) {
+                    scrubber.setMaximum(gameStates.size() - 1);
+                    currentAction = 0;
+                    scrubber.setValue(0);
+                    gamePanel.repaint();
+                }
+            } catch (DocumentException e) {
+                new GameDialog(base, "Error: Invalid file.").visibleFocus();
+                throw new IllegalArgumentException("Invalid file");
             }
+
+            return;
         }
+        throw new RuntimeException("No file selected");
     }
 
     /**
