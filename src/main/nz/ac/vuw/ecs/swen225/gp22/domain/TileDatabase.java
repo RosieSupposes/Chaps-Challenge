@@ -42,7 +42,7 @@ public class TileDatabase{
         Constructor<? extends Tile> c = (Constructor<? extends Tile>) tileDB.get(tileID).getConstructors()[0];
         if(c.getParameterCount() != tileParams.length) throw new IllegalArgumentException("Invalid parameter count.");
         for(int i = 0; i < c.getParameterCount(); i++){
-            if(!(tileParams[i].getClass() == c.getParameterTypes()[i])){
+            if(tileParams[i].getClass() != c.getParameterTypes()[i] && tileParams[i].getClass().getSuperclass() != c.getParameterTypes()[i]){
                 throw new IllegalArgumentException("Invalid parameter types.");
             }
         }
