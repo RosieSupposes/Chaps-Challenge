@@ -436,10 +436,13 @@ public class Base extends JFrame {
 
 			if (timeSec <= 0) {
 				playerDied();
-			} else if (Maze.gameComplete()) {
-				playerWon();
-			} else if (Maze.getNextLevel() != -1) {
-				nextLevel(Maze.getNextLevel());
+			} else if (Maze.gameWon()) {
+				if(Maze.gameComplete()){
+					playerWon();
+				}else{
+					assert Maze.getNextLevel() != 1;
+					nextLevel(Maze.getNextLevel());
+				}
 			}
 		});
 		gameTimer.start();
