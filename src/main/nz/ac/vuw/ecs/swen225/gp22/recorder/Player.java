@@ -46,6 +46,7 @@ public class Player extends JPanel {
         load();
         setup();
         setVisible(true);
+        scrubber.setValue(0);
     }
 
     /**
@@ -55,13 +56,12 @@ public class Player extends JPanel {
         gamePanel = base.getGameWindow();
 
         JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
-            scrubber.setValue(scrubber.getValue() - 1);
+            scrubber.setValue(currentAction - 1);
             isPlaying = false;
             isRewinding = false;
-            gamePanel.repaint();
         }, "stepback");
 
-        scrubber = gameStates == null ? new JSlider() : new JSlider(0, gameStates.size() - 1);
+        scrubber = gameStates == null ? new JSlider() : new JSlider(0, gameStates.size());
         scrubber.setPreferredSize(SLIDER_DIM);
         scrubber.setValue(0);
         scrubber.addChangeListener(e -> {
@@ -93,10 +93,9 @@ public class Player extends JPanel {
         });
 
         JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
-            scrubber.setValue(scrubber.getValue() + 1);
+            scrubber.setValue(currentAction + 1);
             isPlaying = false;
             isRewinding = false;
-            gamePanel.repaint();
         }, "stepforward");
 
         JButton rewind = new GameButton("", LONG_BTN, e -> {
@@ -201,12 +200,12 @@ public class Player extends JPanel {
             }
         } else if (position < currentAction) {
             // scrub backward
-            for (int i = currentAction; i > position; i--) {
+            for (int i = currentAction - 1; i >= position; i--) {
                 gameStates.get(i).undo(base);
                 gamePanel.repaint();
             }
         }
-        currentAction = position < gameStates.size() ? position : gameStates.size() - 1;
+        currentAction = Math.min(position, gameStates.size());
     }
 
     /**
