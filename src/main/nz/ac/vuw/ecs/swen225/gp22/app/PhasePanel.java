@@ -16,8 +16,8 @@ import java.util.List;
  * @version 1.1
  */
 public class PhasePanel extends JPanel {
-	Viewport gamePanel; //main square panel
-	SidePanel sidePanel; //side panel
+	JPanel gamePanel; //main square panel
+	JPanel sidePanel; //side panel
 	List<JComponent> components = new ArrayList<>(); //all components in panel
 
 	/**
@@ -26,7 +26,7 @@ public class PhasePanel extends JPanel {
 	 * @param gamePanel the panel in the main square
 	 * @param sidePanel the panel on the side
 	 */
-	public PhasePanel(Viewport gamePanel, SidePanel sidePanel) {
+	public PhasePanel(JPanel gamePanel, JPanel sidePanel) {
 		this.gamePanel = gamePanel;
 		this.sidePanel = sidePanel;
 		this.setLayout(new BorderLayout());
@@ -48,8 +48,17 @@ public class PhasePanel extends JPanel {
 		this.add(BorderLayout.EAST, sidePanel);
 	}
 
+	/**
+	 * If sidepanel has timer, update timer
+	 * @param time
+	 */
 	public void updateTime(int time) {
-		this.sidePanel.setTime(time);
+		if(this.sidePanel instanceof SidePanel sp){
+			sp.setTime(time);
+			this.sidePanel = sp;
+		}else{
+			throw new ClassCastException("Panel must be Side Panel");
+		}
 	}
 
 	/**
