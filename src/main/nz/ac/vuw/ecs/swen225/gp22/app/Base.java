@@ -30,60 +30,59 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
  * @version 1.8
  */
 public class Base extends JFrame {
-    private final List<JComponent> components = new ArrayList<>();
-    private int timeMS = 0;
-    private static int timeSec = 60;
-    private final int delay = 20;
-    private Timer gameTimer = new Timer(20, null);
-    private Recorder recorder;
-    private GameMenuBar currentMenuBar;
-    private JPanel currentPanel; //for setting keylistener on
-    private final GameDialog pauseDialog;
-    private final GameDialog saveDialog;
-    private final GameDialog gameOverDialog;
-    private final GameDialog gameWinDialog;
+	private final List<JComponent> components = new ArrayList<>();
+	private int timeMS = 0;
+	private static int timeSec = 60;
+	private Timer gameTimer = new Timer(20, null);
+	private Recorder recorder;
+	private GameMenuBar currentMenuBar;
+	private JPanel currentPanel; //for setting keylistener on
+	private final GameDialog pauseDialog;
+	private final GameDialog saveDialog;
+	private final GameDialog gameOverDialog;
+	private final GameDialog gameWinDialog;
     private final GameDialog nextLevelDialog;
+    private final int delay = 20;
 
-    private static int level = 1;
+	private static int level = 1;
 
-    /**
-     * Begin program here. Run menu phase.
-     */
-    public Base() {
-        assert SwingUtilities.isEventDispatchThread();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	/**
+	 * Begin program here. Run menu phase.
+	 */
+	public Base() {
+		assert SwingUtilities.isEventDispatchThread();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        menuScreen();
-        System.out.println(this.getSize());
+		menuScreen();
+		System.out.println(this.getSize());
 
-        pauseDialog = new GameDialog(this, GameDialog.PopUp.Pause);
-        saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
-        gameOverDialog = new GameDialog(this, GameDialog.PopUp.GameOver);
-        gameWinDialog = new GameDialog(this, GameDialog.PopUp.GameCompleted);
-        nextLevelDialog = new GameDialog(this,GameDialog.PopUp.NextLevel);
+		pauseDialog = new GameDialog(this, GameDialog.PopUp.Pause);
+		saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
+		gameOverDialog = new GameDialog(this, GameDialog.PopUp.GameOver);
+		gameWinDialog = new GameDialog(this, GameDialog.PopUp.GameCompleted);
 
-        setVisible(true);
-        setResizable(false);
-        pack();
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                runClosePhase();
-            }
-        });
-    }
 
-    /**
-     * remove all components in window, clears list and stops timer
-     */
-    public void runClosePhase() {
-        for (JComponent component : this.components) {
-            remove(component);
-        }
-        components.clear();
-        gameTimer.stop();
-    }
+		setVisible(true);
+		setResizable(false);
+		pack();
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				runClosePhase();
+			}
+		});
+	}
 
+	/**
+	 * remove all components in window, clears list and stops timer
+	 */
+	public void runClosePhase() {
+		for (JComponent component : this.components) {
+			remove(component);
+		}
+		components.clear();
+		gameTimer.stop();
+	}
     /**
      * Sets current level.
      *
@@ -192,7 +191,6 @@ public class Base extends JFrame {
 
         recorder = new Recorder(level, timeMS);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
-
         System.out.println("Load");
     }
 
@@ -219,17 +217,17 @@ public class Base extends JFrame {
         saveDialog.visibleFocus();
     }
 
-    /**
-     * Saves the game and then exits
-     */
-    public void saveExit() {
-        this.saveGame();
-        this.exitGame();
-    }
-
     public void resetFocus() {
         currentPanel.requestFocus();
     }
+
+	/**
+	 * Saves the game and then exits
+	 */
+	public void saveExit() {
+		this.saveGame();
+		this.exitGame();
+	}
 
     /**
      * Saves recorder, pops up game over screen.
@@ -251,25 +249,22 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
-    public void nextLevel() {
-        System.out.println("Level won");
-        recorder.save();
-        nextLevelDialog.visibleFocus();
-        gameTimer.stop();
-    }
+	public void nextLevel(int lvl) {
+		System.out.println("Level won");
+		recorder.save();
+		GameDialog nextLevelDialog = new GameDialog(this, lvl);
+		nextLevelDialog.visibleFocus();
+		gameTimer.stop();
+	}
 
-    /**
-     * exit the game.
-     */
-    public void exitGame() {
-        System.out.println("Exit");
-        runClosePhase();
-        System.exit(1);
-    }
-
-    public Maze.Point getBoardSize(){
-        return Maze.getDimensions();
-    }
+	/**
+	 * exit the game
+	 */
+	public void exitGame() {
+		System.out.println("Exit");
+		runClosePhase();
+		System.exit(0);
+	}
 
     /**
      * When key is pressed, move player and tell recorder.
@@ -299,31 +294,31 @@ public class Base extends JFrame {
         return new PhasePanel(game, side);
     }
 
-    /**
-     * Run and display menu
-     */
-    public void menuScreen() {
-        runClosePhase();
-        setJMenuBar(null);
+	/**
+	 * Run and display menu
+	 */
+	public void menuScreen() {
+		runClosePhase();
+		setJMenuBar(null);
 
 //        ImagePanel testGame = new ImagePanel("TEST_game",Main.GAME_SIZE,new Dimension(0,0));
 //        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
 //        PhasePanel menu = new PhasePanel(testGame,testSide);
 
-        ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameConstants.SIDE_SIZE, 0.8);
-        PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
+		ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameConstants.SIDE_SIZE, 0.8);
+		PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
-        currentPanel = menu;
-        changeKeyListener(new Controller(this));
+		currentPanel = menu;
+		changeKeyListener(new Controller(this));
 
-        add(BorderLayout.CENTER, menu);
-        components.add(menu);
-        components.addAll(menu.getAllComponents());
+		add(BorderLayout.CENTER, menu);
+		components.add(menu);
+		components.addAll(menu.getAllComponents());
 
-        setMinimumSize(GameConstants.WINDOW_SIZE);
-        pack();
-        menu.requestFocus();
-    }
+		setMinimumSize(GameConstants.WINDOW_SIZE);
+		pack();
+		menu.requestFocus();
+	}
 
     /**
      * Undoes action.
@@ -417,15 +412,15 @@ public class Base extends JFrame {
     public void loadLevel() {
         assert Maze.player != null;
 
-        runClosePhase();
+		runClosePhase();
 
-        JPanel game = new Viewport();
-        SidePanel side = new SidePanel(timeSec, level);
-        side.setTime(timeSec);
-        final JPanel level = new PhasePanel(game, side);
+		JPanel game = new Viewport();
+		SidePanel side = new SidePanel(timeSec, level);
+		side.setTime(timeSec);
+		final JPanel level = new PhasePanel(game, side);
 
-        timeMS = 0;
         gameTimer = new Timer(delay, unused -> {
+        timeMS = 0;
             assert SwingUtilities.isEventDispatchThread();
             level.repaint(); //draws game
             timeMS += delay;
@@ -437,35 +432,32 @@ public class Base extends JFrame {
             Maze.entities.stream()
                     .filter(e -> e instanceof EnemyEntity<?> ee && timeMS % ee.getSpeed() == 0)
                     .forEach(Entity::ping);
-
             transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
 
-            if (timeSec <= 0 || Maze.isGameLost()) {
-                playerDied();
-            }
-            else if (Maze.gameComplete()) {
-                playerWon();
-            }
-//            else if(Maze.isNextLevel()){
-//                nextLevel();
-//            }
-        });
-        gameTimer.start();
+			if (timeSec <= 0) {
+				playerDied();
+			} else if (Maze.gameComplete()) {
+				playerWon();
+			} else if (Maze.getNextLevel() != -1) {
+				nextLevel(Maze.getNextLevel());
+			}
+		});
+		gameTimer.start();
 
-        currentPanel = level;
-        changeKeyListener(new Controller(this, false));
+		currentPanel = level;
+		changeKeyListener(new Controller(this, false));
 
-        add(BorderLayout.CENTER, level);
-        components.add(level);
-        currentMenuBar = new GameMenuBar(this);
-        currentMenuBar.addGameButtons();
-        currentMenuBar.addLoadButton();
-        currentMenuBar.addExitButton();
-        setJMenuBar(currentMenuBar);
+		add(BorderLayout.CENTER, level);
+		components.add(level);
+		currentMenuBar = new GameMenuBar(this);
+		currentMenuBar.addGameButtons();
+		currentMenuBar.addLoadButton();
+		currentMenuBar.addExitButton();
+		setJMenuBar(currentMenuBar);
 
-        pack();
-        level.requestFocus();  //need to be after pack
-    }
+		pack();
+		level.requestFocus();  //need to be after pack
+	}
 
     /**
      * transforms list of Domain actions into list of Recorder actions.
