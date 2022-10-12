@@ -39,7 +39,7 @@ public class Parser {
      *
      * @return the list of actions
      */
-    public List<GameState> getActions() {
+    public List<GameState> getStates() {
         List<Element> nodes = document.getRootElement().elements();
         return nodes.stream().map(this::parseState).toList();
     }
