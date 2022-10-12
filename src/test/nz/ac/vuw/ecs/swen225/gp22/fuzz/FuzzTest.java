@@ -94,7 +94,7 @@ public class FuzzTest {
                     }
                 });
                 try {
-                    Thread.sleep(5);
+                    Thread.sleep(3);
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             robot.keyRelease(i);
