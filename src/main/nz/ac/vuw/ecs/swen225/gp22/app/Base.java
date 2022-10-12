@@ -431,9 +431,9 @@ public class Base extends JFrame {
 					.filter(e -> e instanceof EnemyEntity<?> ee && timeMS % ee.getSpeed() == 0)
 					.forEach(Entity::ping);
 
-			transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
-
-			game.setAction(Maze.getChangeMap().stream().map(a -> a.interaction().type()).collect(Collectors.toList()));
+			List<Entity.Action> actions = Maze.getChangeMap();
+			transformActions(actions).forEach(a -> recorder.addAction(a, timeMS));
+			game.setAction(actions.stream().map(a -> a.interaction().type()).collect(Collectors.toList()));
 
 			if (timeSec <= 0 || Maze.isGameLost()) {
 				playerDied();
