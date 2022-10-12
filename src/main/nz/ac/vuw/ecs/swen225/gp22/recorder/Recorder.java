@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -17,29 +18,38 @@ import org.dom4j.io.XMLWriter;
  * The recorder for the game. Used to record actions.
  *
  * @author Christopher Sa, 300570735
- * @version 1.2
+ * @version 1.3
  */
 public class Recorder {
     private final int level;
-    private final List<Action> actions;
+    private final List<GameState> gameStates;
+    private GameState prevState;
 
     /**
      * Create a new recorder.
      *
      * @param lvl the level to record
+     * @param time the time of the game
      */
-    public Recorder(int lvl) {
+    public Recorder(int lvl, int time) {
         level = lvl;
-        actions = new ArrayList<>();
+        gameStates = new ArrayList<>();
+        prevState = new GameState(0, time);
+        gameStates.add(prevState);
     }
 
     /**
      * Add an action to the recorder.
      *
      * @param action The action to add.
+     * @param time The time of the action.
      */
-    public void addAction(Action action) {
-        actions.add(action);
+    public void addAction(Action action, int time) {
+        if (prevState.getTime() != time) {
+            prevState = new GameState(gameStates.size(), time);
+            gameStates.add(prevState);
+        }
+        prevState.addAction(action);
     }
 
     /**
@@ -48,7 +58,7 @@ public class Recorder {
     public void save() {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("game").addAttribute("level", String.valueOf(level));
-        actions.forEach(action -> root.add(action.toXML()));
+        gameStates.forEach(state -> root.add(state.toxml()));
 
         String filename = System.getProperty("user.dir") + "/resources/recordings/"
             + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";

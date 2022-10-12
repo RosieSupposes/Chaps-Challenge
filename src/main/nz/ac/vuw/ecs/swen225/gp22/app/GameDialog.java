@@ -1,10 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 /**
@@ -16,291 +17,299 @@ import java.util.List;
  */
 public class GameDialog extends JDialog {
 
-    private static final Dimension BUTTON_SIZE = new Dimension(180, 30);
-    private int xOffset;
-    private int yOffset;
-    private int width;
-    private int height;
-    private Base base;
-    private Timer timer = new Timer(20, e -> {
-    });
+	private static final Dimension BUTTON_SIZE = new Dimension(180, 30);
+	private int width = 230;
+	private int height;
+	private int xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
+	private int yOffset = GameConstants.WINDOW_HEIGHT / 4;
+	private final Base base;
+	private JLabel info;
+	private Timer timer = new Timer(20, e -> {
+	});
 
-    public enum PopUp{
-        Pause,
-        GameOver,
-        GameCompleted,
-        Save;
-    }
+	public enum PopUp {
+		Pause,
+		GameOver,
+		GameCompleted,
+		NextLevel,
+		Save;
+	}
 
-    /**
-     * New Dialog window, can create four types based on type passed in
-     *
-     * @param base current base
-     * @param type Pause, GameOver, GameComplete, Save
-     */
-    public GameDialog(Base base, PopUp type) {
-        this.base = base;
-        setUpWindow();
-        List<JComponent> components = List.of();
-        switch (type) {
-            case Pause -> components = setUpPause();
-            case GameOver -> components = setUpGameOver();
-            case GameCompleted -> components = setUpGameCompleted();
-            case Save -> components = setUpSave();
-        }
-        setUpComponents(components);
-    }
+	/**
+	 * New Dialog window, can create four types based on type passed in
+	 *
+	 * @param base current base
+	 * @param type Pause, GameOver, GameComplete, Save
+	 */
+	public GameDialog(Base base, PopUp type) {
+		this.base = base;
+		setUpWindow();
+		List<JComponent> components = List.of();
+		switch (type) {
+			case Pause -> components = setUpPause();
+			case GameOver -> components = setUpGameOver();
+			case GameCompleted -> components = setUpGameCompleted();
+			case Save -> components = setUpSave();
+		}
+		setUpComponents(components);
+	}
 
-    /**
-     * For error pop-ups
-     *
-     * @param base
-     * @param message
-     */
-    public GameDialog(Base base, String message){
-        this.base = base;
-        setUpWindow();
-        setUpComponents(setUpError(message));
-    }
 
-    private void setUpWindow(){
-        this.setLayout(new GridBagLayout());
-        this.getContentPane().setBackground(GameConstants.LIGHT_YELLOW_COLOR);
-        this.setResizable(false);
-    }
+	/**
+	 * For error pop-ups
+	 *
+	 * @param base
+	 * @param message
+	 */
+	public GameDialog(Base base, String message) {
+		this.base = base;
+		setUpWindow();
+		setUpComponents(setUpError(message));
+	}
 
-    /**
-     * add components to dialog.
-     */
-    private void setUpComponents(List<JComponent> components){
-        GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(5, 5, 5, 5);
-        c.gridy = 0;
-        for (JComponent component : components) {
-            this.add(component, c);
-            c.gridy++;
-        }
-    }
+	public GameDialog(Base base, int level) {
+		this.base = base;
+		setUpWindow();
+		setUpComponents(setUpNextLevel(level));
+	}
 
-    /**
-     * Set size and position of pop-up based on fields and current base coordinates
-     */
-    public void makeBounds() {
-        this.setBounds(base.getX() + xOffset, base.getY() + yOffset, width, height);
-    }
+	private void setUpWindow() {
+		this.setLayout(new GridBagLayout());
+		this.getContentPane().setBackground(GameConstants.LIGHT_YELLOW_COLOR);
+		this.setResizable(false);
+		this.info = new JLabel();
+		this.info.setFont(new Font("Arial", Font.BOLD, 14));
+		this.info.setForeground(GameConstants.TEXT_COLOR);
+	}
 
-    /**
-     * Set pop-up as visible, in focus and reset it's bounds
-     * Start timer (only Save pop-up has timer).
-     */
-    public void visibleFocus() {
-        this.timer.start();
-        this.makeBounds();
-        this.setVisible(true);
-        this.requestFocus();
-    }
+	/**
+	 * add components to dialog.
+	 */
+	private void setUpComponents(List<JComponent> components) {
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.CENTER;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.gridy = 0;
+		for (JComponent component : components) {
+			this.add(component, c);
+			c.gridy++;
+		}
+	}
 
-    private int timeMS = 0;
+	/**
+	 * Set size and position of pop-up based on fields and current base coordinates
+	 */
+	public void makeBounds() {
+		this.setBounds(base.getX() + xOffset, base.getY() + yOffset, width, height);
+	}
 
-    /**
-     * Creates "saved game" pop-up
-     *
-     * @return list of components to be added to box
-     */
-    private List<JComponent> setUpSave() {
-        width = 100;
-        height = 70;
-        xOffset = GameConstants.GAME_WINDOW_SIZE - width / 2;
-        yOffset = 100;
-        this.makeBounds();
+	/**
+	 * Set pop-up as visible, in focus and reset it's bounds
+	 * Start timer (only Save pop-up has timer).
+	 */
+	public void visibleFocus() {
+		this.timer.start();
+		this.makeBounds();
+		this.setVisible(true);
+		this.requestFocus();
+	}
 
-        this.addKeyListener(new Controller(base, this));
+	private int timeMS = 0;
 
-        JLabel info = new JLabel("Game Saved");
-        info.setFont(new Font("Arial", Font.BOLD, 14));
-        info.setForeground(GameConstants.TEXT_COLOR);
+	/**
+	 * Creates "saved game" pop-up
+	 *
+	 * @return list of components to be added to box
+	 */
+	private List<JComponent> setUpSave() {
+		width = 100;
+		height = 70;
+		xOffset = GameConstants.GAME_WINDOW_SIZE - width / 2;
+		yOffset = 100;
+		this.makeBounds();
 
-        timeMS = 0;
-        timer = new Timer(250, unused -> {
-            assert SwingUtilities.isEventDispatchThread();
-            timeMS += 1;
-            if (timeMS >= 3) {
-                this.setVisible(false);
-                timer.stop();
-                timeMS = 0;
-            }
-        });
-        return List.of(info);
-    }
+		this.addKeyListener(new Controller(base, this));
 
-    /**
-     * Sets up "game won" pop-up
-     *
-     * @return list of components to be added to window
-     */
-    private List<JComponent> setUpGameCompleted() {
-        width = 230;
-        height = 400;
-        xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-        yOffset = GameConstants.WINDOW_HEIGHT / 4;
-        this.makeBounds();
+		this.info.setText("Game Saved");
 
-        this.addKeyListener(new Controller(base, this));
+		timeMS = 0;
+		timer = new Timer(250, unused -> {
+			assert SwingUtilities.isEventDispatchThread();
+			timeMS += 1;
+			if (timeMS >= 3) {
+				this.setVisible(false);
+				timer.stop();
+				timeMS = 0;
+			}
+		});
+		return List.of(info);
+	}
 
-        JLabel info = new JLabel("You Win!");
-        info.setFont(new Font("Arial", Font.BOLD, 18));
-        info.setForeground(GameConstants.TEXT_COLOR);
+	/**
+	 * Sets up "game won" pop-up
+	 *
+	 * @return list of components to be added to window
+	 */
+	private List<JComponent> setUpGameCompleted() {
+		height = 400;
+		this.makeBounds();
 
-        return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
-    }
+		this.addKeyListener(new Controller(base, this));
 
-    /**
-     * sets up "game over" pop-up
-     *
-     * @return list of components to be added to window
-     */
-    private List<JComponent> setUpGameOver() {
-        width = 230;
-        height = 300;
-        xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-        yOffset = GameConstants.WINDOW_HEIGHT / 4;
-        this.makeBounds();
+		this.info.setText("You Win!");
 
-        this.addKeyListener(new Controller(base, this));
+		return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
+	}
 
-        JLabel info = new JLabel("Game is Over");
-        info.setFont(new Font("Arial", Font.BOLD, 18));
-        info.setForeground(GameConstants.TEXT_COLOR);
+	/**
+	 * sets up "game over" pop-up
+	 *
+	 * @return list of components to be added to window
+	 */
+	private List<JComponent> setUpGameOver() {
+		height = 300;
+		this.makeBounds();
 
-        return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
-    }
+		this.addKeyListener(new Controller(base, this));
 
-    /**
-     * sets up "pause" pop up
-     *
-     * @return list of components to be added to pop-up
-     */
-    private List<JComponent> setUpPause() {
-        width = 230;
-        height = 400;
-        xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-        yOffset = GameConstants.WINDOW_HEIGHT / 4;
-        this.makeBounds();
+		this.info.setText("You Died!");
 
-        this.addKeyListener(new Controller(base, this));
+		return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
+	}
 
-        JLabel info = new JLabel("Game is Paused");
-        info.setFont(new Font("Arial", Font.BOLD, 18));
-        info.setForeground(GameConstants.TEXT_COLOR);
+	private List<JComponent> setUpNextLevel(int lvl) {
+		height = 200;
+		this.makeBounds();
 
-        if (!this.isFocusOwner()) {
-            base.unPause();
-            this.setVisible(false);
-        }
+		this.addKeyListener(new Controller(base, this));
 
-        return List.of(info, playButton(), loadButton(), newOneButton(), newTwoButton(), saveButton(), exitButton());
-    }
+		this.info.setText("Great Job!");
 
-    /**
-     * set up error pop up
-     *
-     * @return list of components for to be added to pop-up
-     */
-    private List<JComponent> setUpError(String message) {
-        width = 230;
-        height = 130;
-        xOffset = GameConstants.GAME_WINDOW_SIZE - width / 2;
-        yOffset = 100;
-        this.makeBounds();
+		return List.of(info, new GameButton("Next Level", BUTTON_SIZE, e -> {
+			base.newGame(lvl);
+			this.dispose();
+		}), exitButton());
+	}
 
-        this.addKeyListener(new Controller(base, this));
+	/**
+	 * sets up "pause" pop up
+	 *
+	 * @return list of components to be added to pop-up
+	 */
+	private List<JComponent> setUpPause() {
+		height = 400;
+		this.makeBounds();
 
-        JLabel info = new JLabel(message);
+		this.addKeyListener(new Controller(base, this));
 
-        GameButton button = new GameButton("OK", BUTTON_SIZE, e -> {
-            this.dispose();
-        });
+		this.info.setText("Game is Paused");
 
-        return List.of(info, button);
-    }
+		if (!this.isFocusOwner()) {
+			base.unPause();
+			this.setVisible(false);
+		}
 
-    /**
-     * Makes play button. With action to set pop-up invisible again.
-     *
-     * @return play button
-     */
-    private GameButton playButton() {
-        Runnable action = () -> {
-            base.unPause();
-            this.setVisible(false);
-        };
-        GameButton button = new GameButton("Play Game", BUTTON_SIZE, e -> action.run());
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                action.run();
-            }
-        });
-        return button;
-    }
+		return List.of(info, playButton(), loadButton(), newOneButton(), newTwoButton(), saveButton(), exitButton());
+	}
 
-    /**
-     * Makes load level button. Closes pop-up when clicked
-     *
-     * @return load button
-     */
-    private GameButton loadButton() {
-        return new GameButton("Load Previous Game", BUTTON_SIZE, e -> {
-            base.loadGame();
-            this.setVisible(false);
-        });
-    }
+	/**
+	 * set up error pop up
+	 *
+	 * @return list of components for to be added to pop-up
+	 */
+	private List<JComponent> setUpError(String message) {
+		height = 130;
+		xOffset = GameConstants.GAME_WINDOW_SIZE - width / 2;
+		yOffset = 100;
+		this.makeBounds();
 
-    /**
-     * Makes load level one button. Closes pop-up when clicked
-     *
-     * @return load level one button
-     */
-    private GameButton newOneButton() {
-        return new GameButton("Load Level One", BUTTON_SIZE, e -> {
-            base.newGame(1);
-            this.setVisible(false);
-        });
-    }
+		this.addKeyListener(new Controller(base, this));
 
-    /**
-     * Makes load level two button. Closes pop-up when clicked
-     *
-     * @return load level two button
-     */
-    private GameButton newTwoButton() {
-        return new GameButton("Load Level Two", BUTTON_SIZE, e -> {
-            base.newGame(2);
-            this.setVisible(false);
-        });
-    }
+		this.info.setText(message);
 
-    /**
-     * Makes save game button
-     *
-     * @return save button
-     */
-    private GameButton saveButton() {
-        return new GameButton("Save and Exit", BUTTON_SIZE, e -> {
-            base.saveExit();
-        });
-    }
+		GameButton button = new GameButton("OK", BUTTON_SIZE, e -> {
+			this.dispose();
+		});
 
-    /**
-     * Makes exit game button. Closes pop-up when clicked
-     *
-     * @return exit button
-     */
-    private GameButton exitButton() {
-        return new GameButton("Exit Game", BUTTON_SIZE, e -> {
-            base.exitGame();
-            this.setVisible(false);
-        });
-    }
+		return List.of(info, button);
+	}
+
+	/**
+	 * Makes play button. With action to set pop-up invisible again.
+	 *
+	 * @return play button
+	 */
+	private GameButton playButton() {
+		Runnable action = () -> {
+			base.unPause();
+			this.setVisible(false);
+		};
+		GameButton button = new GameButton("Play Game", BUTTON_SIZE, e -> action.run());
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				action.run();
+			}
+		});
+		return button;
+	}
+
+	/**
+	 * Makes load level button. Closes pop-up when clicked
+	 *
+	 * @return load button
+	 */
+	private GameButton loadButton() {
+		return new GameButton("Load Previous Game", BUTTON_SIZE, e -> {
+			base.loadGame();
+			this.setVisible(false);
+		});
+	}
+
+	/**
+	 * Makes load level one button. Closes pop-up when clicked
+	 *
+	 * @return load level one button
+	 */
+	private GameButton newOneButton() {
+		return new GameButton("Load Level One", BUTTON_SIZE, e -> {
+			base.newGame(1);
+			this.setVisible(false);
+		});
+	}
+
+	/**
+	 * Makes load level two button. Closes pop-up when clicked
+	 *
+	 * @return load level two button
+	 */
+	private GameButton newTwoButton() {
+		return new GameButton("Load Level Two", BUTTON_SIZE, e -> {
+			base.newGame(2);
+			this.setVisible(false);
+		});
+	}
+
+	/**
+	 * Makes save game button
+	 *
+	 * @return save button
+	 */
+	private GameButton saveButton() {
+		return new GameButton("Save and Exit", BUTTON_SIZE, e -> {
+			base.saveExit();
+		});
+	}
+
+	/**
+	 * Makes exit game button. Closes pop-up when clicked
+	 *
+	 * @return exit button
+	 */
+	private GameButton exitButton() {
+		return new GameButton("Exit Game", BUTTON_SIZE, e -> {
+			base.exitGame();
+			this.setVisible(false);
+		});
+	}
 }

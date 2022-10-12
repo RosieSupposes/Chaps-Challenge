@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

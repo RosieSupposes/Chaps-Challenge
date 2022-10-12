@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.Img;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

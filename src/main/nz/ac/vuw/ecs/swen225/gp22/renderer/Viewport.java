@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 /**
  * This class displays the maze, and all the entities active in the current level

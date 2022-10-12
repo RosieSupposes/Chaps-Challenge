@@ -2,8 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
-import nz.ac.vuw.ecs.swen225.gp22.app.Main;
+import nz.ac.vuw.ecs.swen225.gp22.app.GameDialog;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
+import org.dom4j.DocumentException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,7 +22,7 @@ import java.util.List;
 public class Player extends JPanel {
     private static final int MAX_SPEED = 5;
     private final Base base;
-    private List<Action> actions;
+    private List<GameState> gameStates;
     private JSlider scrubber;
     private int currentAction = 0;
     private boolean isPlaying = false;
@@ -45,6 +47,7 @@ public class Player extends JPanel {
         load();
         setup();
         setVisible(true);
+        scrubber.setValue(0);
     }
 
     /**
@@ -54,13 +57,12 @@ public class Player extends JPanel {
         gamePanel = base.getGameWindow();
 
         JButton stepBack = new GameButton("", BUTTON_DIM, e -> {
-            scrubber.setValue(scrubber.getValue() - 1);
+            scrubber.setValue(currentAction - 1);
             isPlaying = false;
             isRewinding = false;
-            gamePanel.repaint();
         }, "stepback");
 
-        scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
+        scrubber = gameStates == null ? new JSlider() : new JSlider(0, gameStates.size());
         scrubber.setPreferredSize(SLIDER_DIM);
         scrubber.setValue(0);
         scrubber.addChangeListener(e -> {
@@ -69,29 +71,32 @@ public class Player extends JPanel {
                 scrub(source.getValue());
             }
         });
-        scrubber.setBackground(Color.MAGENTA);
+        scrubber.setBackground(GameConstants.BG_COLOR);
         scrubber.setUI(new BasicSliderUI(scrubber) {
             @Override
             public void paintThumb(Graphics g) {
-                g.setColor(Color.MAGENTA);
+                g.setColor(GameConstants.BG_COLOR_LIGHTER);
                 g.fillOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
                 g.setColor(Color.GRAY);
                 g.drawOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
             }
         });
 
-        JButton home = new GameButton("", BUTTON_DIM, e -> base.menuScreen(), "home");
+        JButton home = new GameButton("", BUTTON_DIM, e -> {
+            base.menuScreen();
+            isRewinding = false;
+            isPlaying = false;
+        }, "home");
 
-        JButton load = new GameButton("Load", new Dimension(75, 30), e -> {
-            load();
-            if (actions != null) scrubber.setMaximum(actions.size());
+        JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
+            try { load(); } catch (RuntimeException ignored) {} // If the user cancels the load, ignore it.
+            if (gameStates != null) scrubber.setMaximum(gameStates.size());
         });
 
         JButton stepForward = new GameButton("", BUTTON_DIM, e -> {
-            scrubber.setValue(scrubber.getValue() + 1);
+            scrubber.setValue(currentAction + 1);
             isPlaying = false;
             isRewinding = false;
-            gamePanel.repaint();
         }, "stepforward");
 
         JButton rewind = new GameButton("", LONG_BTN, e -> {
@@ -121,7 +126,7 @@ public class Player extends JPanel {
         add(speedBtn);
 
         setPreferredSize(new Dimension(800, 520));
-        setBackground(Color.MAGENTA);
+        setBackground(GameConstants.BG_COLOR);
     }
 
     /**
@@ -161,16 +166,24 @@ public class Player extends JPanel {
 
         // Only load if a file was selected
         if (fileChooser.getSelectedFile() != null) {
-            Parser parser = new Parser(fileChooser.getSelectedFile());
-            actions = parser.getActions();
-            Load.loadLevel(parser.getLevel());
-            if (scrubber != null) {
-                scrubber.setMaximum(actions.size() - 1);
-                currentAction = 0;
-                scrubber.setValue(0);
-                gamePanel.repaint();
+            try {
+                Parser parser = new Parser(fileChooser.getSelectedFile());
+                gameStates = parser.getStates();
+                Load.loadLevel(parser.getLevel());
+                if (scrubber != null) {
+                    scrubber.setMaximum(gameStates.size() - 1);
+                    currentAction = 0;
+                    scrubber.setValue(0);
+                    gamePanel.repaint();
+                }
+            } catch (DocumentException e) {
+                new GameDialog(base, "Error: Invalid file.").visibleFocus();
+                throw new IllegalArgumentException("Invalid file");
             }
+
+            return;
         }
+        throw new RuntimeException("No file selected");
     }
 
     /**
@@ -179,23 +192,21 @@ public class Player extends JPanel {
      * @param position the position to scrub to
      */
     private void scrub(int position) {
-        if (actions == null) return;
+        if (gameStates == null) return;
         if (position > currentAction) {
             // scrub forward
             for (int i = currentAction; i < position; i++) {
-                actions.get(i).execute();
+                gameStates.get(i).apply(base);
                 gamePanel.repaint();
             }
         } else if (position < currentAction) {
             // scrub backward
-            for (int i = currentAction; i > position; i--) {
-                Action prevAction = actions.get(i - 1);
-                if (prevAction instanceof MoveAction m) { m.execute(); }
-                actions.get(i).undo();
+            for (int i = currentAction - 1; i >= position; i--) {
+                gameStates.get(i).undo(base);
                 gamePanel.repaint();
             }
         }
-        currentAction = position < actions.size() ? position : actions.size() - 1;
+        currentAction = Math.min(position, gameStates.size());
     }
 
     /**
@@ -205,12 +216,8 @@ public class Player extends JPanel {
         isRewinding = true;
         isPlaying = false;
         new Thread(() -> {
-            for (int i = currentAction; i > 0; i--) {
+            for (int i = currentAction; i >= 0; i--) {
                 if (!isPlaying && !isRewinding) break;
-                Action prevAction = actions.get(i - 1);
-                if (prevAction instanceof MoveAction m) { m.execute(); }
-                actions.get(i).undo();
-                gamePanel.repaint();
                 if (progress(i, isRewinding)) break;
             }
             isRewinding = false;
@@ -225,10 +232,8 @@ public class Player extends JPanel {
         isPlaying = true;
         isRewinding = false;
         new Thread(() -> {
-            for (int i = currentAction; i < actions.size(); i++) {
+            for (int i = currentAction; i < gameStates.size(); i++) {
                 if (!isPlaying && !isRewinding) break;
-                actions.get(i).execute();
-                gamePanel.repaint();
                 if (progress(i, isPlaying)) break;
             }
             isPlaying = false;
@@ -244,7 +249,6 @@ public class Player extends JPanel {
      * @return true if the player should stop progressing.
      */
     private boolean progress(int i, boolean isProgressing) {
-        currentAction = i < actions.size() ? i : actions.size() - 1;
         scrubber.setValue(i);
         try {
             Thread.sleep(1000 / speed);

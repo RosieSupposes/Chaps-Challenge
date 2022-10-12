@@ -38,8 +38,7 @@ public class Parser {
         int width = intFromElement(mapInfo,"width");
         int height = intFromElement(mapInfo,"height");
         Maze.Point dimensions = new Maze.Point(width,height);
-        Maze.generateMap(dimensions,intFromElement(mapInfo,"treasures"));
-        Maze.player = parsePlayer();
+        Maze.generateMap(dimensions,intFromElement(mapInfo,"treasures"),intFromElement(mapInfo,"nextLevel"));
     }
 
     /**
@@ -66,31 +65,30 @@ public class Parser {
     /**
      * Parse the saved player information from the file
      * create player at saved position and direction
-     *
-     * @return player
+     * add keys to inventory if present
      */
-    public Player parsePlayer(){
+    public void parsePlayer(Player player){
         Element playerNode = document.getRootElement().element("player");
         Maze.Point position = getPoint(playerNode);
         Entity.Direction direction = Entity.Direction.valueOf(playerNode.attributeValue("direction"));
-        Player p = new Player(position,direction);
+        player.setPos(position);
+        player.setDir(direction);
         Element inventory = playerNode.element("inventory");
-        if(inventory != null) parseInventory(p,inventory);
-        return p;
+        if(inventory != null) parseInventory(player,inventory);
     }
 
     /**
      * Parse player inventory
      *
-     * @param p player with inventory to fill
+     * @param player player with inventory to fill
      * @param inventory dom4j element containing inventory to parse
      */
-    public void parseInventory(Player p, Element inventory){
+    public void parseInventory(Player player, Element inventory){
         for(Iterator<Element> it = inventory.elementIterator(); it.hasNext();){
             Element item = it.next();
             ColorableTile.Color color = ColorableTile.Color.valueOf(item.attributeValue("color"));
             for (int i = 0; i < intFromAttribute(item,"count"); i++){
-                p.addKey(color);
+                player.addKey(color);
             }
         }
     }

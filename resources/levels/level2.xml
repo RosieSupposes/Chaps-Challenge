@@ -3,8 +3,8 @@
     <mapInfo>
         <width>16</width>
         <height>15</height>
-        <treasures>7</treasures>
-        <nextLevel>"Level2"</nextLevel>
+        <treasures>3</treasures>
+        <nextLevel>-1</nextLevel>
     </mapInfo>
     <player x="1" y="7" direction="Right"/>
     <tiles>
