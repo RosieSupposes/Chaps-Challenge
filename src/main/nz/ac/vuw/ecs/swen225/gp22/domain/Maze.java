@@ -33,8 +33,8 @@ public class Maze{
     /** Represents how many more {@link Treasure} tiles are still on the map. */
     private static int treasuresLeft;
     
-    /** Stores the name of the next level to load. If empty or null then the {@link #gameComplete() game over flag} returns true. */
-    private static String nextLevel;
+    /** Stores the number of the next level to load. If -1 {@link #gameComplete() game complete flag} returns true. */
+    private static int nextLevel;
 
     /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
@@ -51,7 +51,7 @@ public class Maze{
      * @param dimensions The size of the {@link #tileMap map}.
      * @param treasures The number of treasures on the {@link #tileMap map}.
      */
-    public static void generateMap(Point dimensions, int treasures, String nextLevelP){
+    public static void generateMap(Point dimensions, int treasures, int nextLevelP){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
 
@@ -180,11 +180,11 @@ public class Maze{
     /** @return The number of treasures left to collect. */
     public static int getTreasuresLeft(){ return treasuresLeft; }
 
-    /** @return The name of the next level to load. */
-    public static String getNextLevel(){ return nextLevel; }
+    /** @return The number of the next level to load. */
+    public static int getNextLevel(){ return nextLevel; }
 
     /** @return Whether or not there are more levels to load. */
-    public static boolean gameComplete(){ return nextLevel == null || nextLevel.equals(""); }
+    public static boolean gameComplete(){ return nextLevel == -1; }
 
     /** @return Whether or not the game has been won. */
     public static boolean gameWon(){ return getTile(player.getPos()) instanceof Exit; }
