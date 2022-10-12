@@ -90,22 +90,26 @@ public class FuzzTest {
             for (int i : generatedInputs) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        try {
-                            robot.keyPress(i);
-                            Thread.sleep(100);
-                            robot.keyRelease(i);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        robot.keyPress(i);
                     }
                 });
+                try {
+                    Thread.sleep(100);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            robot.keyRelease(i);
+                        }
+                    });
+                } catch (InterruptedException e) {
+                }
             }
+
         } catch (AWTException e) {
             e.printStackTrace();
         }
     }
 
-    /**
+        /**
      * Runs tests for both level 1 and 2 of Chap's Challenge.
      * Tests are limited to a one minute timer.
      */
