@@ -103,10 +103,11 @@ public class Load {
     private static Parser loadGame(File file){
         Parser parser = new Parser(file);
         parser.parseMapInfo();
+        Maze.player = parser.parsePlayer();
         List<Tile> tiles = parser.getTiles();
         if (parser.entitiesPresent()) {
             loadJar(parser.getLevel());
-            List<Entity> entities = parser.getEntities().stream().filter(e -> e instanceof Entity).map(e -> (Entity) e).toList();
+            List<Entity> entities = parser.getEntities();
             Maze.entities.addAll(entities);
         }
         for (Tile t : tiles) {
@@ -138,7 +139,6 @@ public class Load {
                     Load.class.getClassLoader()
             );
             classLoader = child;
-            //BufferedImage img = ImageIO.read(classLoader.getResource("resources/imgs/EnemyDown.png"));
         } catch (IOException e) {
             classLoader = null;
         }
