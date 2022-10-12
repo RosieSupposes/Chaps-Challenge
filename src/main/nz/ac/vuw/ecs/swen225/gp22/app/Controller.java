@@ -25,7 +25,7 @@ public class Controller extends Keys {
     }
 
     /**
-     * commands for when game is running
+     * Controller for when game is running
      *
      * @param b      base which commands get run on
      * @param paused is the game paused?
@@ -33,7 +33,8 @@ public class Controller extends Keys {
     public Controller(Base b, boolean paused) {
         this.b = b;
         constantCommand();
-        setAction(KeyEvent.VK_S, b::saveGame, true); //ctrl s
+        setAction(KeyEvent.VK_S, b::saveExit, true); //ctrl s
+        setAction(KeyEvent.VK_Q, b::saveGame, true); //ctrl q
 
         if (paused) {
             setAction(KeyEvent.VK_ESCAPE, b::unPause, false); //esc
@@ -47,6 +48,11 @@ public class Controller extends Keys {
         }
     }
 
+    /**
+     * Controller for Pop-up window
+     * @param b
+     * @param dialog
+     */
     public Controller(Base b, JDialog dialog) {
         this.b = b;
 
@@ -70,9 +76,9 @@ public class Controller extends Keys {
             b.newGame(2);
         }, true); //ctrl 2
 
-        setAction(KeyEvent.VK_S, () -> {
-            b.saveGame();
-        }, true); //ctrl s
+        setAction(KeyEvent.VK_S, b::saveExit, true); //ctrl s
+
+        setAction(KeyEvent.VK_Q, b::saveGame, true); //ctrl q
 
         setAction(KeyEvent.VK_ESCAPE, () -> {
             dialog.setVisible(false);

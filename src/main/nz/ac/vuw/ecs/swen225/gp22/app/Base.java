@@ -50,10 +50,10 @@ public class Base extends JFrame {
         menuScreen();
         System.out.println(this.getSize());
 
-        pauseDialog = new GameDialog(this, "Pause");
-        saveDialog = new GameDialog(this, "Save");
-        gameOverDialog = new GameDialog(this, "GameOver");
-        gameWinDialog = new GameDialog(this, "GameCompleted");
+        pauseDialog = new GameDialog(this, GameDialog.PopUp.Pause);
+        saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
+        gameOverDialog = new GameDialog(this, GameDialog.PopUp.GameOver);
+        gameWinDialog = new GameDialog(this, GameDialog.PopUp.GameCompleted);
 
         setVisible(true);
         setResizable(false);
@@ -186,9 +186,18 @@ public class Base extends JFrame {
      * save the current game
      */
     public void saveGame() {
-        Save.saveGame(); //TODO persistency should choose name, App should pass current time
+        Save.saveGame();
+        recorder.save();
         System.out.println("Save");
         saveDialog.visibleFocus();
+    }
+
+    /**
+     * Saves the game and then exits
+     */
+    public void saveExit() {
+        this.saveGame();
+        this.exitGame();
     }
 
     public void resetFocus() {
@@ -215,7 +224,11 @@ public class Base extends JFrame {
     public void exitGame() {
         System.out.println("Exit");
         runClosePhase();
-        System.exit(0);
+        this.dispose();
+    }
+
+    public Maze.Point getBoardSize(){
+        return Maze.getDimensions();
     }
 
     /**
