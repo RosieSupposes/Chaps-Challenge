@@ -286,10 +286,10 @@ public class Base extends JFrame {
      *
      * @return game window
      */
-    public JPanel getGameWindow() {
+    public PhasePanel getGameWindow() {
         assert Maze.player != null;
-        JPanel game = new Viewport();
-        JPanel side = new SidePanel(timeSec, level);
+        Viewport game = new Viewport();
+        SidePanel side = new SidePanel(timeSec, level);
         return new PhasePanel(game, side);
     }
 
