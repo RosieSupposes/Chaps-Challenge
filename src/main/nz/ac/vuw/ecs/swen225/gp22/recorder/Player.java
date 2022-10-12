@@ -4,6 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameDialog;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 import org.dom4j.DocumentException;
 
 import javax.swing.*;
@@ -70,11 +71,11 @@ public class Player extends JPanel {
                 scrub(source.getValue());
             }
         });
-        scrubber.setBackground(Color.MAGENTA);
+        scrubber.setBackground(GameConstants.BG_COLOR);
         scrubber.setUI(new BasicSliderUI(scrubber) {
             @Override
             public void paintThumb(Graphics g) {
-                g.setColor(Color.MAGENTA);
+                g.setColor(GameConstants.BG_COLOR_LIGHTER);
                 g.fillOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
                 g.setColor(Color.GRAY);
                 g.drawOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
@@ -125,7 +126,7 @@ public class Player extends JPanel {
         add(speedBtn);
 
         setPreferredSize(new Dimension(800, 520));
-        setBackground(Color.MAGENTA);
+        setBackground(GameConstants.BG_COLOR);
     }
 
     /**
