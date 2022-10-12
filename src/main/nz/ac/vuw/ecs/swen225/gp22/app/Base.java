@@ -434,7 +434,7 @@ public class Base extends JFrame {
                     .forEach(Entity::ping);
             transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
 
-			if (timeSec <= 0) {
+			if (timeSec <= 0 || Maze.isGameLost()) {
 				playerDied();
 			} else if (Maze.gameWon()) {
 				if(Maze.gameComplete()){
