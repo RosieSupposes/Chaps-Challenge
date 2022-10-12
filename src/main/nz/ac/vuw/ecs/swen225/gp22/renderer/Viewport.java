@@ -223,16 +223,16 @@ public class Viewport extends JPanel implements ActionListener {
      */
     public void checkAction(Entity.Action.Interaction.ActionType a){
     // void checkAction(){
-        switch (a){ //TODO: do something for Pinged case
-            case None : playSFX("Background", 2);
-            case PickupKey: playSFX("CollectItem", 1);
-            case PickupTreasure: playSFX("CollectItem", 1);
+        switch (a){
+            case PickupKey -> playSFX("CollectItem", 1);
+            case PickupTreasure -> playSFX("CollectItem", 1); 
             //case "LoseGame": playSFX("LoseGame", 1);
             //case "MainMenu": playSFX("MainMenu", 1);
-            case UnlockDoor: playSFX("Unlock", 1);
-            case UnlockExit: playSFX("Unlock", 1);
+            case UnlockDoor -> playSFX("Unlock", 1); 
+            case UnlockExit -> playSFX("Unlock", 1);
             //case "WinGame": playSFX("WinGame", 1);
             //case "WinLevel": playSFX("WinLevel", 1);
+            default -> playSFX("Background", 1);
         }
     }
 
