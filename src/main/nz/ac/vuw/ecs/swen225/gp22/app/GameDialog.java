@@ -172,7 +172,7 @@ public class GameDialog extends JDialog {
 
 		this.addKeyListener(new Controller(base, this));
 
-		this.info.setText("Game is Over");
+		this.info.setText("You Died!");
 
 		return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
 	}
@@ -183,9 +183,9 @@ public class GameDialog extends JDialog {
 
 		this.addKeyListener(new Controller(base, this));
 
-		this.info.setText("Next Level");
+		this.info.setText("Great Job!");
 
-		return List.of(info, new GameButton("Load Level Two", BUTTON_SIZE, e -> {
+		return List.of(info, new GameButton("Next Level", BUTTON_SIZE, e -> {
 			base.newGame(lvl);
 			this.dispose();
 		}), exitButton());

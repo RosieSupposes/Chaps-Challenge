@@ -440,7 +440,7 @@ public class Base extends JFrame {
 				if(Maze.gameComplete()){
 					playerWon();
 				}else{
-					assert Maze.getNextLevel() != 1;
+					assert Maze.getNextLevel() != -1;
 					nextLevel(Maze.getNextLevel());
 				}
 			}
