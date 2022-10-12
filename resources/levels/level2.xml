@@ -7,6 +7,10 @@
         <nextLevel>-1</nextLevel>
     </mapInfo>
     <player x="1" y="7" direction="Right"/>
+    <entities>
+        <entity ID="GummyGuard" x="10" y="6" direction="Right"/>
+        <entity ID="GummyGuard" x="14" y="8" direction="Left"/>
+    </entities>
     <tiles>
         <tile ID="key" x="2" y="2">
             <color>Blue</color>
