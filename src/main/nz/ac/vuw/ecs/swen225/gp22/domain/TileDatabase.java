@@ -9,7 +9,7 @@ import java.util.Map;
  * as well as get the ID of a current object (for saving).
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.1
+ * @version 1.2
  */
 public class TileDatabase{
     /** Map of tile classes with a string as the key/ID. */
@@ -22,6 +22,8 @@ public class TileDatabase{
         put("door", LockedDoor.class);
         put("exit-gate", LockedExit.class);
         put("exit", Exit.class);
+        put("death", MilkPuddle.class);
+        put("bouncepad", BouncyPad.class);
     }};
 
     /**
