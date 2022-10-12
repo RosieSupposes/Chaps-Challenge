@@ -4,7 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 import javax.swing.Timer;
@@ -35,8 +35,7 @@ public class Viewport extends JPanel implements ActionListener {
     private JLabel infofield = new JLabel("");
     private SFXPlayer sfxPlayer = new SFXPlayer();
     private final HashMap<String, SFX> soundList = new HashMap<>();
-    private ArrayList<Entity.Action.Interaction.ActionType> actions = new ArrayList<>();
-    //private Entity.Action.Interaction.ActionType action = ActionType.None;
+    private List<Entity.Action.Interaction.ActionType> actions;
 
     /**
      * Initialises a new maze upon the loading of a level.
@@ -251,6 +250,6 @@ public class Viewport extends JPanel implements ActionListener {
      * Stores the action that has happened in the game. 
      * @param action Action performed.
      */
-    public void setAction(ArrayList<Entity.Action.Interaction.ActionType> actions){ this.actions = actions; }
+    public void setAction(List<Entity.Action.Interaction.ActionType> actions){ this.actions = actions; }
 
 }
