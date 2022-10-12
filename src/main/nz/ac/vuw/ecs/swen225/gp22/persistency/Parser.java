@@ -226,12 +226,11 @@ public class Parser {
      */
     private void loadEnemyEntityImages(Class<?> entityClass){
         if(EnemyEntity.class.isAssignableFrom(entityClass)){
-            //EnemyEntity.imageMap = new HashMap<Entity.Direction, BufferedImage>();
             try {
                 for(Entity.Direction direction : Entity.Direction.values()){
                     URL imagePath = entityClass.getClassLoader().getResource("resources/imgs/Enemy"+direction.name()+".png");
                     BufferedImage image = ImageIO.read(imagePath);
-                    //EnemyEntity.imageMap.put(direction,image);
+                    EnemyEntity.imageMap.put(direction,image);
                 }
             } catch (Exception e) {System.out.println("no image" + e);}
         }
