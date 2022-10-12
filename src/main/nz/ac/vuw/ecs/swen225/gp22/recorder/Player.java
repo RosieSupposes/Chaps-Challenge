@@ -217,8 +217,6 @@ public class Player extends JPanel {
         new Thread(() -> {
             for (int i = currentAction; i >= 0; i--) {
                 if (!isPlaying && !isRewinding) break;
-                gameStates.get(i).undo(base);
-                gamePanel.repaint();
                 if (progress(i, isRewinding)) break;
             }
             isRewinding = false;
@@ -235,8 +233,6 @@ public class Player extends JPanel {
         new Thread(() -> {
             for (int i = currentAction; i < gameStates.size(); i++) {
                 if (!isPlaying && !isRewinding) break;
-                gameStates.get(i).apply(base);
-                gamePanel.repaint();
                 if (progress(i, isPlaying)) break;
             }
             isPlaying = false;
@@ -252,7 +248,6 @@ public class Player extends JPanel {
      * @return true if the player should stop progressing.
      */
     private boolean progress(int i, boolean isProgressing) {
-        currentAction = i < gameStates.size() ? i : gameStates.size() - 1;
         scrubber.setValue(i);
         try {
             Thread.sleep(1000 / speed);
