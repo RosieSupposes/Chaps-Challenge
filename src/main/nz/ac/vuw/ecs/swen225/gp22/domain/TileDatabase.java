@@ -23,7 +23,7 @@ public class TileDatabase{
         put("exit-gate", LockedExit.class);
         put("exit", Exit.class);
         put("death", MilkPuddle.class);
-        put("bouncepad", BouncyPad.class);
+        put("bounce-pad", BouncyPad.class);
     }};
 
     /**
