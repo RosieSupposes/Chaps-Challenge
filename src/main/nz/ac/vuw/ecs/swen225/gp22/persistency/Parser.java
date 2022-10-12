@@ -38,7 +38,7 @@ public class Parser {
         int width = intFromElement(mapInfo,"width");
         int height = intFromElement(mapInfo,"height");
         Maze.Point dimensions = new Maze.Point(width,height);
-        Maze.generateMap(dimensions,intFromElement(mapInfo,"treasures"),mapInfo.elementText("nextLevel"));
+        Maze.generateMap(dimensions,intFromElement(mapInfo,"treasures"),intFromElement(mapInfo,"nextLevel"));
     }
 
     /**
