@@ -23,7 +23,8 @@ public class BouncyPad extends Tile{
 
         playerObserver = player -> {
             if(player.getPos().equals(tilePos)){
-                player.setPos(tilePos.add(dir));
+                player.setPos(tilePos.add(dir).add(dir));
+                player.setDir(dir);
             }
         };
         Maze.player.addObserver(playerObserver);
