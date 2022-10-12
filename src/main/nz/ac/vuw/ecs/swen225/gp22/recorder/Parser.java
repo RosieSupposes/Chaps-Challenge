@@ -22,6 +22,7 @@ public class Parser {
      * Parses given XML file into a document and stores it.
      *
      * @param file the recording file
+     * @throws DocumentException if the file is not a valid XML file
      */
     Parser(File file) throws DocumentException {
         document = new SAXReader().read(file);
