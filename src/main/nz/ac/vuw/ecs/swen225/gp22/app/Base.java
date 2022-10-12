@@ -431,7 +431,7 @@ public class Base extends JFrame {
 
             transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
 
-            Maze.getChangeMap().forEach(e -> game.setAction(e.interaction().type().toString()));
+            //Maze.getChangeMap().forEach(e -> game.setAction(e.interaction().type()));
 
             if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();

@@ -36,6 +36,7 @@ public class Viewport extends JPanel implements ActionListener {
     private SFXPlayer sfxPlayer = new SFXPlayer();
     private final HashMap<String, SFX> soundList = new HashMap<>();
     private ArrayList<Entity.Action.Interaction.ActionType> actions = new ArrayList<>();
+    //private Entity.Action.Interaction.ActionType action = ActionType.None;
 
     /**
      * Initialises a new maze upon the loading of a level.
@@ -103,6 +104,8 @@ public class Viewport extends JPanel implements ActionListener {
             for (Entity.Action.Interaction.ActionType a : actions){
                 checkAction(a); 
             }
+            //checkAction();
+            
         }
         catch(Exception e){ e.printStackTrace(); }
 
@@ -219,8 +222,9 @@ public class Viewport extends JPanel implements ActionListener {
      * Plays a sound based on the action that takes place in the game.
      * @param action Action performed.
      */
-    public void checkAction(Entity.Action.Interaction.ActionType action){
-        switch (action){
+    public void checkAction(Entity.Action.Interaction.ActionType a){
+    // void checkAction(){
+        switch (a){ //TODO: do something for Pinged case
             case None : playSFX("Background", 2);
             case PickupKey: playSFX("CollectItem", 1);
             case PickupTreasure: playSFX("CollectItem", 1);
@@ -247,6 +251,6 @@ public class Viewport extends JPanel implements ActionListener {
      * Stores the action that has happened in the game. 
      * @param action Action performed.
      */
-    public void setAction(ArrayList<Entity.Action.Interaction.ActionType> action){ this.actions = action; }
+    public void setAction(ArrayList<Entity.Action.Interaction.ActionType> actions){ this.actions = actions; }
 
 }
