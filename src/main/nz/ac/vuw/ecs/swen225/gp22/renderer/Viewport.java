@@ -4,6 +4,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.Timer;
 
 import java.awt.event.ActionEvent;
@@ -13,13 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
+import nz.ac.vuw.ecs.swen225.gp22.renderer.SFX.Sounds;
 
 /**
  * This class displays the maze, and all the entities active in the current level
  * such as the player, free tiles, walls, keys, locked doors, treasures, locked exit, and exit.
  * 
  * @author Diana Batoon, 300475111 
- * @version 1.4
+ * @version 1.6
  */
 public class Viewport extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -29,13 +33,26 @@ public class Viewport extends JPanel implements ActionListener {
     private int boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
     private int boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
     private JLabel infofield = new JLabel("");
+    private SFXPlayer sfxPlayer = new SFXPlayer();
+    private final HashMap<String, SFX> soundList = new HashMap<>();
+    private ArrayList<String> actionList = new ArrayList<String>();
+    
 
     /**
      * Initialises a new maze upon the loading of a level.
      */
-    public Viewport(){ 
+    public Viewport(ArrayList<String> actions){ 
         timer = new Timer(50, this);
         timer.start();
+        actionList = actions;
+
+        //load wav files
+        try{
+            for (SFX.Sounds sfx : Sounds.values()){
+                soundList.put(sfx.toString(), new SFX(sfx.toString()));
+            }
+        }
+        catch(Exception e){ e.printStackTrace(); }
     }
 
     /**
@@ -47,6 +64,7 @@ public class Viewport extends JPanel implements ActionListener {
     public void paint(Graphics g){
         super.paint(g);
         Graphics2D g2D = (Graphics2D)g.create();
+
         for (int x = 0; x < GameConstants.NUM_GAME_TILE; x++){
             for (int y = 0; y < GameConstants.NUM_GAME_TILE; y++){
                 // draw the tiles
@@ -62,12 +80,14 @@ public class Viewport extends JPanel implements ActionListener {
         int playerX = Maze.player.getPos().x();
         int playerY = Maze.player.getPos().y();
 
+        Tile playerTile = Maze.getTile(new Maze.Point(playerX, playerY));
+
         if(playerX < focusX){ focusX = playerX; } // checking for the far left 
         else if(playerX > Maze.getDimensions().x() - focusX - 1){ focusX = playerX - boundariesX; } // checking for the far right
         
         if(playerY < focusY){ focusY = playerY; } // checking for the top
         else if(playerY > Maze.getDimensions().y() - focusY - 1){ focusY = playerY - boundariesY; } // checking for bottom
-        
+
         focusX *= GameConstants.TILE_SIZE;
         focusY *= GameConstants.TILE_SIZE;
 
@@ -75,13 +95,16 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        if (Maze.getTile(new Maze.Point(playerX, playerY)) instanceof InfoField inField){
+        if (playerTile instanceof InfoField inField){
             displayInfo(inField, g2D);
+            //playSFX("Unlock", 1); // check sounds is working
         }
 
-        //TODO: draw the enemy for level 2
-    }
+        //TODO: play sounds based on the player's actions and game status
+        try{ for (String action: actionList){ checkActions(action);} }
+        catch(Exception e){ e.printStackTrace(); }
 
+    }
 
     /**
      * Updates the display every 100 ms.  
@@ -185,8 +208,34 @@ public class Viewport extends JPanel implements ActionListener {
         int infoPos = (GameConstants.NUM_GAME_TILE*GameConstants.TILE_SIZE)/9;
         g.drawImage(Img.InfoPost.image, infoPos, 2*infoPos, this);
         infofield.setText(iField.getText());
+        //System.out.println(""+iField.getText());
         infofield.setBounds(infoPos+ 10, (2*infoPos)+10, Img.InfoPost.image.getWidth()-100, Img.InfoPost.image.getHeight()-100);
         infofield.setFont(new Font("Verdana", Font.BOLD, 20));
+        add(infofield);
+    }
+
+        /**
+     * Plays a sound based on the action that takes place in the game.
+     * @param action Action performed.
+     */
+    public void checkActions(String action){
+        switch (action){
+            case "CollectItem": playSFX("CollectItem", 1);
+            case "Unlock": playSFX("Unlock", 1);
+            case "LoseGame": playSFX("LoseGame", 1);
+            case "WinGame": playSFX("WinGame", 1);
+            case "WinLevel": playSFX("WinLevel", 1);
+        }
+    }
+
+    /**
+     * Plays a sound.
+     * 
+     * @param soundName The name of the sounds.
+     * @param priorityLevel Which sound must be played over others.
+     */
+    public void playSFX(String soundName, int priorityLevel){
+        sfxPlayer.playSound(soundList.get(soundName), priorityLevel);
     }
 
 }

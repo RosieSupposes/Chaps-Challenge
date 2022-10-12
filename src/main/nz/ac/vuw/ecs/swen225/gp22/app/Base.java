@@ -354,7 +354,9 @@ public class Base extends JFrame {
      */
     public JPanel getGameWindow() {
         assert Maze.player != null;
-        JPanel game = new Viewport();
+        ArrayList<String> actions = new ArrayList<>();
+        JPanel game = new Viewport(actions);
+        //JPanel game = new Viewport();
         JPanel side = new SidePanel(timeSec, level);
         return new PhasePanel(game, side);
     }
@@ -392,8 +394,9 @@ public class Base extends JFrame {
         assert Maze.player != null;
 
         runClosePhase();
-
-        JPanel game = new Viewport();
+        ArrayList<String> actions = new ArrayList<>();
+        JPanel game = new Viewport(actions);
+        // JPanel game = new Viewport();
         SidePanel side = new SidePanel(timeSec, level);
         side.setTime(timeSec);
         final JPanel level = new PhasePanel(game, side);
