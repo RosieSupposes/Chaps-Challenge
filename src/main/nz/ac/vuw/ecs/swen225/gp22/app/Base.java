@@ -1,10 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.*;
+import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
+import nz.ac.vuw.ecs.swen225.gp22.domain.EnemyEntity;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.Action;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
-import nz.ac.vuw.ecs.swen225.gp22.recorder.*;
+import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SidePanel;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
@@ -23,20 +27,21 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
  * Base is the base window that all actions occur on.
  *
  * @author Molly Henry, 300562038
- * @version 1.6
+ * @version 1.8
  */
 public class Base extends JFrame {
     private final List<JComponent> components = new ArrayList<>();
     private int timeMS = 0;
     private static int timeSec = 60;
+    private final int delay = 20;
     private Timer gameTimer = new Timer(20, null);
     private Recorder recorder;
     private GameMenuBar currentMenuBar;
     private JPanel currentPanel; //for setting keylistener on
-    private GameDialog pauseDialog;
-    private GameDialog saveDialog;
-    private GameDialog gameOverDialog;
-    private GameDialog gameWinDialog;
+    private final GameDialog pauseDialog;
+    private final GameDialog saveDialog;
+    private final GameDialog gameOverDialog;
+    private final GameDialog gameWinDialog;
 
     private static int level = 1;
 
@@ -77,34 +82,52 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    /**
+     * Sets current level.
+     *
+     * @param lvl current level
+     */
     public static void setLevel(int lvl) {
         level = lvl;
     }
 
+    /**
+     * Sets current game time
+     *
+     * @param t time in seconds
+     */
     public static void setTime(int t) {
         timeSec = t;
     }
 
+    /**
+     * Returns current level
+     *
+     * @return current level number
+     */
     public static int getLevel() {
         return level;
     }
 
+    /**
+     * Returns current game time
+     *
+     * @return game time in seconds
+     */
     public static int getTime() {
         return timeSec;
     }
 
     /**
      * When you click start button, check for last save file
-     * and run the level
+     * and run the level.
      */
     public void startGame() {
         if (Load.previousGamePresent()) {
             Load.previousGame();
-            loadLevel(); //TODO Persistency should tell me which level is loaded?
+            loadLevel();
 
-            recorder = new Recorder(1);
-            recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
-
+            recorder = new Recorder(level, timeMS);
             //TODO when recorder has ability to start recording from middle of game, tell recorder
         } else {
             newGame(1);
@@ -112,7 +135,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * pauses game
+     * pauses game.
      */
     public void pause() {
         System.out.println("Pause");
@@ -123,12 +146,11 @@ public class Base extends JFrame {
         currentMenuBar.setPause();
 
         changeKeyListener(new Controller(this, true));
-        //TODO learn how to make pop up windows!
         pauseDialog.visibleFocus();
     }
 
     /**
-     * un-pauses game
+     * un-pauses game.
      */
     public void unPause() {
         System.out.println("Un Pause");
@@ -139,51 +161,54 @@ public class Base extends JFrame {
         currentMenuBar.setUnPause();
         pauseDialog.setVisible(false);
         changeKeyListener(new Controller(this, false));
-        //TODO close pause popup window
     }
 
     /**
-     * Creates and runs replayer window
+     * Creates and runs re-player window.
      */
     public void replayPhase() {
         System.out.println("Replay");
-        runClosePhase();
+        try {
+            Player playerWindow = new Player(this);
+            runClosePhase();
 
-        Player playerWindow = new Player(this);
+            add(BorderLayout.CENTER, playerWindow);
+            setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
+            pack();
+            playerWindow.requestFocus(); //need to be after pack
 
-        add(BorderLayout.CENTER, playerWindow);
-        setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
-        pack();
-        playerWindow.requestFocus(); //need to be after pack
-
-        components.add(playerWindow);
+            components.add(playerWindow);
+        } catch (Exception ignored) {}
     }
 
     /**
-     * load a game from file
+     * load a game from file.
      */
     public void loadGame() {
         Load.resumeGame();
-        loadLevel(); //TODO ask persistency which level was loaded
+        loadLevel();
 
-        recorder = new Recorder(1);
-        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
+        recorder = new Recorder(level, timeMS);
         //TODO when recorder has ability to start recording from middle of game, tell recorder
 
         System.out.println("Load");
     }
 
+    /**
+     * Loads new level, makes new recorder.
+     *
+     * @param lvl level number to load
+     */
     public void newGame(int lvl) {
         System.out.println("New level" + lvl);
         level = lvl;
-        Load.loadLevel(lvl); //TODO change 1 to lvl when level2.xml exists
+        Load.loadLevel(lvl);
         loadLevel();
-        recorder = new Recorder(lvl);
-        recorder.addAction(new MoveAction(Maze.player.getPos().x(), Maze.player.getPos().y(), Maze.player.getDir().toString()));
+        recorder = new Recorder(lvl, timeMS);
     }
 
     /**
-     * save the current game
+     * Save the current game.
      */
     public void saveGame() {
         Save.saveGame();
@@ -204,6 +229,9 @@ public class Base extends JFrame {
         currentPanel.requestFocus();
     }
 
+    /**
+     * Saves recorder, pops up game over screen.
+     */
     public void playerDied() {
         System.out.println("Level lost");
         recorder.save();
@@ -211,6 +239,9 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    /**
+     * Saves recorder, pops up game won screen.
+     */
     public void playerWon() {
         System.out.println("Level won");
         recorder.save();
@@ -219,7 +250,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * exit the game
+     * exit the game.
      */
     public void exitGame() {
         System.out.println("Exit");
@@ -232,7 +263,7 @@ public class Base extends JFrame {
     }
 
     /**
-     * When key is pressed, move player and tell recorder
+     * When key is pressed, move player and tell recorder.
      *
      * @param dir direction player moves
      */
@@ -241,123 +272,10 @@ public class Base extends JFrame {
         Entity.Action action = null;
 
         try {
-            action = Maze.player.moveAndTurn(dir);
+            Maze.player.moveAndTurn(dir);
         } catch (IllegalArgumentException e) {
             Maze.player.setDir(dir);
         }
-
-        String direction = dir.toString();
-        int x = Maze.player.getPos().x();
-        int y = Maze.player.getPos().y();
-
-        if (action != null) {
-            Entity.Action.Interaction interaction = action.interaction();
-            if (interaction.type().equals(UnlockDoor) || interaction.type().equals(UnlockExit)) {
-                recorder.addAction(new DoorAction(x, y, interaction.type().toString(), interaction.color().toString()));
-            } else if (interaction.type().equals(PickupKey) || interaction.type().equals(PickupTreasure)) {
-                recorder.addAction(new CollectAction(x, y, interaction.type().toString(), interaction.color().toString()));
-            }
-        }
-
-        recorder.addAction(new MoveAction(x, y, direction));
-    }
-
-    /**
-     * For undoing or redoing a move from Recorder class.
-     * Sets player position and the direction they face
-     *
-     * @param x         x position of player
-     * @param y         y position of player
-     * @param direction action that occurred
-     */
-    public static void setMove(int x, int y, String direction) {
-        Maze.Point pos = new Maze.Point(x, y);
-        Maze.player.setPos(pos);
-        switch (direction) {
-            case "Left" -> Maze.player.setDir(Entity.Direction.Left);
-            case "Right" -> Maze.player.setDir(Entity.Direction.Right);
-            case "Up" -> Maze.player.setDir(Entity.Direction.Up);
-            case "Down" -> Maze.player.setDir(Entity.Direction.Down);
-        }
-    }
-
-    /**
-     * for undoing and redoing actions from Recorder class.
-     * sets tiles.
-     *
-     * @param x      x coord of tile
-     * @param y      y coord of tile
-     * @param action Open, Close, Pick-up, Drop
-     * @param object Door, Exit, Key, Treasure
-     * @param color  Red, Green, Blue, Yellow
-     */
-    public static void setAction(int x, int y, String action, String object, String color) {
-        Maze.Point pos = new Maze.Point(x, y);
-        switch (action) {
-            case "Open", "Pick-up" -> Maze.setTile(pos, new Ground(pos));
-            case "Close" -> {
-                switch (object) {
-                    case "UnlockDoor" -> {
-                        switch (color) {
-                            case "Red" -> {
-                                Maze.player.addKey(ColorableTile.Color.Red);
-                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Red));
-
-                            }
-                            case "Green" -> {
-                                Maze.player.addKey(ColorableTile.Color.Green);
-                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Green));
-
-                            }
-                            case "Blue" -> {
-                                Maze.player.addKey(ColorableTile.Color.Blue);
-                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Blue));
-
-                            }
-                            case "Yellow" -> {
-                                Maze.player.addKey(ColorableTile.Color.Yellow);
-                                Maze.setTile(pos, new LockedDoor(pos, ColorableTile.Color.Yellow));
-
-                            }
-                        }
-                    }
-                    case "UnlockExit" -> Maze.setTile(pos, new LockedExit(pos));
-                }
-            }
-            case "Drop" -> {
-                switch (object) {
-                    case "PickupKey" -> {
-                        switch (color) {
-                            case "Red" -> {
-                                Maze.player.consumeKey(ColorableTile.Color.Red);
-                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Red));
-
-                            }
-                            case "Green" -> {
-                                Maze.player.consumeKey(ColorableTile.Color.Green);
-                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Green));
-
-                            }
-                            case "Blue" -> {
-                                Maze.player.consumeKey(ColorableTile.Color.Blue);
-                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Blue));
-
-                            }
-                            case "Yellow" -> {
-                                Maze.player.consumeKey(ColorableTile.Color.Yellow);
-                                Maze.setTile(pos, new Key(pos, ColorableTile.Color.Yellow));
-
-                            }
-                        }
-                    }
-                    case "PickupTreasure" -> {
-                        Maze.setTile(pos, new Treasure(pos));
-                        Maze.addTreasure();
-                    }
-                }
-            }
-        }
-
     }
 
     /**
@@ -399,6 +317,92 @@ public class Base extends JFrame {
     }
 
     /**
+     * Undoes action.
+     *
+     * @param actions List of Recorder actionRecords.
+     */
+    public void undo(List<Action> actions) {
+        Maze.undo(actions.stream().map(this::getAction).toList());
+    }
+
+    /**
+     * Apply action.
+     *
+     * @param actions List of Recorder actionRecords.
+     */
+    public void apply(List<Action> actions) {
+        Maze.apply(actions.stream().map(this::getAction).toList());
+    }
+
+    /**
+     * Transforms Recorder Action into Domain Action.
+     *
+     * @param action Recorder action.
+     * @return Domain Action.
+     */
+    public Entity.Action getAction(Action action) {
+        int entity = action.entityID();
+        Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
+        Entity.Direction oldDir = getDirection(action.prevDir());
+        Entity.Direction newDir = getDirection(action.currDir());
+        ColorableTile.Color color = getColor(action.color());
+        Maze.Point point = new Maze.Point(action.x(), action.y());
+        Entity.Action.Interaction interaction = new Entity.Action.Interaction(actionType, color);
+        return new Entity.Action(entity, point, oldDir, newDir, interaction);
+    }
+
+    /**
+     * Gets Domain direction from String
+     *
+     * @param dir direction from Recorder
+     * @return Direction from Domain
+     */
+    private Entity.Direction getDirection(String dir) {
+        return switch (dir) {
+            case "Up" -> Entity.Direction.Up;
+            case "Down" -> Entity.Direction.Down;
+            case "Left" -> Entity.Direction.Left;
+            case "Right" -> Entity.Direction.Right;
+            default -> throw new IllegalStateException("Unexpected direction: " + dir);
+        };
+    }
+
+    /**
+     * Gets Domain Color from String
+     *
+     * @param color color from Recorder
+     * @return Color from Domain
+     */
+    private ColorableTile.Color getColor(String color) {
+        return switch (color) {
+            case "Red" -> ColorableTile.Color.Red;
+            case "Yellow" -> ColorableTile.Color.Yellow;
+            case "Green" -> ColorableTile.Color.Green;
+            case "Blue" -> ColorableTile.Color.Blue;
+            case "None" -> ColorableTile.Color.None;
+            default -> throw new IllegalStateException("Unexpected Color: " + color);
+        };
+    }
+
+    /**
+     * Gets Domain action from String
+     *
+     * @param actionType action from Recorder
+     * @return Domain action
+     */
+    private Entity.Action.Interaction.ActionType getActionType(String actionType) {
+        return switch (actionType) {
+            case "Pinged" -> Pinged;
+            case "PickupKey" -> PickupKey;
+            case "PickupTreasure" -> PickupTreasure;
+            case "UnlockDoor" -> UnlockDoor;
+            case "UnlockExit" -> UnlockExit;
+            case "None" -> None;
+            default -> throw new IllegalStateException("Unexpected action type: " + actionType);
+        };
+    }
+
+    /**
      * Create, run and draw new level
      */
     public void loadLevel() {
@@ -412,10 +416,10 @@ public class Base extends JFrame {
         final JPanel level = new PhasePanel(game, side);
 
         timeMS = 0;
-        gameTimer = new Timer(20, unused -> {
+        gameTimer = new Timer(delay, unused -> {
             assert SwingUtilities.isEventDispatchThread();
             level.repaint(); //draws game
-            timeMS += 20;
+            timeMS += delay;
             if (timeMS % 1000 == 0) {
                 //TODO tell viewport current time
 
@@ -423,11 +427,16 @@ public class Base extends JFrame {
                 side.setTime(timeSec);
             }
 
-            //TODO uncomment when ready for game ending/level switching
-            if (timeSec <= 0) {
+            Maze.entities.stream()
+                    .filter(e -> e instanceof EnemyEntity<?> ee && timeMS % ee.getSpeed() == 0)
+                    .forEach(Entity::ping);
+
+            transformActions(Maze.getChangeMap()).forEach(a -> recorder.addAction(a, timeMS));
+
+            if (timeSec <= 0 || Maze.isGameLost()) {
                 playerDied();
             }
-//            else if (Maze.gameComplete()) {
+//            else if (Maze.gameComplete()) { //TODO uncomment when ready for game ending/level switching
 //                playerWon();
 //            }
         });
@@ -446,6 +455,27 @@ public class Base extends JFrame {
 
         pack();
         level.requestFocus();  //need to be after pack
+    }
+
+    /**
+     * transforms list of Domain actions into list of Recorder actions.
+     *
+     * @param actions list of Domain actions
+     * @return list of Recorder actions
+     */
+    private List<Action> transformActions(List<Entity.Action> actions) {
+        List<Action> actionRecords = new ArrayList<>();
+        for (Entity.Action action : actions) {
+            String actionType = action.interaction().type().toString();
+            String oldDir = action.oldDir().toString();
+            String newDir = action.newDir().toString();
+            String color = action.interaction().color().toString();
+            int entityHash = action.id();
+            int vx = action.moveVector().x();
+            int vy = action.moveVector().y();
+            actionRecords.add(new Action(entityHash, actionType, vx, vy, oldDir, newDir, color));
+        }
+        return actionRecords;
     }
 
     /**

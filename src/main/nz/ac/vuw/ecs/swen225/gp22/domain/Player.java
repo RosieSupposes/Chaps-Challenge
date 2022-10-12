@@ -11,7 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
  * a base {@link Entity} but with an inventory to hold keys.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.5
+ * @version 1.8
  */
 public class Player extends Entity<Player>{
     /** Stores all the keys that the player has. */
@@ -27,17 +27,22 @@ public class Player extends Entity<Player>{
         super(entityPos, facingDir);
     }
 
-    // Returns null because the player should not be pinged.
+    // Does not do anything because the player should not be pinged.
     @Override
-    public Action ping(){ return null; }
+    public void ping(){ }
+
+    @Override
+    public void unping(){ }
 
     @Override 
-    public Action moveAndTurn(Direction dir){
+    public void moveAndTurn(Direction dir){
+        Direction oldDir = getDir();
+        Maze.Point oldPos = getPos();
         super.moveAndTurn(dir);
 
         Action.Interaction interaction = new Interaction(ActionType.None, Color.None);
         if(!Maze.unclaimedInteractions.isEmpty()) interaction = Maze.unclaimedInteractions.poll();
-        return new Action(getPos(), getDir(), interaction);
+        action = new Action(id(), getPos().subtract(oldPos), oldDir, getDir(), interaction);
     }
 
     /** Clears all the keys that the player has. */
