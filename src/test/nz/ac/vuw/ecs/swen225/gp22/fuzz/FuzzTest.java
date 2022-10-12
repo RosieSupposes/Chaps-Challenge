@@ -6,6 +6,7 @@ import java.time.Duration;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import org.junit.jupiter.api.Test;
+
 import java.util.*;
 import javax.swing.SwingUtilities;
 import java.awt.Robot;
@@ -16,11 +17,12 @@ import java.awt.event.KeyEvent;
  * Class for Fuzz Testing.
  *
  * @author Gavin Lim, 300585341
- * @version 1.4
+ * @version 1.5
  */
 public class FuzzTest {
 
     static final Random r = new Random();
+    private static Base base;
 
     // List of possible inputs.
     private final List<Integer> inputs = List.of(KeyEvent.VK_UP,
@@ -42,11 +44,11 @@ public class FuzzTest {
     private List<Integer> generateInputs() {
         int prev = -1;
         List<Integer> moves = new ArrayList<>();
-        for(int i = 0; i < 500; i++) {
-            while(true) {
+        for (int i = 0; i < 500; i++) {
+            while (true) {
                 int random = r.nextInt(inputs.size());
                 int move = inputs.get(random);
-                if (prev == - 1 || move != inputsAndOpposite.get(prev)) {
+                if (prev == -1 || move != inputsAndOpposite.get(prev)) {
                     moves.add(move);
                     prev = move;
                     break;
@@ -57,39 +59,33 @@ public class FuzzTest {
     }
 
     /**
-     * Generates a single valid input.
-     *
-     * @return single valid input.
-     */
-    private int generateOneInput() {
-        return inputs.get(r.nextInt(inputs.size()));
-    }
-
-    /**
      * Inputs random inputs for Level 1 of Chap's Challenge.
      */
     public void test1() {
-        runTest(1);
+        try {
+            SwingUtilities.invokeLater(() -> (base = new Base()).newGame(1));
+        } catch (Error e) {
+        }
+        runTest();
     }
 
     /**
      * Inputs random inputs for Level 2 of Chap's Challenge.
      */
     public void test2() {
-        runTest(2);
+        try {
+            SwingUtilities.invokeLater(() -> base.newGame(2));
+        } catch (Error e) {
+        }
+        runTest();
     }
 
     /**
-     * Runs the test for the specified level.
-     * @param level - level number.
+     * Runs the test on current Base.
      */
-    private void runTest(int level) {
+    private void runTest() {
         try {
             Robot robot = new Robot();
-            try {
-                SwingUtilities.invokeLater(() -> new Base().newGame(level));
-            } catch (Error e) {
-            }
             List<Integer> generatedInputs = generateInputs();
             for (int i : generatedInputs) {
                 SwingUtilities.invokeLater(new Runnable() {
@@ -107,24 +103,13 @@ public class FuzzTest {
                 } catch (InterruptedException e) {
                 }
             }
-            try {
-                robot.keyPress(KeyEvent.VK_CONTROL);
-                Thread.sleep(100);
-                robot.keyPress(KeyEvent.VK_X);
-                Thread.sleep(100);
-                robot.keyRelease(KeyEvent.VK_X);
-                Thread.sleep(100);
-                robot.keyRelease(KeyEvent.VK_CONTROL);
-            }
-            catch(Exception e) {
 
-            }
         } catch (AWTException e) {
             e.printStackTrace();
         }
     }
 
-    /**
+        /**
      * Runs tests for both level 1 and 2 of Chap's Challenge.
      * Tests are limited to a one minute timer.
      */
@@ -132,10 +117,9 @@ public class FuzzTest {
     public void fuzzTests() {
         try {
             assertTimeout(Duration.ofSeconds(60), () -> test1());
-            Thread.sleep(5000);
+            Thread.sleep(1000);
             assertTimeout(Duration.ofSeconds(60), () -> test2());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
     }
