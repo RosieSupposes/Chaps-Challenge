@@ -3,7 +3,7 @@
     <mapInfo>
         <width>16</width>
         <height>15</height>
-        <treasures>3</treasures>
+        <treasures>7</treasures>
         <nextLevel>-1</nextLevel>
     </mapInfo>
     <player x="1" y="7" direction="Right"/>
@@ -66,8 +66,8 @@
         <tile ID="wall" x="15" y="5"/>
 
         <tile ID="wall" x="0" y="6"/>
-        <tile ID="wall" x="5" y="6"/>
-        <tile ID="bounce-pad" x="7" y="6">
+        <tile ID="death" x="5" y="6"/>
+        <tile ID="bounce-pad" x="6" y="6">
             <direction>Left</direction>
         </tile>
         <tile ID="wall" x="9" y="6"/>
@@ -77,10 +77,10 @@
         <tile ID="info" x="3" y="7">
             <text>Marshmallow pads can launch you over walls, and deadly puddles of milk</text>
         </tile>
-        <tile ID="bounce-pad" x="5" y="7">
+        <tile ID="bounce-pad" x="4" y="7">
             <direction>Right</direction>
         </tile>
-        <tile ID="wall" x="5" y="7"/>
+        <tile ID="death" x="5" y="7"/>
         <tile ID="key" x="7" y="7">
             <color>Green</color>
         </tile>
@@ -91,8 +91,8 @@
         <tile ID="wall" x="15" y="7"/>
 
         <tile ID="wall" x="0" y="8"/>
-        <tile ID="wall" x="5" y="8"/>
-        <tile ID="bounce-pad" x="7" y="8">
+        <tile ID="death" x="5" y="8"/>
+        <tile ID="bounce-pad" x="6" y="8">
             <direction>Left</direction>
         </tile>
         <tile ID="wall" x="9" y="8"/>
