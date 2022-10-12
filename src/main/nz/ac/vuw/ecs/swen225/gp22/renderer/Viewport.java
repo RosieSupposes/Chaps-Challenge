@@ -94,11 +94,11 @@ public class Viewport extends JPanel implements ActionListener {
         // display infofield if the player steps on it
         if (playerTile instanceof InfoField inField){
             displayInfo(inField, g2D);
-            //playSFX("Unlock", 1); // check sounds is working
+            //playSFX("Background", 2); // check sound is working
         }
 
         //TODO: play sounds based on the player's actions and game status
-        try{ checkActions(); }
+        try{ checkAction(); }
         catch(Exception e){ e.printStackTrace(); }
 
     }
@@ -184,7 +184,6 @@ public class Viewport extends JPanel implements ActionListener {
      * @return The image of an entity depending on the direction it is facing.
      */
     public BufferedImage getEntityImg(Entity.Direction dir){
-        // check for the facingDir of player then return image accordingly
         switch (dir){
             case Up: return Img.PlayerUp.image;
             case Down: return Img.PlayerDown.image;
@@ -215,11 +214,13 @@ public class Viewport extends JPanel implements ActionListener {
      * Plays a sound based on the action that takes place in the game.
      * @param action Action performed.
      */
-    public void checkActions(){
+    public void checkAction(){
         switch (this.action){
+            case "Background" : playSFX("Background", 2);
             case "CollectItem": playSFX("CollectItem", 1);
-            case "Unlock": playSFX("Unlock", 1);
             case "LoseGame": playSFX("LoseGame", 1);
+            case "MainMenu": playSFX("MainMenu", 1);
+            case "Unlock": playSFX("Unlock", 1);
             case "WinGame": playSFX("WinGame", 1);
             case "WinLevel": playSFX("WinLevel", 1);
         }
