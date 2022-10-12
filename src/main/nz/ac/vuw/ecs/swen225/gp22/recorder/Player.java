@@ -235,7 +235,7 @@ public class Player extends JPanel {
         isPlaying = true;
         isRewinding = false;
         new Thread(() -> {
-            for (int i = currentAction; i < gameStates.size(); i++) {
+            for (int i = currentAction; i <= gameStates.size(); i++) {
                 if (!isPlaying && !isRewinding) break;
                 if (progress(i, isPlaying)) break;
             }
