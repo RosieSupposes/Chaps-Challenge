@@ -39,7 +39,6 @@ public class Viewport extends JPanel implements ActionListener {
         timer.start();
         boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
         boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
-        System.out.println("boundariesX: " + boundariesX + "\tboundariesY: " + boundariesY);
     }
 
     /**
