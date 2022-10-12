@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.Timer;
@@ -34,7 +35,7 @@ public class Viewport extends JPanel implements ActionListener {
     private JLabel infofield = new JLabel("");
     private SFXPlayer sfxPlayer = new SFXPlayer();
     private final HashMap<String, SFX> soundList = new HashMap<>();
-    private String action = "";
+    private ArrayList<Entity.Action.Interaction.ActionType> actions = new ArrayList<>();
 
     /**
      * Initialises a new maze upon the loading of a level.
@@ -97,8 +98,12 @@ public class Viewport extends JPanel implements ActionListener {
             //playSFX("Background", 2); // check sound is working
         }
 
-        //TODO: play sounds based on the player's actions and game status
-        try{ checkAction(); }
+        // play sounds based on the player's actions and game status
+        try{ 
+            for (Entity.Action.Interaction.ActionType a : actions){
+                checkAction(a); 
+            }
+        }
         catch(Exception e){ e.printStackTrace(); }
 
     }
@@ -210,19 +215,21 @@ public class Viewport extends JPanel implements ActionListener {
         add(infofield);
     }
 
-        /**
+    /**
      * Plays a sound based on the action that takes place in the game.
      * @param action Action performed.
      */
-    public void checkAction(){
-        switch (this.action){
-            case "Background" : playSFX("Background", 2);
-            case "CollectItem": playSFX("CollectItem", 1);
-            case "LoseGame": playSFX("LoseGame", 1);
-            case "MainMenu": playSFX("MainMenu", 1);
-            case "Unlock": playSFX("Unlock", 1);
-            case "WinGame": playSFX("WinGame", 1);
-            case "WinLevel": playSFX("WinLevel", 1);
+    public void checkAction(Entity.Action.Interaction.ActionType action){
+        switch (action){
+            case None : playSFX("Background", 2);
+            case PickupKey: playSFX("CollectItem", 1);
+            case PickupTreasure: playSFX("CollectItem", 1);
+            //case "LoseGame": playSFX("LoseGame", 1);
+            //case "MainMenu": playSFX("MainMenu", 1);
+            case UnlockDoor: playSFX("Unlock", 1);
+            case UnlockExit: playSFX("Unlock", 1);
+            //case "WinGame": playSFX("WinGame", 1);
+            //case "WinLevel": playSFX("WinLevel", 1);
         }
     }
 
@@ -240,6 +247,6 @@ public class Viewport extends JPanel implements ActionListener {
      * Stores the action that has happened in the game. 
      * @param action Action performed.
      */
-    public void setAction(String action){ this.action = action; }
+    public void setAction(ArrayList<Entity.Action.Interaction.ActionType> action){ this.actions = action; }
 
 }
