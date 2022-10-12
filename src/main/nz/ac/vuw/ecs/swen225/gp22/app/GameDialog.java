@@ -17,11 +17,12 @@ import java.util.List;
 public class GameDialog extends JDialog {
 
     private static final Dimension BUTTON_SIZE = new Dimension(180, 30);
-    private int xOffset;
-    private int yOffset;
-    private int width;
+    private int width = 230;
     private int height;
-    private Base base;
+    private int xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
+    private int yOffset = GameConstants.WINDOW_HEIGHT / 4;
+    private final Base base;
+    private JLabel info;
     private Timer timer = new Timer(20, e -> {
     });
 
@@ -29,6 +30,7 @@ public class GameDialog extends JDialog {
         Pause,
         GameOver,
         GameCompleted,
+        NextLevel,
         Save;
     }
 
@@ -46,10 +48,13 @@ public class GameDialog extends JDialog {
             case Pause -> components = setUpPause();
             case GameOver -> components = setUpGameOver();
             case GameCompleted -> components = setUpGameCompleted();
+            case NextLevel -> components = setUpNextLevel();
             case Save -> components = setUpSave();
         }
         setUpComponents(components);
     }
+
+
 
     /**
      * For error pop-ups
@@ -67,6 +72,9 @@ public class GameDialog extends JDialog {
         this.setLayout(new GridBagLayout());
         this.getContentPane().setBackground(GameConstants.LIGHT_YELLOW_COLOR);
         this.setResizable(false);
+        this.info = new JLabel();
+        this.info.setFont(new Font("Arial", Font.BOLD, 14));
+        this.info.setForeground(GameConstants.TEXT_COLOR);
     }
 
     /**
@@ -117,9 +125,7 @@ public class GameDialog extends JDialog {
 
         this.addKeyListener(new Controller(base, this));
 
-        JLabel info = new JLabel("Game Saved");
-        info.setFont(new Font("Arial", Font.BOLD, 14));
-        info.setForeground(GameConstants.TEXT_COLOR);
+        this.info.setText("Game Saved");
 
         timeMS = 0;
         timer = new Timer(250, unused -> {
@@ -140,17 +146,12 @@ public class GameDialog extends JDialog {
      * @return list of components to be added to window
      */
     private List<JComponent> setUpGameCompleted() {
-        width = 230;
         height = 400;
-        xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-        yOffset = GameConstants.WINDOW_HEIGHT / 4;
         this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
-        JLabel info = new JLabel("You Win!");
-        info.setFont(new Font("Arial", Font.BOLD, 18));
-        info.setForeground(GameConstants.TEXT_COLOR);
+        this.info.setText("You Win!");
 
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
     }
@@ -161,19 +162,25 @@ public class GameDialog extends JDialog {
      * @return list of components to be added to window
      */
     private List<JComponent> setUpGameOver() {
-        width = 230;
         height = 300;
-        xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-        yOffset = GameConstants.WINDOW_HEIGHT / 4;
         this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
-        JLabel info = new JLabel("Game is Over");
-        info.setFont(new Font("Arial", Font.BOLD, 18));
-        info.setForeground(GameConstants.TEXT_COLOR);
+        this.info.setText("Game is Over");
 
         return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
+    }
+
+    private List<JComponent> setUpNextLevel() {
+        height = 200;
+        this.makeBounds();
+
+        this.addKeyListener(new Controller(base, this));
+
+        this.info.setText("Next Level");
+
+        return List.of(info, newTwoButton(), exitButton());
     }
 
     /**
@@ -182,17 +189,12 @@ public class GameDialog extends JDialog {
      * @return list of components to be added to pop-up
      */
     private List<JComponent> setUpPause() {
-        width = 230;
         height = 400;
-        xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-        yOffset = GameConstants.WINDOW_HEIGHT / 4;
         this.makeBounds();
 
         this.addKeyListener(new Controller(base, this));
 
-        JLabel info = new JLabel("Game is Paused");
-        info.setFont(new Font("Arial", Font.BOLD, 18));
-        info.setForeground(GameConstants.TEXT_COLOR);
+        this.info.setText("Game is Paused");
 
         if (!this.isFocusOwner()) {
             base.unPause();
@@ -208,7 +210,6 @@ public class GameDialog extends JDialog {
      * @return list of components for to be added to pop-up
      */
     private List<JComponent> setUpError(String message) {
-        width = 230;
         height = 130;
         xOffset = GameConstants.GAME_WINDOW_SIZE - width / 2;
         yOffset = 100;
@@ -216,7 +217,7 @@ public class GameDialog extends JDialog {
 
         this.addKeyListener(new Controller(base, this));
 
-        JLabel info = new JLabel(message);
+        this.info.setText(message);
 
         GameButton button = new GameButton("OK", BUTTON_SIZE, e -> {
             this.dispose();

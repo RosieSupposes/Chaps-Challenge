@@ -42,6 +42,7 @@ public class Base extends JFrame {
     private final GameDialog saveDialog;
     private final GameDialog gameOverDialog;
     private final GameDialog gameWinDialog;
+    private final GameDialog nextLevelDialog;
 
     private static int level = 1;
 
@@ -59,6 +60,7 @@ public class Base extends JFrame {
         saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
         gameOverDialog = new GameDialog(this, GameDialog.PopUp.GameOver);
         gameWinDialog = new GameDialog(this, GameDialog.PopUp.GameCompleted);
+        nextLevelDialog = new GameDialog(this,GameDialog.PopUp.NextLevel);
 
         setVisible(true);
         setResizable(false);
@@ -249,6 +251,13 @@ public class Base extends JFrame {
         gameTimer.stop();
     }
 
+    public void nextLevel() {
+        System.out.println("Level won");
+        recorder.save();
+        nextLevelDialog.visibleFocus();
+        gameTimer.stop();
+    }
+
     /**
      * exit the game.
      */
@@ -421,8 +430,6 @@ public class Base extends JFrame {
             level.repaint(); //draws game
             timeMS += delay;
             if (timeMS % 1000 == 0) {
-                //TODO tell viewport current time
-
                 timeSec--;
                 side.setTime(timeSec);
             }
@@ -439,6 +446,9 @@ public class Base extends JFrame {
             else if (Maze.gameComplete()) {
                 playerWon();
             }
+//            else if(Maze.isNextLevel()){
+//                nextLevel();
+//            }
         });
         gameTimer.start();
 
