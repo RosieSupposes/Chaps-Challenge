@@ -59,7 +59,7 @@ public class Player extends JPanel {
             gamePanel.repaint();
         }, "stepback");
 
-        scrubber = actions == null ? new JSlider() : new JSlider(0, actions.size() - 1);
+        scrubber = gameStates == null ? new JSlider() : new JSlider(0, gameStates.size() - 1);
         scrubber.setPreferredSize(SLIDER_DIM);
         scrubber.setValue(0);
         scrubber.addChangeListener(e -> {
