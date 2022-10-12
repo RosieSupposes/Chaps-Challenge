@@ -151,6 +151,7 @@ public class Viewport extends JPanel implements ActionListener {
         if (tile instanceof InfoField){ return Img.InfoField.image; } 
         if (tile instanceof Exit){ return Img.Exit.image; } 
         if (tile instanceof LockedExit){ return Img.LockedExit.image; }
+        if (tile instanceof MilkPuddle){ return Img.MilkPuddle.image; }
         if (tile instanceof Treasure){ return Img.Treasure.image; }
         if (tile instanceof Wall){ return Img.Wall.image; }
 
