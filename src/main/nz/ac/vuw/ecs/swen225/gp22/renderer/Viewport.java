@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.Timer;
@@ -35,16 +34,14 @@ public class Viewport extends JPanel implements ActionListener {
     private JLabel infofield = new JLabel("");
     private SFXPlayer sfxPlayer = new SFXPlayer();
     private final HashMap<String, SFX> soundList = new HashMap<>();
-    private ArrayList<String> actionList = new ArrayList<String>();
-    
+    private String action = "";
 
     /**
      * Initialises a new maze upon the loading of a level.
      */
-    public Viewport(ArrayList<String> actions){ 
+    public Viewport(){ 
         timer = new Timer(50, this);
         timer.start();
-        actionList = actions;
 
         //load wav files
         try{
@@ -101,7 +98,7 @@ public class Viewport extends JPanel implements ActionListener {
         }
 
         //TODO: play sounds based on the player's actions and game status
-        try{ for (String action: actionList){ checkActions(action);} }
+        try{ checkActions(); }
         catch(Exception e){ e.printStackTrace(); }
 
     }
@@ -218,8 +215,8 @@ public class Viewport extends JPanel implements ActionListener {
      * Plays a sound based on the action that takes place in the game.
      * @param action Action performed.
      */
-    public void checkActions(String action){
-        switch (action){
+    public void checkActions(){
+        switch (this.action){
             case "CollectItem": playSFX("CollectItem", 1);
             case "Unlock": playSFX("Unlock", 1);
             case "LoseGame": playSFX("LoseGame", 1);
@@ -237,5 +234,11 @@ public class Viewport extends JPanel implements ActionListener {
     public void playSFX(String soundName, int priorityLevel){
         sfxPlayer.playSound(soundList.get(soundName), priorityLevel);
     }
+
+    /***
+     * Stores the action that has happened in the game. 
+     * @param action Action performed.
+     */
+    public void setAction(String action){ this.action = action; }
 
 }
