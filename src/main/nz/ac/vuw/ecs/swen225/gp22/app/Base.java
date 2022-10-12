@@ -168,16 +168,17 @@ public class Base extends JFrame {
      */
     public void replayPhase() {
         System.out.println("Replay");
-        runClosePhase();
+        try {
+            Player playerWindow = new Player(this);
+            runClosePhase();
 
-        Player playerWindow = new Player(this);
+            add(BorderLayout.CENTER, playerWindow);
+            setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
+            pack();
+            playerWindow.requestFocus(); //need to be after pack
 
-        add(BorderLayout.CENTER, playerWindow);
-        setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
-        pack();
-        playerWindow.requestFocus(); //need to be after pack
-
-        components.add(playerWindow);
+            components.add(playerWindow);
+        } catch (Exception ignored) {}
     }
 
     /**
