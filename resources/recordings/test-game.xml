@@ -1,32 +1,317 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <game level="1">
-    <move x="3" y="5" direction="Left"/>
-    <move x="2" y="5" direction="Left"/>
-    <collect x="2" y="5" item="PickupTreasure"/>
-    <move x="2" y="4" direction="Up"/>
-    <collect x="2" y="4" item="PickupKey" color="Blue"/>
-    <move x="2" y="5" direction="Down"/>
-    <move x="2" y="6" direction="Down"/>
-    <collect x="2" y="6" item="PickupKey" color="Red"/>
-    <move x="2" y="7" direction="Down"/>
-    <move x="3" y="7" direction="Right"/>
-    <move x="4" y="7" direction="Right"/>
-    <collect x="4" y="7" item="PickupTreasure"/>
-    <move x="5" y="7" direction="Right"/>
-    <move x="6" y="7" direction="Right"/>
-    <move x="7" y="7" direction="Right"/>
-    <door x="7" y="7" type="UnlockDoor" color="Blue"/>
-    <move x="6" y="7" direction="Left"/>
-    <move x="6" y="6" direction="Up"/>
-    <move x="6" y="5" direction="Up"/>
-    <collect x="6" y="5" item="PickupTreasure"/>
-    <move x="5" y="5" direction="Left"/>
-    <move x="4" y="5" direction="Left"/>
-    <move x="4" y="4" direction="Up"/>
-    <move x="4" y="3" direction="Up"/>
-    <move x="4" y="2" direction="Up"/>
-    <door x="4" y="2" type="UnlockDoor" color="Red"/>
-    <move x="4" y="1" direction="Up"/>
-    <door x="4" y="1" type="UnlockExit"/>
+    <state id="0" time="0"/>
+    <state id="1" time="680">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Down" currDir="Left" color="None"/>
+    </state>
+    <state id="2" time="840">
+        <action entityID="1" type="PickupTreasure" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="3" time="1200">
+        <action entityID="1" type="PickupKey" x="0" y="-1" prevDir="Left" currDir="Up" color="Blue"/>
+    </state>
+    <state id="4" time="1540">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="5" time="1740">
+        <action entityID="1" type="UnlockDoor" x="-1" y="0" prevDir="Up" currDir="Left" color="Blue"/>
+    </state>
+    <state id="6" time="1920">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="7" time="2080">
+        <action entityID="1" type="PickupKey" x="-1" y="0" prevDir="Left" currDir="Left" color="Yellow"/>
+    </state>
+    <state id="8" time="2300">
+        <action entityID="1" type="PickupTreasure" x="0" y="1" prevDir="Left" currDir="Down" color="None"/>
+    </state>
+    <state id="9" time="2600">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Down" currDir="Right" color="None"/>
+    </state>
+    <state id="10" time="2960">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Right" currDir="Up" color="None"/>
+    </state>
+    <state id="11" time="3180">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Up" currDir="Right" color="None"/>
+    </state>
+    <state id="12" time="3380">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="13" time="3580">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Right" currDir="Down" color="None"/>
+    </state>
+    <state id="14" time="3780">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="15" time="4020">
+        <action entityID="1" type="PickupKey" x="0" y="1" prevDir="Down" currDir="Down" color="Blue"/>
+    </state>
+    <state id="16" time="4360">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Down" currDir="Right" color="None"/>
+    </state>
+    <state id="17" time="4680">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Right" currDir="Down" color="None"/>
+    </state>
+    <state id="18" time="4860">
+        <action entityID="1" type="UnlockDoor" x="0" y="1" prevDir="Down" currDir="Down" color="Yellow"/>
+    </state>
+    <state id="19" time="5060">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="20" time="5260">
+        <action entityID="1" type="PickupTreasure" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="21" time="5460">
+        <action entityID="1" type="PickupKey" x="0" y="1" prevDir="Down" currDir="Down" color="Green"/>
+    </state>
+    <state id="22" time="5700">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Down" currDir="Up" color="None"/>
+    </state>
+    <state id="23" time="5880">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="24" time="6060">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="25" time="6240">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="26" time="6820">
+        <action entityID="1" type="PickupTreasure" x="1" y="0" prevDir="Up" currDir="Right" color="None"/>
+    </state>
+    <state id="27" time="7220">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="28" time="7440">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="29" time="7680">
+        <action entityID="1" type="UnlockDoor" x="1" y="0" prevDir="Right" currDir="Right" color="Blue"/>
+    </state>
+    <state id="30" time="7880">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="31" time="8120">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="32" time="8320">
+        <action entityID="1" type="PickupTreasure" x="0" y="-1" prevDir="Right" currDir="Up" color="None"/>
+    </state>
+    <state id="33" time="8500">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Up" currDir="Down" color="None"/>
+    </state>
+    <state id="34" time="8720">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Down" currDir="Left" color="None"/>
+    </state>
+    <state id="35" time="8940">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="36" time="9160">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="37" time="9420">
+        <action entityID="1" type="PickupKey" x="0" y="-1" prevDir="Left" currDir="Up" color="Red"/>
+    </state>
+    <state id="38" time="9660">
+        <action entityID="1" type="PickupTreasure" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="39" time="9860">
+        <action entityID="1" type="PickupKey" x="0" y="-1" prevDir="Up" currDir="Up" color="Red"/>
+    </state>
+    <state id="40" time="10100">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="41" time="10520">
+        <action entityID="1" type="UnlockDoor" x="1" y="0" prevDir="Up" currDir="Right" color="Red"/>
+    </state>
+    <state id="42" time="10740">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="43" time="10980">
+        <action entityID="1" type="PickupKey" x="1" y="0" prevDir="Right" currDir="Right" color="Yellow"/>
+    </state>
+    <state id="44" time="11220">
+        <action entityID="1" type="PickupTreasure" x="0" y="1" prevDir="Right" currDir="Down" color="None"/>
+    </state>
+    <state id="45" time="11480">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Down" currDir="Up" color="None"/>
+    </state>
+    <state id="46" time="11680">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Up" currDir="Left" color="None"/>
+    </state>
+    <state id="47" time="11880">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="48" time="12080">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="49" time="12360">
+        <action entityID="1" type="UnlockDoor" x="0" y="-1" prevDir="Left" currDir="Up" color="Green"/>
+    </state>
+    <state id="50" time="12580">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="51" time="12840">
+        <action entityID="1" type="PickupTreasure" x="1" y="0" prevDir="Up" currDir="Right" color="None"/>
+    </state>
+    <state id="52" time="13060">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Right" currDir="Left" color="None"/>
+    </state>
+    <state id="53" time="13300">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Left" currDir="Down" color="None"/>
+    </state>
+    <state id="54" time="13500">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="55" time="13780">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Down" currDir="Left" color="None"/>
+    </state>
+    <state id="56" time="13980">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="57" time="14260">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Left" currDir="Down" color="None"/>
+    </state>
+    <state id="58" time="14500">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Down" currDir="Left" color="None"/>
+    </state>
+    <state id="59" time="14820">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="60" time="14980">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Left" currDir="Down" color="None"/>
+    </state>
+    <state id="61" time="15200">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="62" time="15380">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="63" time="15580">
+        <action entityID="1" type="UnlockDoor" x="-1" y="0" prevDir="Down" currDir="Left" color="Red"/>
+    </state>
+    <state id="64" time="15780">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="65" time="16000">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Left" currDir="Left" color="None"/>
+    </state>
+    <state id="66" time="16220">
+        <action entityID="1" type="PickupTreasure" x="0" y="-1" prevDir="Left" currDir="Up" color="None"/>
+    </state>
+    <state id="67" time="16500">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Up" currDir="Down" color="None"/>
+    </state>
+    <state id="68" time="16720">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Down" currDir="Right" color="None"/>
+    </state>
+    <state id="69" time="16900">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="70" time="17060">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="71" time="17200">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="72" time="17340">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="73" time="17500">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="74" time="17740">
+        <action entityID="1" type="UnlockDoor" x="0" y="1" prevDir="Right" currDir="Down" color="Yellow"/>
+    </state>
+    <state id="75" time="18220">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="76" time="18260">
+        <action entityID="1" type="PickupTreasure" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="77" time="18380">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Down" currDir="Up" color="None"/>
+    </state>
+    <state id="78" time="18580">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="79" time="18820">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Up" currDir="Down" color="None"/>
+    </state>
+    <state id="80" time="19000">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="81" time="19160">
+        <action entityID="1" type="PickupKey" x="0" y="1" prevDir="Down" currDir="Down" color="Green"/>
+    </state>
+    <state id="82" time="19380">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Down" currDir="Up" color="None"/>
+    </state>
+    <state id="83" time="19500">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="84" time="19860">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="85" time="20000">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="86" time="20140">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="87" time="20340">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Up" currDir="Left" color="None"/>
+    </state>
+    <state id="88" time="20540">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Left" currDir="Up" color="None"/>
+    </state>
+    <state id="89" time="20740">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="90" time="20820">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Up" currDir="Left" color="None"/>
+    </state>
+    <state id="91" time="21060">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Left" currDir="Up" color="None"/>
+    </state>
+    <state id="92" time="21440">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Up" currDir="Left" color="None"/>
+    </state>
+    <state id="93" time="21680">
+        <action entityID="1" type="UnlockDoor" x="0" y="-1" prevDir="Left" currDir="Up" color="Green"/>
+    </state>
+    <state id="94" time="21840">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
+    <state id="95" time="22040">
+        <action entityID="1" type="PickupTreasure" x="-1" y="0" prevDir="Up" currDir="Left" color="None"/>
+    </state>
+    <state id="96" time="22300">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Left" currDir="Right" color="None"/>
+    </state>
+    <state id="97" time="22540">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Right" currDir="Down" color="None"/>
+    </state>
+    <state id="98" time="22700">
+        <action entityID="1" type="None" x="0" y="1" prevDir="Down" currDir="Down" color="None"/>
+    </state>
+    <state id="99" time="22920">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Down" currDir="Right" color="None"/>
+    </state>
+    <state id="100" time="23100">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="101" time="23300">
+        <action entityID="1" type="None" x="1" y="0" prevDir="Right" currDir="Right" color="None"/>
+    </state>
+    <state id="102" time="23640">
+        <action entityID="1" type="None" x="-1" y="0" prevDir="Right" currDir="Left" color="None"/>
+    </state>
+    <state id="103" time="23800">
+        <action entityID="1" type="UnlockExit" x="0" y="-1" prevDir="Left" currDir="Up" color="None"/>
+    </state>
+    <state id="104" time="23960">
+        <action entityID="1" type="None" x="0" y="-1" prevDir="Up" currDir="Up" color="None"/>
+    </state>
 </game>
