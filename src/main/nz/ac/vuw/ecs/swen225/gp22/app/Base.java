@@ -41,7 +41,6 @@ public class Base extends JFrame {
 	private final GameDialog saveDialog;
 	private final GameDialog gameOverDialog;
 	private final GameDialog gameWinDialog;
-    private final GameDialog nextLevelDialog;
     private final int delay = 20;
 
 	private static int level = 1;
@@ -418,13 +417,12 @@ public class Base extends JFrame {
 		SidePanel side = new SidePanel(timeSec, level);
 		side.setTime(timeSec);
 		final JPanel level = new PhasePanel(game, side);
-
+		timeMS = 0;
         gameTimer = new Timer(delay, unused -> {
-        timeMS = 0;
             assert SwingUtilities.isEventDispatchThread();
             level.repaint(); //draws game
             timeMS += delay;
-            if (timeMS % 1000 == 0) {
+            if (timeMS % 600 == 0) {
                 timeSec--;
                 side.setTime(timeSec);
             }
