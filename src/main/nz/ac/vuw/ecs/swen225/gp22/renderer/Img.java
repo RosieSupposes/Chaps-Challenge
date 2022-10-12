@@ -21,7 +21,7 @@ public enum Img {
     BlueKeyNB, GreenKeyNB, RedKeyNB, YellowKeyNB, 
 
     // images to be displayed for level 2 of Chap's Challenge
-    EnemyDown, EnemyLeft, EnemyRight, EnemyUp;
+    EnemyDown, EnemyLeft, EnemyRight, EnemyUp, MilkPuddle;
 
     public final BufferedImage image;
 
