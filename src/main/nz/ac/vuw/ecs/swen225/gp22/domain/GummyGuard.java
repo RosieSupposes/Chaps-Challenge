@@ -37,7 +37,9 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
 
     @Override
     public void unping(){
-        System.out.println("IM NOT SURE YET, WE WILL SEE");
+        if(Maze.getTile(getPos().subtract(getDir())).isObstructive()) setDir(getDir().opposite());
+        move(getDir().opposite());;
+        if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
     }
 
     @Override
