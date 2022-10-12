@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;

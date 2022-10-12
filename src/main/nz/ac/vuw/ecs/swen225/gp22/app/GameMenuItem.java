@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp22.app;
 
 import javax.swing.*;
 
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 import java.awt.*;
 import java.awt.event.ActionListener;

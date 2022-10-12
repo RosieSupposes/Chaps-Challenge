@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e2fc2d67-1530-4be8-ac19-26629596d111" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/Base.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/Base.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/ImagePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/ImagePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/MenuMainPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/MenuMainPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/PhasePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/PhasePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/GameConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/util/GameConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/SidePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/SidePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/Viewport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/Viewport.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +25,13 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -26,22 +44,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "dart.analysis.tool.window.visible": "false",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="DevMarkers" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="nz.ac.vuw.ecs.swen225.gp22.domain.DevMarkers" />
@@ -87,5 +106,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

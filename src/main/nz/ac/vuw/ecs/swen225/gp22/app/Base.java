@@ -9,7 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Action;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
-import nz.ac.vuw.ecs.swen225.gp22.renderer.GameConstants;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SidePanel;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
 
