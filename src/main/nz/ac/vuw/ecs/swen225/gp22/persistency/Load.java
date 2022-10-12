@@ -93,6 +93,7 @@ public class Load {
     private static Parser loadGame(File file){
         Parser parser = new Parser(file);
         parser.parseMapInfo();
+        parser.parsePlayer(Maze.player);
         List<Tile> tiles = parser.getTiles();
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
