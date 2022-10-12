@@ -53,6 +53,8 @@ public class Load {
      * @param levelNum level to load.
      */
     public static void loadLevel(int levelNum){
+        Base.setTime(60);
+        Base.setLevel(levelNum);
         loadGame(getFile("levels/level" + levelNum));
         Base.setLevel(levelNum);
         Base.setTime(60);

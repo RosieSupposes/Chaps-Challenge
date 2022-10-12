@@ -25,24 +25,54 @@ public class GameDialog extends JDialog {
     private Timer timer = new Timer(20, e -> {
     });
 
+    public enum PopUp{
+        Pause,
+        GameOver,
+        GameCompleted,
+        Save;
+    }
+
     /**
      * New Dialog window, can create four types based on type passed in
      *
      * @param base current base
      * @param type Pause, GameOver, GameComplete, Save
      */
-    public GameDialog(Base base, String type) {
+    public GameDialog(Base base, PopUp type) {
         this.base = base;
+        setUpWindow();
+        List<JComponent> components = List.of();
+        switch (type) {
+            case Pause -> components = setUpPause();
+            case GameOver -> components = setUpGameOver();
+            case GameCompleted -> components = setUpGameCompleted();
+            case Save -> components = setUpSave();
+        }
+        setUpComponents(components);
+    }
+
+    /**
+     * For error pop-ups
+     *
+     * @param base
+     * @param message
+     */
+    public GameDialog(Base base, String message){
+        this.base = base;
+        setUpWindow();
+        setUpComponents(setUpError(message));
+    }
+
+    private void setUpWindow(){
         this.setLayout(new GridBagLayout());
         this.getContentPane().setBackground(GameConstants.LIGHT_YELLOW_COLOR);
         this.setResizable(false);
-        List<JComponent> components = List.of();
-        switch (type) {
-            case "Pause" -> components = setUpPause();
-            case "GameOver" -> components = setUpGameOver();
-            case "GameCompleted" -> components = setUpGameCompleted();
-            case "Save" -> components = setUpSave();
-        }
+    }
+
+    /**
+     * add components to dialog.
+     */
+    private void setUpComponents(List<JComponent> components){
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(5, 5, 5, 5);
@@ -173,11 +203,34 @@ public class GameDialog extends JDialog {
     }
 
     /**
+     * set up error pop up
+     *
+     * @return list of components for to be added to pop-up
+     */
+    private List<JComponent> setUpError(String message) {
+        width = 230;
+        height = 130;
+        xOffset = GameConstants.GAME_WINDOW_SIZE - width / 2;
+        yOffset = 100;
+        this.makeBounds();
+
+        this.addKeyListener(new Controller(base, this));
+
+        JLabel info = new JLabel(message);
+
+        GameButton button = new GameButton("OK", BUTTON_SIZE, e -> {
+            this.dispose();
+        });
+
+        return List.of(info, button);
+    }
+
+    /**
      * Makes play button. With action to set pop-up invisible again.
      *
      * @return play button
      */
-    public GameButton playButton() {
+    private GameButton playButton() {
         Runnable action = () -> {
             base.unPause();
             this.setVisible(false);
@@ -197,7 +250,7 @@ public class GameDialog extends JDialog {
      *
      * @return load button
      */
-    public GameButton loadButton() {
+    private GameButton loadButton() {
         return new GameButton("Load Previous Game", BUTTON_SIZE, e -> {
             base.loadGame();
             this.setVisible(false);
@@ -209,7 +262,7 @@ public class GameDialog extends JDialog {
      *
      * @return load level one button
      */
-    public GameButton newOneButton() {
+    private GameButton newOneButton() {
         return new GameButton("Load Level One", BUTTON_SIZE, e -> {
             base.newGame(1);
             this.setVisible(false);
@@ -221,7 +274,7 @@ public class GameDialog extends JDialog {
      *
      * @return load level two button
      */
-    public GameButton newTwoButton() {
+    private GameButton newTwoButton() {
         return new GameButton("Load Level Two", BUTTON_SIZE, e -> {
             base.newGame(2);
             this.setVisible(false);
@@ -233,9 +286,9 @@ public class GameDialog extends JDialog {
      *
      * @return save button
      */
-    public GameButton saveButton() {
-        return new GameButton("Save Game", BUTTON_SIZE, e -> {
-            base.saveGame();
+    private GameButton saveButton() {
+        return new GameButton("Save and Exit", BUTTON_SIZE, e -> {
+            base.saveExit();
         });
     }
 
@@ -244,7 +297,7 @@ public class GameDialog extends JDialog {
      *
      * @return exit button
      */
-    public GameButton exitButton() {
+    private GameButton exitButton() {
         return new GameButton("Exit Game", BUTTON_SIZE, e -> {
             base.exitGame();
             this.setVisible(false);
