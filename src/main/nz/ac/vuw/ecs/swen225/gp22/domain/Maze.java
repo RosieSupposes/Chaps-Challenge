@@ -2,10 +2,12 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
 
 /**
  * This class stores the game state (player, tilemap, entities, and treasures). 
@@ -13,7 +15,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
  * or perform operations on the player.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.9
+ * @version 1.13
  */
 public class Maze{
     /** Stores the {@link Maze} entity so that other tiles can access it easily. */
@@ -37,7 +39,11 @@ public class Maze{
     /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
 
+    /** Flag used to check if the player was killed. */
     private static boolean gameLost;
+
+    /** Used to make entity IDs. */
+    public static int globalID;
 
     /** 
      * Generates a new map. This will be used by the persistency module for level loading. 
@@ -50,6 +56,7 @@ public class Maze{
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
 
         gameLost = false;
+        globalID = 0;
         entities.clear();
 
         tileMap = new Tile[dimensions.x()][dimensions.y()];
@@ -62,8 +69,6 @@ public class Maze{
         treasuresLeft = treasures;
         player = new Player(new Point(0, 0), Entity.Direction.Down);
         nextLevel = "";
-
-        entities.add(new GummyGuard(new Point(2, 1), Direction.Left));
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
@@ -105,6 +110,59 @@ public class Maze{
         if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
         setTile(point, new Ground(point));
         assert getTile(point) instanceof Ground : "Tile not reset properly.";
+    }
+
+    /** @return A list of changes that have occurred since this was last called. */
+    public static List<Entity.Action> getChangeMap(){
+        List<Entity.Action> changeMap = entities.stream().filter(Entity::hasAction).map(n -> n.pollAction()).collect(Collectors.toList());
+        if(player.hasAction()) changeMap.add(player.pollAction());
+        return changeMap;
+    }
+
+    /**
+     * Applies a change map to the current game, updating the game state.
+     * 
+     * @param changeMap A list of changes to apply.
+     */
+    public static void apply(List<Entity.Action> changeMap){
+        changeMap.forEach(a -> {
+            if(a.interaction().type() == ActionType.Pinged) getEntity(a.id()).ping();
+            else{
+                getEntity(a.id()).setDir(a.newDir());
+                getEntity(a.id()).move(a.moveVector());
+            }
+        });
+    }
+
+    /**
+     * Undoes a change map to the current game, updating the game state.
+     * 
+     * @param changeMap A list of changes to undo.
+     */
+    public static void undo(List<Entity.Action> changeMap){
+        changeMap.forEach(a -> {
+            if(a.interaction().type() == ActionType.Pinged) getEntity(a.id()).unping();
+            else{
+                getEntity(a.id()).setDir(a.oldDir());
+                getEntity(a.id()).move(a.moveVector().x() * -1, a.moveVector().y() * -1);
+                a.interaction().type().undo(getEntity(a.id()).getPos().add(a.moveVector()), a.interaction().color());
+            }
+        });
+    }
+
+    /**
+     * Finds an entity based on its hash code, used for
+     * replaying and rewinding moves. Suppresses raw types 
+     * warning because the generic type is only used for observers
+     * and does not affect the implementation of this method.
+     * 
+     * @param hashcode Hash code of the entity.
+     * @return The entity that matches the hash code.
+     */
+    @SuppressWarnings("rawtypes")
+    public static Entity getEntity(int id){
+        if(player.id() == id) return player;
+        return entities.stream().filter(n -> n.id() == id).findFirst().orElseThrow(() -> new IllegalArgumentException("No entity exists with given ID."));
     }
 
     /** Reduce the number of treasures left by 1. */
@@ -169,6 +227,41 @@ public class Maze{
          */
         public Point add(int addX, int addY){
             return add(new Point(addX, addY));
+        }
+
+        /**
+         * Subtract this point from another, then returns the result.
+         * 
+         * @param addX The amount to subtract from the X.
+         * @param addY The amount to subtract from the Y.
+         * @return Point object representing the result of the two points.
+         */
+        public Point subtract(Point point){
+            if(point == null) throw new IllegalArgumentException("Given point is null");
+            return new Point(x - point.x(),y - point.y());
+        }
+
+        /**
+         * Overloaded method for {@link #subtract subtract()} that accepts an {@link Entity.Direction} enum.
+         * 
+         * @param dir Direction to get point from.
+         * @return Point object representing the result of the point minus the direction.
+         */
+        public Point subtract(Entity.Direction dir){
+            if(dir == null) throw new IllegalArgumentException("Given direction is null");
+            return subtract(new Point(dir.posChange.x(), dir.posChange.y()));
+        }
+
+        /**
+         * Overloaded method for {@link #subtract subtract()} that accepts two individual numbers 
+         * that represent X and Y, respectively.
+         * 
+         * @param addX The amount to subtract from the X.
+         * @param addY The amount to subtract from the Y.
+         * @return Point object representing the result of the point minus the two numbers.
+         */
+        public Point subtract(int addX, int addY){
+            return subtract(new Point(addX, addY));
         }
 
         /** @return Whether or not the point exists on the {@link Maze#tileMap tilemap}. */
