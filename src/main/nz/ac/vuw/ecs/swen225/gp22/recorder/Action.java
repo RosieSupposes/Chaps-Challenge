@@ -13,7 +13,7 @@ import org.dom4j.Element;
  * @param currDir The current direction.
  * @param color The color of the tile. Can be None.
  */
-public record Action(int entityHash, String actionType, int x, int y, String prevDir, String currDir, String color) {
+public record Action(int entityID, String actionType, int x, int y, String prevDir, String currDir, String color) {
     /**
      * Creates an XML element from the action.
      *
@@ -21,7 +21,7 @@ public record Action(int entityHash, String actionType, int x, int y, String pre
      */
     public Element toxml() {
         return DocumentHelper.createElement("action")
-                .addAttribute("hash", String.valueOf(entityHash))
+                .addAttribute("entityID", String.valueOf(entityID))
                 .addAttribute("type", actionType)
                 .addAttribute("x", String.valueOf(x))
                 .addAttribute("y", String.valueOf(y))

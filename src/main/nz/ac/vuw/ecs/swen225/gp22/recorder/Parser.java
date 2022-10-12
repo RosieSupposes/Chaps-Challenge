@@ -51,7 +51,7 @@ public class Parser {
      * @return the action
      */
     private Action parseAction(Element element) {
-        int hash = Integer.parseInt(element.attributeValue("hash"));
+        int hash = Integer.parseInt(element.attributeValue("entityID"));
         String actionType = element.attributeValue("type");
         int x = Integer.parseInt(element.attributeValue("x"));
         int y = Integer.parseInt(element.attributeValue("y"));

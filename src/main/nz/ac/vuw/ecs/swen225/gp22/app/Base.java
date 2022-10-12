@@ -337,7 +337,7 @@ public class Base extends JFrame {
      * @return Domain Action.
      */
     public Entity.Action getAction(Action action) {
-        int entity = action.entityHash();
+        int entity = action.entityID();
         Entity.Action.Interaction.ActionType actionType = getActionType(action.actionType());
         Entity.Direction oldDir = getDirection(action.prevDir());
         Entity.Direction newDir = getDirection(action.currDir());
