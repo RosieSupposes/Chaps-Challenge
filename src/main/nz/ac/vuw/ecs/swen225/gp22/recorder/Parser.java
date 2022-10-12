@@ -23,12 +23,8 @@ public class Parser {
      *
      * @param file the recording file
      */
-    Parser(File file) {
-        try {
-            document = new SAXReader().read(file);
-        } catch (DocumentException e) {
-            throw new IllegalArgumentException("Invalid recording file");
-        }
+    Parser(File file) throws DocumentException {
+        document = new SAXReader().read(file);
     }
 
     /**
