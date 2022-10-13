@@ -5,11 +5,14 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * in a direction.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.1
+ * @version 1.2
  */
 public class BouncyPad extends Tile{
     /** Used for tile functionality that depends on the player. */
     private final Observer<Player> playerObserver;
+
+    /** The direction the player will get bounced in. */
+    private final Entity.Direction dir;
 
     /**
      * Default constructor, sets the position of the tile,
@@ -20,6 +23,7 @@ public class BouncyPad extends Tile{
      */
     public BouncyPad(Maze.Point tilePos, Entity.Direction dir){
         super(tilePos, false);
+        this.dir = dir;
 
         playerObserver = player -> {
             if(player.getPos().equals(tilePos)){
@@ -29,6 +33,9 @@ public class BouncyPad extends Tile{
         };
         Maze.player.addObserver(playerObserver);
     }
+
+    /** @return The {@link Entity.Direction} the player will get bounced in. */
+    public Entity.Direction getDir(){ return dir; }
 
     @Override
     public void deleteTile(){ 
