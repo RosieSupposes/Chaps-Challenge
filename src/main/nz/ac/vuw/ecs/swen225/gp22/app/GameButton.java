@@ -1,75 +1,109 @@
 package nz.ac.vuw.ecs.swen225.gp22.app;
 
-import javax.swing.*;
-
 import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+/**
+ * GameButton is button with set colors to make it match consistently across UI.
+ */
 public class GameButton extends JButton {
-    private Image image;
-    private Dimension dim;
+	private Image image; //image on button
+	private final Dimension dim; //dimension of button
 
-    public GameButton(String name, Dimension dim, ActionListener action) {
-        super(name);
-        this.dim = dim;
-        setUp(dim, action);
-    }
+	/**
+	 * Normal button
+	 *
+	 * @param name   Text on button
+	 * @param dim    Size of button
+	 * @param action Action for button
+	 */
+	public GameButton(String name, Dimension dim, ActionListener action) {
+		super(name);
+		this.dim = dim;
+		setUp(action);
+	}
 
-    public GameButton(String name, Dimension dim, ActionListener action, String filename) {
-        super(name);
-        setUp(dim, action);
-        this.dim = dim;
-        image = getIcon(filename);
-//        this.setIcon(icon);
-    }
+	/**
+	 * Button with image or icon
+	 *
+	 * @param name     button name
+	 * @param dim      size of button
+	 * @param action   action of button
+	 * @param filename filename for image
+	 */
+	public GameButton(String name, Dimension dim, ActionListener action, String filename) {
+		super(name);
+		setUp(action);
+		this.dim = dim;
+		image = getIcon(filename);
+	}
 
-    private void setUp(Dimension dim, ActionListener action) {
-        this.setBackground(GameConstants.BUTTON_COLOR);
-        this.setForeground(GameConstants.TEXT_COLOR);
+	/**
+	 * Standard set-up for all buttons
+	 *
+	 * @param action action for button
+	 */
+	private void setUp(ActionListener action) {
+		this.setBackground(GameConstants.BUTTON_COLOR);
+		this.setForeground(GameConstants.TEXT_COLOR);
 
-        this.setPreferredSize(dim);
-        this.setMinimumSize(dim);
-        this.setMaximumSize(dim);
-        this.addActionListener(action);
-    }
+		this.setPreferredSize(dim);
+		this.setMinimumSize(dim);
+		this.setMaximumSize(dim);
+		this.addActionListener(action);
+	}
 
-    private Image getIcon(String filename) {
-        URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
-        ImageIcon imageIcon = new ImageIcon(imagePath);
-        return imageIcon.getImage();
-//        Image image = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-//        return new ImageIcon(image);
-    }
+	/**
+	 * Gets the icon to add to the button.
+	 *
+	 * @param filename filename of image
+	 * @return the image to add to button
+	 */
+	private Image getIcon(String filename) {
+		URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
+		ImageIcon imageIcon = new ImageIcon(imagePath);
+		return imageIcon.getImage();
+	}
 
-    public void changeName(String name) {
-        this.setText(name);
-    }
+	/**
+	 * Change icon on button
+	 *
+	 * @param filename filename of new icon
+	 */
+	public void changeIcon(String filename) {
+		image = getIcon(filename);
+	}
 
-    public void changeIcon(String filename) {
-        image = getIcon(filename);
-//        this.setIcon(icon);
-    }
+	/**
+	 * Changes action on button.
+	 *
+	 * @param actionListener new action listener
+	 */
+	public void changeActionListener(ActionListener actionListener) {
+		this.removeActionListener(this.getActionListeners()[0]);
+		this.addActionListener(actionListener);
+	}
 
-    public void changeActionListener(ActionListener actionListener) {
-        this.removeActionListener(this.getActionListeners()[0]);
-        this.addActionListener(actionListener);
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2D = (Graphics2D) g.create();
-        if (image != null) {
-//            System.out.println("imaage width: " + image.getWidth(this));
-            double scale = 0.45;
-            int imgWidth = (int) (image.getWidth(this) * scale);
-            int imgHeight = (int) (image.getHeight(this) * scale);
-            int x = dim.width / 2 - imgWidth / 2;
-            int y = dim.height / 2 - imgHeight / 2;
-            g2D.drawImage(image, x, y, imgWidth, imgHeight, this);
-        }
-    }
+	/**
+	 * Repaints the button with image on it
+	 *
+	 * @param g the <code>Graphics</code> object to protect
+	 */
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2D = (Graphics2D) g.create();
+		if (image != null) {
+			double scale = 0.45;
+			int imgWidth = (int) (image.getWidth(this) * scale);
+			int imgHeight = (int) (image.getHeight(this) * scale);
+			int x = dim.width / 2 - imgWidth / 2;
+			int y = dim.height / 2 - imgHeight / 2;
+			g2D.drawImage(image, x, y, imgWidth, imgHeight, this);
+		}
+	}
 }
