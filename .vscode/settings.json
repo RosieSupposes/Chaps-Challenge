@@ -1,0 +1,14 @@
+{
+    "java.project.sourcePaths": [
+        "src/main",
+        "resources",
+        "src/test"
+    ],
+    "java.test.config": {
+        "workingDirectory": "${workspaceFolder}"
+    },
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "resources/levels/level2.jar"
+    ]
+}
