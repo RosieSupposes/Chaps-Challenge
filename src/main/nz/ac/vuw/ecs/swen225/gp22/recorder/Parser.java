@@ -41,6 +41,7 @@ public class Parser {
      * @return the list of actions
      */
     public List<GameState> getStates() {
+        @SuppressWarnings("unchecked")
         List<Element> nodes = document.getRootElement().elements();
         return nodes.stream().map(this::parseState).toList();
     }
@@ -71,6 +72,7 @@ public class Parser {
     private GameState parseState(Element element) {
         int id = Integer.parseInt(element.attributeValue("id"));
         int time = Integer.parseInt(element.attributeValue("time"));
+        @SuppressWarnings("unchecked")
         List<Action> actions = element.elements().stream().map(e -> parseAction((Element) e)).toList();
         return new GameState(id, time, actions);
     }

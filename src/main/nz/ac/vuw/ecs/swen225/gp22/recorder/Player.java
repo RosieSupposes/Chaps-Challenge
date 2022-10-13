@@ -90,7 +90,7 @@ public class Player extends JPanel {
         }, "home");
 
         JButton load = new GameButton("Load", new Dimension(100, 30), e -> {
-            try { load(); } catch (RuntimeException ignored) {} // If the user cancels the load, ignore it.
+            try { load(); } catch (RuntimeException ignored) { } // If the user cancels the load, ignore it.
             if (gameStates != null) scrubber.setMaximum(gameStates.size());
         });
 
@@ -156,8 +156,10 @@ public class Player extends JPanel {
 
     /**
      * Load a file.
+     *
+     * @throws RuntimeException If the user cancels the load.
      */
-    private void load() {
+    private void load() throws RuntimeException {
         JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir") + "/resources/recordings");
         fileChooser.setDialogTitle("Select a recording to play");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -198,14 +200,14 @@ public class Player extends JPanel {
             // scrub forward
             for (int i = currentAction; i < position; i++) {
                 gameStates.get(i).apply(base);
-                gamePanel.updateTime(60 - gameStates.get(i).getTime()/1000);
+                gamePanel.updateTime(60 - gameStates.get(i).getTime() / 1000);
                 gamePanel.repaint();
             }
         } else if (position < currentAction) {
             // scrub backward
             for (int i = currentAction - 1; i >= position; i--) {
                 gameStates.get(i).undo(base);
-                gamePanel.updateTime(60 - gameStates.get(i).getTime()/1000);
+                gamePanel.updateTime(60 - gameStates.get(i).getTime() / 1000);
                 gamePanel.repaint();
             }
         }
@@ -247,7 +249,7 @@ public class Player extends JPanel {
     /**
      * Used for playing and rewinding.
      *
-     * @param i The current action.
+     * @param i             The current action.
      * @param isProgressing If the player is progressing.
      * @return true if the player should stop progressing.
      */
