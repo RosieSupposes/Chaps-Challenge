@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.15
+ * @version 1.16
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -91,6 +91,12 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /** Used to identify an entity during playback. */
     private final int id;
 
+    /** 
+     * Makes sure updateObservers() isn't called in setPos() when
+     * a move method is being called.
+     */
+    private boolean inMove = false;
+
     /**
      * Default constructor, sets the position and direction of the entity.
      * 
@@ -129,7 +135,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Maze.Point newPos = entityPos.add(direction);
         if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
+        inMove = true;
         setPos(newPos);
+        inMove = false;
         assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
         updateObservers(); 
     }
@@ -144,7 +152,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Maze.Point newPos = entityPos.add(moveVector);
         if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
+        inMove = true;
         setPos(newPos);
+        inMove = false;
         assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
         updateObservers(); 
     }
@@ -197,7 +207,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
         if(Maze.getTile(pos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         entityPos = pos; 
-        updateObservers(); 
+        if(!inMove) updateObservers(); 
     }
 
     /**
