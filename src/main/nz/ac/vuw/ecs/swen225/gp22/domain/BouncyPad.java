@@ -18,8 +18,8 @@ public class BouncyPad extends Tile{
      * Default constructor, sets the position of the tile,
      * obstructiveness to false, and the direction of the bounce pad.
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
-     * @param dir The {@link Entity.Direction} the player will get bounced in.
+     * @param tilePos Point to set the position field to.
+     * @param dir The Direction the player will get bounced in.
      */
     public BouncyPad(Maze.Point tilePos, Entity.Direction dir){
         super(tilePos, false);
@@ -34,7 +34,7 @@ public class BouncyPad extends Tile{
         Maze.player.addObserver(playerObserver);
     }
 
-    /** @return The {@link Entity.Direction} the player will get bounced in. */
+    /** @return The Direction the player will get bounced in. */
     public Entity.Direction getDir(){ return dir; }
 
     @Override

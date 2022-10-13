@@ -12,7 +12,7 @@ public class Exit extends Tile{
      * Default constructor, sets the position the tile, and 
      * obstructiveness to false.
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param tilePos Point to set the position field to. 
      */
     public Exit(Maze.Point tilePos){
         super(tilePos, false);

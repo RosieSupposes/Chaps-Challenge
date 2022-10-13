@@ -14,7 +14,7 @@ public class MilkPuddle extends Tile{
      * Default constructor, sets the position of the tile,
      * and obstructiveness to false.
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param tilePos Point to set the position field to. 
      */
     public MilkPuddle(Maze.Point tilePos){
         super(tilePos, false);

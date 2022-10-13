@@ -27,14 +27,14 @@ public class TileDatabase{
     }};
 
     /**
-     * Factory method that creates a {@link Tile} object based on the tile ID. 
+     * Factory method that creates a Tile object based on the tile ID. 
      * Makes sure the given parameters are the correct amount and with
      * the correct types. Suppresses unchecked warnings because I know that any constructor
-     * from a class in {@link #tileDB} will be of the correct constructor type.
+     * from a class in tileDB will be of the correct constructor type.
      * 
      * @param tileID ID of the requested tile.
      * @param tileParams Array of the given tile parameters.
-     * @return The newly created tile {@link Tile}.
+     * @return The newly created tile Tile.
      */
     @SuppressWarnings("unchecked")
     public static Tile create(String tileID, Object... tileParams){
@@ -67,10 +67,10 @@ public class TileDatabase{
     }
 
     /**
-     * Overloaded method for {@link #getID getID()} with {@link Tile} 
+     * Overloaded method for getID() with Tile 
      * object as the parameter.
      * 
-     * @param tile {@link Tile} object to get ID of.
+     * @param tile Tile object to get ID of.
      * @return String ID of the object's class.
      */
     public static String getID(Tile tile){ return getID(tile.getClass()); }

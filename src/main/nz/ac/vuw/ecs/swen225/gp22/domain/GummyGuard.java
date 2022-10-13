@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.*;
-
 /**
  * A basic enemy that moves back and forth.
  * 

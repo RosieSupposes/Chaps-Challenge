@@ -20,8 +20,8 @@ public class Player extends Entity<Player>{
     /**
      * Default constructor, sets the position and direction of the player.
      * 
-     * @param entityPos {@link Maze.Point Point} to set the position field to. ({@link Entity#entityPos see here})
-     * @param facingDir {@link Direction} to set the direction field to. ({@link Entity#facingDir see here})
+     * @param entityPos Point to set the position field to. 
+     * @param facingDir Direction to set the direction field to. 
      */
     public Player(Maze.Point entityPos, Direction facingDir) {
         super(entityPos, facingDir);
@@ -51,7 +51,7 @@ public class Player extends Entity<Player>{
     /** 
      * Adds a key to the player's inventory.
      * 
-     * @param color {@link ColorableTile.Color Color} of the key. 
+     * @param color Color of the key. 
      */
     public void addKey(ColorableTile.Color color){
         if(color == null || color == ColorableTile.Color.None) throw new IllegalArgumentException("Given color is null.");
@@ -64,7 +64,7 @@ public class Player extends Entity<Player>{
     /** 
      * Consumes a key from the player's inventory.
      * 
-     * @param color {@link ColorableTile.Color Color} of the key.
+     * @param color Color of the key.
      */
     public void consumeKey(ColorableTile.Color color){
         if(color == null || color == ColorableTile.Color.None) throw new IllegalArgumentException("Given color is null.");
@@ -78,7 +78,7 @@ public class Player extends Entity<Player>{
     /**
      * Checks if the player has a key of a certain color.
      * 
-     * @param color {@link ColorableTile.Color Color} of the key.
+     * @param color Color of the key.
      * @return Whether or not the key is in the player's inventory.
      */
     public boolean hasKey(ColorableTile.Color color){ return collectedKeys.contains(color); }

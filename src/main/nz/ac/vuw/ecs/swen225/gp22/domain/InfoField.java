@@ -15,7 +15,7 @@ public class InfoField extends Tile{
      * Default constructor, sets the position of the tile,
      * and obstructiveness to false.
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param tilePos Point to set the position field to. 
      */
     public InfoField(Maze.Point tilePos, String infoText){
         super(tilePos, false);
@@ -23,7 +23,7 @@ public class InfoField extends Tile{
         this.infoText = infoText;
     }
 
-    /** @return The {@link #infoText info text} of this tile. */
+    /** @return The info text of this tile. */
     public String getText(){ return infoText; }
 
     @Override

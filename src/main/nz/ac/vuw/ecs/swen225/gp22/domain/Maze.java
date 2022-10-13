@@ -18,7 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
  * @version 1.13
  */
 public class Maze{
-    /** Stores the {@link Maze} entity so that other tiles can access it easily. */
+    /** Stores the Player entity so that other tiles can access it easily. */
     public static Player player;
 
     /** Contains all non-player entities. Suppressed the raw types warning as 
@@ -26,17 +26,17 @@ public class Maze{
     @SuppressWarnings("rawtypes")
     public static ArrayList<Entity> entities = new ArrayList<>();
 
-    /** A 2D array that stores the level {@link Tile} instances in a 
+    /** A 2D array that stores the level Tile instances in a 
      *  way where they can be accessed by position.  */
     private static Tile tileMap[][];
 
-    /** Represents how many more {@link Treasure} tiles are still on the map. */
+    /** Represents how many more Treasure tiles are still on the map. */
     private static int treasuresLeft;
     
-    /** Stores the number of the next level to load. If -1 {@link #gameComplete() game complete flag} returns true. */
+    /** Stores the number of the next level to load. If -1 the game complete flag returns true. */
     private static int nextLevel;
 
-    /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
+    /** Stores Interaction records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
 
     /** Flag used to check if the player was killed. */
@@ -48,8 +48,9 @@ public class Maze{
     /** 
      * Generates a new map. This will be used by the persistency module for level loading. 
      * 
-     * @param dimensions The size of the {@link #tileMap map}.
-     * @param treasures The number of treasures on the {@link #tileMap map}.
+     * @param dimensions The size of the map.
+     * @param treasures The number of treasures on the map.
+     * @param int nextLevelP Stores the number of the next level to load.
      */
     public static void generateMap(Point dimensions, int treasures, int nextLevelP){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
@@ -71,13 +72,13 @@ public class Maze{
         player = new Player(new Point(0, 0), Entity.Direction.Down);
     }
 
-    /** @return A {@link Point} representing the maps dimensions. */
+    /** @return A Point representing the maps dimensions. */
     public static Point getDimensions(){ return new Point(tileMap.length, tileMap[0].length); }
 
     /** 
-     * Finds a {@link Tile} using the {@link #tileMap tilemap} given a {@link Point point}.
+     * Finds a Tile using the tilemap given a point.
      * 
-     * @param point The position of the {@link Tile tile}.
+     * @param point The position of the tile.
      * @return Tile object at the given position.
      */
     public static Tile getTile(Point point){
@@ -86,10 +87,10 @@ public class Maze{
     }
     
     /** 
-     * Sets the value on the {@link #tileMap tilemap} at a given {@link Point point}.
+     * Sets the value on the tilemap at a given point.
      * 
-     * @param point The position the {@link Tile tile} will be at.
-     * @param tile The {@link Tile tile} to add to the {@link #tileMap tilemap}.
+     * @param point The position the tile will be at.
+     * @param tile The tile to add to the tilemap.
      */
     public static void setTile(Point point, Tile tile){
         if(point == null || !point.isValid()) throw new IllegalArgumentException("Invalid point given.");
@@ -102,7 +103,7 @@ public class Maze{
     }
 
     /** 
-     * Sets the {@link Tile} object at a given {@link Point point} to air.
+     * Sets the Tile object at a given point to air.
      * 
      * @param point Point to reset.
      */
@@ -151,13 +152,13 @@ public class Maze{
     }
 
     /**
-     * Finds an entity based on its hash code, used for
+     * Finds an entity based on its ID, used for
      * replaying and rewinding moves. Suppresses raw types 
      * warning because the generic type is only used for observers
      * and does not affect the implementation of this method.
      * 
-     * @param hashcode Hash code of the entity.
-     * @return The entity that matches the hash code.
+     * @param id ID of the entity.
+     * @return The entity that matches the ID.
      */
     @SuppressWarnings("rawtypes")
     public static Entity getEntity(int id){
@@ -174,7 +175,7 @@ public class Maze{
     /** Increases the number of treasures left by 1. */
     public static void addTreasure(){ treasuresLeft++; }
 
-    /** @return Whether or not all the {@link Treasure} tiles on the map have been collected. */
+    /** @return Whether or not all the Treasure tiles on the map have been collected. */
     public static boolean collectedAllTreasures(){ return treasuresLeft == 0; }
 
     /** @return The number of treasures left to collect. */
@@ -208,13 +209,12 @@ public class Maze{
         return mazeState;
     }
 
-    /** Represents a point on the {@link Maze#tileMap tilemap}. */
+    /** Represents a point on the tilemap. */
     public record Point(int x, int y){ 
         /**
          * Adds this point and another, then returns the result.
          * 
-         * @param addX The amount to add to the X.
-         * @param addY The amount to add to the Y.
+         * @param point The point to add.
          * @return Point object representing the sum of the two points.
          */
         public Point add(Point point){
@@ -223,7 +223,7 @@ public class Maze{
         }
 
         /**
-         * Overloaded method for {@link #add add()} that accepts an {@link Entity.Direction} enum.
+         * Overloaded method for add() that accepts a Direction.
          * 
          * @param dir Direction to get point from.
          * @return Point object representing the sum of the point and direction.
@@ -234,7 +234,7 @@ public class Maze{
         }
 
         /**
-         * Overloaded method for {@link #add add()} that accepts two individual numbers 
+         * Overloaded method for add() that accepts two individual numbers 
          * that represent X and Y, respectively.
          * 
          * @param addX The amount to add to the X.
@@ -248,8 +248,7 @@ public class Maze{
         /**
          * Subtract this point from another, then returns the result.
          * 
-         * @param addX The amount to subtract from the X.
-         * @param addY The amount to subtract from the Y.
+         * @param point Point to subtract by.
          * @return Point object representing the result of the two points.
          */
         public Point subtract(Point point){
@@ -258,7 +257,7 @@ public class Maze{
         }
 
         /**
-         * Overloaded method for {@link #subtract subtract()} that accepts an {@link Entity.Direction} enum.
+         * Overloaded method for subtract() that accepts a Direction.
          * 
          * @param dir Direction to get point from.
          * @return Point object representing the result of the point minus the direction.
@@ -269,7 +268,7 @@ public class Maze{
         }
 
         /**
-         * Overloaded method for {@link #subtract subtract()} that accepts two individual numbers 
+         * Overloaded method for subtract() that accepts two individual numbers 
          * that represent X and Y, respectively.
          * 
          * @param addX The amount to subtract from the X.
@@ -280,7 +279,7 @@ public class Maze{
             return subtract(new Point(addX, addY));
         }
 
-        /** @return Whether or not the point exists on the {@link Maze#tileMap tilemap}. */
+        /** @return Whether or not the point exists on the tilemap. */
         public boolean isValid(){
             return x >= 0 && x < tileMap.length && y >= 0 && y < tileMap[0].length;
         }

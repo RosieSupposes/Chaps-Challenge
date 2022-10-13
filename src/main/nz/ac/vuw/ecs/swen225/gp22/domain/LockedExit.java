@@ -19,7 +19,7 @@ public class LockedExit extends Tile{
      * that the obstructiveness is updated based on the treasures collected. The same 
      * observer makes sure that when they are on this tile, it is reset. 
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param tilePos Point to set the position field to. 
      */
     public LockedExit(Maze.Point tilePos){
         super(tilePos, true);

@@ -21,8 +21,8 @@ public abstract class EnemyEntity<S extends Observable<S>> extends Entity<S>{
     /**
      * Default constructor, sets the position, direction, and speed of the enemy.
      * 
-     * @param entityPos {@link Maze.Point Point} to set the position field to. ({@link Entity#entityPos see here})
-     * @param facingDir {@link Direction} to set the direction field to. ({@link Entity#facingDir see here})
+     * @param entityPos Point to set the position field to.
+     * @param facingDir Direction to set the direction field to. 
      * @param speed How often the monster gets pinged. 
      */
     public EnemyEntity(Point entityPos, Direction facingDir, int speed){
@@ -30,6 +30,6 @@ public abstract class EnemyEntity<S extends Observable<S>> extends Entity<S>{
         this.speed = speed;
     }
 
-    /** @return The {@link #speed} of the enemy. */
+    /** @return The speed of the enemy. */
     public final int getSpeed(){ return speed; }
 }
