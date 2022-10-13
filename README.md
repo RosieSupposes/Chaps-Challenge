@@ -6,6 +6,9 @@ Our game is candy land themed. The gingerbread chap player needs to collect all 
 candy jar treasures by collecting lollipop keys to unlock all the doors before he can 
 make it through the licorice gate. 
 
+We had some issues with our game sound, and so the volume is quite loud 
+(especially the item pick-up sounds). Please be warned, and turn down your volume!
+
 We implemented all required key commands, as well as one extra Ctrl+Q to 
 quick save the game (and recording) without exiting. 
 
@@ -25,3 +28,5 @@ This allows you to test level 2 more thoroughly.
 
 We made and tested our program using IntelliJ and VSCode. We also made sure 
 it works on the ECS machines. 
+
+Here is our Gource.io video https://youtu.be/k2VJMN2m2i8 
