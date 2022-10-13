@@ -16,7 +16,7 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Direction;
  * @author Abdulrahman Asfari, 300475089
  * @version 1.2
  */
-public class DomainTests{
+public class DomainTest{
     /**
      * Checks that a new maze is created properly.
      */
