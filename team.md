@@ -5,4 +5,4 @@
 | Renderer    | Diana Batoon       | batoondian                                     |
 | Persistency | Gideon Wilkins     | wilkingide@ecs.vuw.ac.nz                       |
 | Recorder    | Christopher Sa     | sachri@ecs.vuw.ac.nz, sachri@myvuw.ac.nz       |
-| Fuzz        | Gavin Lim          | limgavi                                        |
+| Fuzz        | Gavin Lim          | limgavi@ecs.vuw.ac.nz             |
