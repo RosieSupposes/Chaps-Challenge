@@ -80,9 +80,6 @@ public class Viewport extends JPanel implements ActionListener {
         // display infofield if the player steps on it
         if (playerTile instanceof InfoField inField){ displayInfo(inField, g2D); }
 
-        //if (playerTile instanceof BouncyPad bp){ getBouncyPadImg(Maze.player.getDir()); }
-
-        //TODO: draw the enemy for level 2
     }
 
 
@@ -151,7 +148,7 @@ public class Viewport extends JPanel implements ActionListener {
             }
         }
         if (tile instanceof BouncyPad bp){ 
-            switch (Maze.player.getDir()){
+            switch (bp.getDir()){
                 case Up: return Img.BouncyPadUp.image;
                 case Down: return Img.BouncyPadDown.image;
                 case Left: return Img.BouncyPadLeft.image; 
@@ -168,24 +165,6 @@ public class Viewport extends JPanel implements ActionListener {
         if (tile instanceof Wall){ return Img.Wall.image; }
 
         return Img.FreeTile.image;
-    }
-
-    /**
-     * Returns a BufferedImage of a BouncyPad along with an arrow
-     * pointing to where the player will be launched to. 
-     * 
-     * @param dir The direction the player will be launched to.
-     * @return The image of the BouncyPad.
-     */
-    public BufferedImage getBouncyPadImg(Entity.Direction dir){
-        // check for the facingDir of player then return image accordingly
-        switch (dir){
-            case Up: return Img.BouncyPadUp.image;
-            case Down: return Img.BouncyPadDown.image;
-            case Left: return Img.BouncyPadLeft.image; 
-            case Right: return Img.BouncyPadRight.image;
-            default: throw new IllegalArgumentException("Invalid direction./n");
-        }
     }
 
     /**
