@@ -170,20 +170,6 @@ public class Base extends JFrame {
     }
 
 	/**
-	 * un-pauses game.
-	 */
-	public void unPause() {
-		System.out.println("Un Pause");
-		gameTimer.start();
-		if (currentMenuBar == null) {
-			return;
-		}
-		currentMenuBar.setUnPause();
-		pauseDialog.setVisible(false);
-		changeKeyListener(new Controller(this, false));
-	}
-
-	/**
 	 * Creates and runs re-player window.
 	 */
 	public void replayPhase() {
@@ -239,16 +225,6 @@ public class Base extends JFrame {
     }
 
 	/**
-	 * Save the current game.
-	 */
-	public void saveGame() {
-		Save.saveGame();
-		recorder.save();
-		System.out.println("Save");
-		saveDialog.visibleFocus();
-	}
-
-	/**
 	 * Saves the game and then exits
 	 */
 	public void saveExit() {
@@ -283,16 +259,6 @@ public class Base extends JFrame {
         gameTimer.stop();
 		changeKeyListener(null);
     }
-
-	/**
-	 * Saves recorder, pops up game won screen.
-	 */
-	public void playerWon() {
-		System.out.println("Level won");
-		recorder.save();
-		gameWinDialog.visibleFocus();
-		gameTimer.stop();
-	}
 
 	public void nextLevel(int lvl) {
 		closePopUp();
