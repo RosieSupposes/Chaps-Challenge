@@ -90,11 +90,11 @@ public class GameMenuBar extends JMenuBar {
 		this.add(newLevel);
 		components.add(newLevel);
 
-		GameMenuItem saveExit = new GameMenuItem("Save and Exit", e -> base.saveExit(), menuItemWidth);
+		GameMenuItem saveExit = new GameMenuItem("Save and Exit", e -> base.saveExit());
 		this.add(saveExit);
 		components.add(saveExit);
 
-		GameMenuItem quickSave = new GameMenuItem("Quick Save", e -> base.saveGame(), menuItemWidth);
+		GameMenuItem quickSave = new GameMenuItem("Quick Save", e -> base.saveGame());
 		this.add(quickSave);
 		components.add(quickSave);
 	}
@@ -103,7 +103,7 @@ public class GameMenuBar extends JMenuBar {
 	 * Add load button to menubar.
 	 */
 	public void addLoadButton() {
-		GameMenuItem load = new GameMenuItem("Load", e -> base.loadGame(), menuItemWidth);
+		GameMenuItem load = new GameMenuItem("Load", e -> base.loadGame());
 		this.add(load);
 		components.add(load);
 	}
@@ -112,7 +112,7 @@ public class GameMenuBar extends JMenuBar {
 	 * Add exit button to menubar.
 	 */
 	public void addExitButton() {
-		GameMenuItem exit = new GameMenuItem("Exit", e -> base.exitGame(), menuItemWidth);
+		GameMenuItem exit = new GameMenuItem("Exit", e -> base.exitGame());
 		this.add(exit);
 		components.add(exit);
 	}

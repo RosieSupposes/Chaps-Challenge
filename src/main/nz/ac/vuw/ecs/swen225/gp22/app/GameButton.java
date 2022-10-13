@@ -9,6 +9,9 @@ import java.net.URL;
 
 /**
  * GameButton is button with set colors to make it match consistently across UI.
+ *
+ * @author Molly Henry, 300562038
+ * @version 1.8
  */
 public class GameButton extends JButton {
 	private Image image; //image on button
