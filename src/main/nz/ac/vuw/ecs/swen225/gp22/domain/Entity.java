@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.16
+ * @version 1.17
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -37,7 +37,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
 
         /** @return The opposite direction. */
-        public Direction opposite(){ return null; }
+        public abstract Direction opposite();
     }
 
     /**
