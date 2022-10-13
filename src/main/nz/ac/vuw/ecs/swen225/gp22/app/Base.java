@@ -28,25 +28,24 @@ import static nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.Action
  * Base is the base window that all actions occur on.
  *
  * @author Molly Henry, 300562038
- * @version 1.8
+ * @version 1.12
  */
 public class Base extends JFrame {
-	private final List<JComponent> components = new ArrayList<>();
-	private int timeMS = 0;
-	private static int timeSec = 60;
-	private Timer gameTimer = new Timer(20, null);
-	private Recorder recorder;
-	private GameMenuBar currentMenuBar;
-	private PhasePanel currentPanel; //for setting keylistener on
-	private final GameDialog pauseDialog;
-	private final GameDialog saveDialog;
-	private final GameDialog gameOverDialog;
-	private final GameDialog gameWinDialog;
-	private final int delay = 20;
-
-	private static int level = 1;
-	private boolean gameOver = false;
-	private GameDialog currentPopUp;
+	private final List<JComponent> components = new ArrayList<>(); //components on JFrame
+	private int timeMS = 0; //time in milliseconds
+	private static int timeSec = 60; //time in seconds
+	private Timer gameTimer = new Timer(20, null); //timer loop for game
+	private Recorder recorder; //recorder player
+	private GameMenuBar currentMenuBar; //menu bar for game
+	private PhasePanel currentPanel; //for setting key-listener on
+	private final GameDialog pauseDialog; //pop-up for pause
+	private final GameDialog saveDialog; //pop-up for save
+	private final GameDialog gameOverDialog; //pop-up for game over
+	private final GameDialog gameWinDialog; //pop-up for game win
+	private final int delay = 20; //delay in timer
+	private static int level = 1; //current level
+	private boolean gameOver = false; //game over check
+	private GameDialog currentPopUp; //current pop-up
 
 	/**
 	 * Begin program here. Run menu phase.
@@ -75,7 +74,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * remove all components in window, clears list and stops timer
+	 * Remove all components in window, clears list and stops timer.
 	 */
 	public void runClosePhase() {
 		for (JComponent component : this.components) {
@@ -95,7 +94,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Sets current game time
+	 * Sets current game time.
 	 *
 	 * @param t time in seconds
 	 */
@@ -104,7 +103,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Returns current level
+	 * Returns current level.
 	 *
 	 * @return current level number
 	 */
@@ -113,7 +112,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Returns current game time
+	 * Returns current game time.
 	 *
 	 * @return game time in seconds
 	 */
@@ -136,38 +135,39 @@ public class Base extends JFrame {
 			newGame(1);
 		}
 	}
-    /**
-     * pauses game.
-     */
-    public void pause() {
-        System.out.println("Pause");
-		closePopUp();
-        gameTimer.stop();
-        if (currentMenuBar == null) {
-            return;
-        }
-        currentMenuBar.setPause();
 
-        changeKeyListener(new Controller(this, true));
-        pauseDialog.visibleFocus();
+	/**
+	 * Pauses game.
+	 */
+	public void pause() {
+		System.out.println("Pause");
+		closePopUp();
+		gameTimer.stop();
+		if (currentMenuBar == null) {
+			return;
+		}
+		currentMenuBar.setPause();
+
+		changeKeyListener(new Controller(this, true));
+		pauseDialog.visibleFocus();
 		currentPopUp = pauseDialog;
-    }
+	}
 
-    /**
-     * un-pauses game.
-     */
-    public void unPause() {
-        System.out.println("Un Pause");
+	/**
+	 * Un-pauses game.
+	 */
+	public void unPause() {
+		System.out.println("Un Pause");
 		closePopUp();
-        gameTimer.start();
-        if (currentMenuBar == null) {
-            return;
-        }
-        currentMenuBar.setUnPause();
-        pauseDialog.setVisible(false);
+		gameTimer.start();
+		if (currentMenuBar == null) {
+			return;
+		}
+		currentMenuBar.setUnPause();
+		pauseDialog.setVisible(false);
 		currentPopUp = null;
-        changeKeyListener(new Controller(this, false));
-    }
+		changeKeyListener(new Controller(this, false));
+	}
 
 	/**
 	 * Creates and runs re-player window.
@@ -189,7 +189,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * load a game from file.
+	 * Load a game from file.
 	 */
 	public void loadGame() {
 		Load.resumeGame();
@@ -199,71 +199,79 @@ public class Base extends JFrame {
 		//TODO when recorder has ability to start recording from middle of game, tell recorder
 		System.out.println("Load");
 	}
-    /**
-     * Loads new level, makes new recorder.
-     *
-     * @param lvl level number to load
-     */
-    public void newGame(int lvl) {
-
-        System.out.println("New level" + lvl);
-        level = lvl;
-        Load.loadLevel(lvl);
-        loadLevel();
-        recorder = new Recorder(lvl, timeMS);
-    }
-
-    /**
-     * Save the current game.
-     */
-    public void saveGame() {
-		closePopUp();
-        Save.saveGame();
-        recorder.save();
-        System.out.println("Save");
-        saveDialog.visibleFocus();
-    }
 
 	/**
-	 * Saves the game and then exits
+	 * Loads new level, makes new recorder.
+	 *
+	 * @param lvl level number to load
+	 */
+	public void newGame(int lvl) {
+
+		System.out.println("New level" + lvl);
+		level = lvl;
+		Load.loadLevel(lvl);
+		loadLevel();
+		recorder = new Recorder(lvl, timeMS);
+	}
+
+	/**
+	 * Save the current game.
+	 */
+	public void saveGame() {
+		closePopUp();
+		Save.saveGame();
+		recorder.save();
+		System.out.println("Save");
+		saveDialog.visibleFocus();
+	}
+
+	/**
+	 * Resets focus to Base window (not pop-up).
+	 */
+	public void resetFocus() {
+		currentPanel.requestFocus();
+	}
+
+	/**
+	 * Saves the game and then exits.
 	 */
 	public void saveExit() {
 		this.saveGame();
 		this.exitGame();
 	}
 
-    /**
-     * Saves recorder, pops up game over screen.
-     */
-    public void playerDied() {
+	/**
+	 * Saves recorder, pops up game over screen.
+	 */
+	public void playerDied() {
 		closePopUp();
-        System.out.println("Level lost");
-        recorder.save();
-        gameOverDialog.visibleFocus();
-        gameTimer.stop();
+		System.out.println("Level lost");
+		recorder.save();
+		gameOverDialog.visibleFocus();
+		gameTimer.stop();
 		changeKeyListener(null);
-    }
-	public void resetFocus() {
-		currentPanel.requestFocus();
 	}
 
-    /**
-     * Saves recorder, pops up game won screen.
-     */
-    public void playerWon() {
-		closePopUp();
-        System.out.println("Level won");
-        recorder.save();
-        gameWinDialog.visibleFocus();
-		currentPopUp = gameWinDialog;
-        gameTimer.stop();
-		changeKeyListener(null);
-    }
-
-	public void nextLevel(int lvl) {
+	/**
+	 * Saves recorder, pops up game won screen.
+	 */
+	public void playerWon() {
 		closePopUp();
 		System.out.println("Level won");
+		recorder.save();
+		gameWinDialog.visibleFocus();
+		currentPopUp = gameWinDialog;
+		gameTimer.stop();
+		changeKeyListener(null);
+	}
 
+	/**
+	 * Displays next level pop-up, stops game.
+	 *
+	 * @param lvl the next level
+	 */
+	public void nextLevel(int lvl) {
+		closePopUp();
 		recorder.save();
 		GameDialog nextLevelDialog = new GameDialog(this, lvl);
 		nextLevelDialog.visibleFocus();
@@ -273,7 +281,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * exit the game
+	 * Exit the game.
 	 */
 	public void exitGame() {
 		System.out.println("Exit");
@@ -298,7 +306,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * gets the game window.
+	 * Gets the game window.
 	 *
 	 * @return game window
 	 */
@@ -310,7 +318,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Run and display menu
+	 * Run and display menu.
 	 */
 	public void menuScreen() {
 
@@ -319,10 +327,6 @@ public class Base extends JFrame {
 		if (currentPanel != null) {
 			currentPanel.stopSound();
 		}
-//        ImagePanel testGame = new ImagePanel("TEST_game",Main.GAME_SIZE,new Dimension(0,0));
-//        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
-//        PhasePanel menu = new PhasePanel(testGame,testSide);
-
 		ImagePanel imagePanel = new ImagePanel("MenuSidePanel", GameConstants.SIDE_SIZE, 0.8);
 		PhasePanel menu = new PhasePanel(new MenuMainPanel(this), imagePanel);
 
@@ -390,7 +394,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Gets Domain Color from String
+	 * Gets Domain Color from String.
 	 *
 	 * @param color color from Recorder
 	 * @return Color from Domain
@@ -425,7 +429,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Create, run and draw new level
+	 * Create, run and draw new level.
 	 */
 	public void loadLevel() {
 		assert Maze.player != null;
@@ -444,7 +448,7 @@ public class Base extends JFrame {
 		timeMS = 0;
 		gameTimer = new Timer(delay, unused -> {
 			assert SwingUtilities.isEventDispatchThread();
-			level.repaint(); //draws game
+			level.repaint(); 
 			timeMS += delay;
 			if (timeMS % 1000 == 0) {
 				timeSec--;
@@ -488,11 +492,11 @@ public class Base extends JFrame {
 		setJMenuBar(currentMenuBar);
 
 		pack();
-		level.requestFocus();  //need to be after pack
+		level.requestFocus();
 	}
 
 	/**
-	 * transforms list of Domain actions into list of Recorder actions.
+	 * Transforms list of Domain actions into list of Recorder actions.
 	 *
 	 * @param actions list of Domain actions
 	 * @return list of Recorder actions
@@ -512,23 +516,26 @@ public class Base extends JFrame {
 		return actionRecords;
 	}
 
-    /**
-     * Removes current key listener, adds new one.
-     * Use to ensure there is only one key listener being
-     * used at any given time
-     *
-     * @param keyListener new keylistener to use
-     */
-    public void changeKeyListener(KeyListener keyListener) {
-        if (currentPanel.getKeyListeners().length > 0) {
-            currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);
-        }
-        currentPanel.addKeyListener(keyListener);
-        currentPanel.setFocusable(true);
-    }
+	/**
+	 * Removes current key listener, adds new one.
+	 * Use to ensure there is only one key listener being
+	 * used at any given time.
+	 *
+	 * @param keyListener new key-listener to use
+	 */
+	public void changeKeyListener(KeyListener keyListener) {
+		if (currentPanel.getKeyListeners().length > 0) {
+			currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);
+		}
+		currentPanel.addKeyListener(keyListener);
+		currentPanel.setFocusable(true);
+	}
 
-	private void closePopUp(){
-		if(currentPopUp!=null){
+	/**
+	 * Closes current pop-up if it exists.
+	 */
+	private void closePopUp() {
+		if (currentPopUp != null) {
 			currentPopUp.setVisible(false);
 		}
 	}

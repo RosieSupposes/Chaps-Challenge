@@ -13,7 +13,7 @@ import java.util.List;
  * This JPanel contains both game panel and side panel.
  *
  * @author Molly Henry, 300562038
- * @version 1.1
+ * @version 1.3
  */
 public class PhasePanel extends JPanel {
 	JPanel gamePanel; //main square panel
@@ -38,7 +38,7 @@ public class PhasePanel extends JPanel {
 	}
 
 	/**
-	 * sets up panel sizes and adds them to panel
+	 * Sets up panel sizes and adds them to panel
 	 */
 	public void setUpPanels() {
 		gamePanel.setPreferredSize(GameConstants.GAME_SIZE);
@@ -49,9 +49,9 @@ public class PhasePanel extends JPanel {
 	}
 
 	/**
-	 * If sidepanel has timer, update timer
+	 * If side-panel has timer, update timer.
 	 *
-	 * @param time
+	 * @param time time to set panel to
 	 */
 	public void updateTime(int time) {
 		if (this.sidePanel instanceof SidePanel sp) {
@@ -73,7 +73,7 @@ public class PhasePanel extends JPanel {
 	}
 
 	/**
-	 * get all components in window
+	 * Get all components in window. 
 	 *
 	 * @return list of components
 	 */

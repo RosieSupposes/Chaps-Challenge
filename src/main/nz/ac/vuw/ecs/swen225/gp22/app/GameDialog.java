@@ -13,30 +13,33 @@ import java.util.List;
  * Pause, GameOver, GameComplete, Save
  *
  * @author Molly Henry, 300562038
- * @version 1.2
+ * @version 1.3
  */
 public class GameDialog extends JDialog {
 
-	private static final Dimension BUTTON_SIZE = new Dimension(180, 30);
-	private int width = 230;
-	private int height;
-	private int xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2;
-	private int yOffset = GameConstants.WINDOW_HEIGHT / 4;
-	private final Base base;
-	private JLabel info;
+	private static final Dimension BUTTON_SIZE = new Dimension(180, 30); //size of most buttons
+	private int width = 230; //pop-up width
+	private int height; //pop-up height
+	private int xOffset = GameConstants.WINDOW_WIDTH / 2 - width / 2; //x offset from main window
+	private int yOffset = GameConstants.WINDOW_HEIGHT / 4; //y offset from main window
+	private final Base base; //to call actions on
+	private JLabel info; //title of pop-up
 	private Timer timer = new Timer(20, e -> {
-	});
+	}); //to time out a pop-up
+	private int timeMS = 0; //to keep track of how long to time out pop-up
 
+	/**
+	 * For selecting different pop-ups
+	 */
 	public enum PopUp {
 		Pause,
 		GameOver,
 		GameCompleted,
-		NextLevel,
 		Save;
 	}
 
 	/**
-	 * New Dialog window, can create four types based on type passed in
+	 * New Dialog window, can create four types based on type passed in.
 	 *
 	 * @param base current base
 	 * @param type Pause, GameOver, GameComplete, Save
@@ -56,7 +59,7 @@ public class GameDialog extends JDialog {
 
 
 	/**
-	 * For error pop-ups
+	 * For error pop-ups.
 	 *
 	 * @param base
 	 * @param message
@@ -67,12 +70,21 @@ public class GameDialog extends JDialog {
 		setUpComponents(setUpError(message));
 	}
 
+	/**
+	 * Pop-up for Next Level.
+	 *
+	 * @param base  to call actions on
+	 * @param level which level is the next level
+	 */
 	public GameDialog(Base base, int level) {
 		this.base = base;
 		setUpWindow();
 		setUpComponents(setUpNextLevel(level));
 	}
 
+	/**
+	 * Set up pop-up window.
+	 */
 	private void setUpWindow() {
 		this.setLayout(new GridBagLayout());
 		this.getContentPane().setBackground(GameConstants.LIGHT_YELLOW_COLOR);
@@ -83,7 +95,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * add components to dialog.
+	 * Add components to dialog.
 	 */
 	private void setUpComponents(List<JComponent> components) {
 		GridBagConstraints c = new GridBagConstraints();
@@ -97,7 +109,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * Set size and position of pop-up based on fields and current base coordinates
+	 * Set size and position of pop-up based on fields and current base coordinates.
 	 */
 	public void makeBounds() {
 		this.setBounds(base.getX() + xOffset, base.getY() + yOffset, width, height);
@@ -114,10 +126,8 @@ public class GameDialog extends JDialog {
 		this.requestFocus();
 	}
 
-	private int timeMS = 0;
-
 	/**
-	 * Creates "saved game" pop-up
+	 * Creates "saved game" pop-up.
 	 *
 	 * @return list of components to be added to box
 	 */
@@ -146,7 +156,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * Sets up "game won" pop-up
+	 * Sets up "game won" pop-up.
 	 *
 	 * @return list of components to be added to window
 	 */
@@ -162,7 +172,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * sets up "game over" pop-up
+	 * Sets up "game over" pop-up.
 	 *
 	 * @return list of components to be added to window
 	 */
@@ -177,6 +187,12 @@ public class GameDialog extends JDialog {
 		return List.of(info, loadButton(), newOneButton(), newTwoButton(), exitButton());
 	}
 
+	/**
+	 * Sets up next level pop-up.
+	 *
+	 * @param lvl the next level number
+	 * @return the list of components to add to pop-up
+	 */
 	private List<JComponent> setUpNextLevel(int lvl) {
 		height = 200;
 		this.makeBounds();
@@ -192,7 +208,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * sets up "pause" pop up
+	 * Sets up "pause" pop up.
 	 *
 	 * @return list of components to be added to pop-up
 	 */
@@ -213,7 +229,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * set up error pop up
+	 * Set up error pop up.
 	 *
 	 * @return list of components for to be added to pop-up
 	 */
