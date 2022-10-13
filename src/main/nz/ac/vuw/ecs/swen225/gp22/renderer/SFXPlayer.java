@@ -1,5 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp22.renderer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
@@ -8,13 +11,14 @@ import javax.sound.sampled.LineListener;
  * Plays a sound depending on the event happening in the game.
  * 
  * @author Diana Batoon, 300475111
- * @version 1.1
+ * @version 1.2
  */
 public class SFXPlayer implements LineListener {
+    private final List<Clip> sounds = new ArrayList<>(); // holds the sound list
     private Clip currentSound;
     private int currentSoundPriority;
     private boolean isPlaying = true;
-
+    
     /**
      * Plays a wav file depending on the name of the sound being passed.
      * 
@@ -23,8 +27,12 @@ public class SFXPlayer implements LineListener {
      */
     public void playSound(SFX sfx, int priorityLevel){
         // stop the song with the smaller priority
-        if (priorityLevel > currentSoundPriority){
-            isPlaying = false;
+        if (priorityLevel > currentSoundPriority){ isPlaying = false; }
+
+        // play a new sound on top of the other when collecting items or unlocking doors/exit
+        if (sfx.getClipName().equals("collectItem") || 
+        sfx.getClipName().equals("Unlock")){ 
+            currentSoundPriority = 2; 
         }
 
         // play a new sound when the current one stops
@@ -33,16 +41,14 @@ public class SFXPlayer implements LineListener {
             currentSound.addLineListener(this);
             currentSound.setFramePosition(0);
             currentSound.start();
-        }
-
-        // play a new sound on top of the other
-        if (sfx.getClipName().equals("collectItem") || 
-        sfx.getClipName().equals("Unlock")){ 
-            currentSoundPriority = 2; 
+            sounds.add(currentSound); // add to the list of current sounds
         }
     }
 
-    public void stopSFX(){ currentSound.stop(); }
+    /**
+     * Stops all the current sounds at the creation or deletion of a level.
+     */
+    public void stopSFX(){ sounds.forEach(Clip::stop); }
 
     @Override
     public void update(LineEvent event) {
@@ -51,7 +57,7 @@ public class SFXPlayer implements LineListener {
         // sent when a line begins to engage in active input/output of audio data in response to a start request
         if (type == LineEvent.Type.START){ isPlaying = true; }
         // sent when a line stops active input/ouput of audio data in response to a stop request
-        else if ( type == LineEvent.Type.STOP){ 
+        else if (type == LineEvent.Type.STOP){ 
             isPlaying = false;
             currentSoundPriority = 0;
             currentSound.stop();
