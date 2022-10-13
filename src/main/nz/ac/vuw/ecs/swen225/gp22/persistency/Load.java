@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class Load {
     private static final String resourceDirectory = System.getProperty("user.dir") + "/resources/";
-    private static final String previousGame = "saves/previousGame.xml";
+    private static final String previousGame = "saves/previousGame";
     private static URLClassLoader classLoader;
 
     /**

@@ -4,6 +4,8 @@ import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 public class ParserTest {
     /**
      * Test to see if the parser can parse the players inventory correctly
@@ -22,4 +24,15 @@ public class ParserTest {
         assert Maze.player.hasKey(ColorableTile.Color.Red): "Player has no red key";
         assert Maze.player.hasKey(ColorableTile.Color.Yellow): "Player has no yellow key";
     }
+
+    @Test
+    public void parseInvalidFile(){
+        try {
+            new Parser(new File("src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/invalidFile"));
+            assert false: "Parser should throw an exception when given an invalid file";
+        } catch (IllegalArgumentException e){
+            assert true;
+        }
+    }
+
 }

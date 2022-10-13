@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class LoadTest {
+    /**
+     * Test to see if the load method can load a level correctly
+     */
     @Test
     public void loadLevel(){
         Load.loadLevel(1);
@@ -15,11 +18,6 @@ public class LoadTest {
         assert Base.getLevel() == 1;
         assert Maze.player.getPos().equals(new Maze.Point(8,7)): "Player position is not correct";
         assert Maze.getDimensions().equals(new Maze.Point(17,16)): "Maze dimensions are not correct";
-        /**Load.loadLevel(2);
-        assert Base.getTime() == 60;
-        assert Base.getLevel() == 2;
-        assert Maze.player.getPos().equals(new Maze.Point(4,5)): "Player position is not correct";
-        assert Maze.getDimensions().equals(new Maze.Point(16,16)): "Maze dimensions are not correct";**/
     }
 
     /**
@@ -31,11 +29,15 @@ public class LoadTest {
         assert f != null;
         assert f.getName().equals("level1.xml");
     }
+
+    /**
+     *
+     */
     @Test
     public void checkPreviousGamePresent(){
         Load.loadLevel(1);
         Save.saveGame();
-        assert Load.previousGamePresent() == true;
+        assert Load.previousGamePresent();
     }
     @Test
     public void checkPreviousGameNotPresent(){
@@ -70,6 +72,10 @@ public class LoadTest {
         assert info.equals("Time: 0, Keys: 0"): "Previous game info is not correct";
     }
     @Test
+    public void loadJar(){
+        Load.loadLevel(2);
+        assert Load.getClassLoader() != null;
+    }
 
     private void createPreviousGame(){
         if(!Load.previousGamePresent()){

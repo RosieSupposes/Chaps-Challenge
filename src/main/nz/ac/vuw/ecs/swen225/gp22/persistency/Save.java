@@ -90,7 +90,6 @@ public class Save {
 
     private static void saveEntity(Element entities, Entity e){
         Element entity = entities.addElement("entity");
-        System.out.println(e.getClass().getSimpleName());
         entity.addAttribute("ID",e.getClass().getSimpleName());
         addPoint(entity,e.getPos());
         entity.addAttribute("direction",e.getDir().name());

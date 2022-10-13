@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
+import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import org.dom4j.*;
@@ -16,7 +17,15 @@ public class SaveTest {
     public void saveGame(){
         Load.loadLevel(1);
         Save.saveGame();
-        assert Load.previousGamePresent() == true;
+        assert Load.previousGamePresent();
+    }
+    @Test
+    public void saveLevel2(){
+        Load.loadLevel(2);
+        Save.saveGame();
+        assert Load.previousGamePresent();
+        Load.previousGame();
+        assert Base.getLevel() == 2;
     }
     @Test
     public void saveInventory(){
