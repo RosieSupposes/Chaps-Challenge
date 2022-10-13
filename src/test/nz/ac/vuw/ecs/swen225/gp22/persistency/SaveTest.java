@@ -12,6 +12,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Tests for Save class
+ * @author Gideon Wilkins, 300576057
+ * @version 1.3
+ */
 public class SaveTest {
     /**
      * Test to see if the save method can save a level
