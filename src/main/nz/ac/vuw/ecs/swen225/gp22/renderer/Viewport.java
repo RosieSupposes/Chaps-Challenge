@@ -13,21 +13,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 /**
  * This class displays the maze, and all the entities active in the current level
  * such as the player, free tiles, walls, keys, locked doors, treasures, locked exit, and exit.
  * 
  * @author Diana Batoon, 300475111 
- * @version 1.4
+ * @version 1.5
  */
 public class Viewport extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     private Tile[][] currentMaze = new Tile[GameConstants.NUM_GAME_TILE][GameConstants.NUM_GAME_TILE]; // 9x9 maze displayed on screen
     private Timer timer;
-    private int boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
-    private int boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
+    private int boundariesX;
+    private int boundariesY;
     private JLabel infofield = new JLabel("");
 
     /**
@@ -36,6 +37,8 @@ public class Viewport extends JPanel implements ActionListener {
     public Viewport(){ 
         timer = new Timer(50, this);
         timer.start();
+        boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
+        boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
     }
 
     /**
@@ -79,7 +82,6 @@ public class Viewport extends JPanel implements ActionListener {
             displayInfo(inField, g2D);
         }
 
-        //TODO: draw the enemy for level 2
     }
 
 
@@ -88,6 +90,11 @@ public class Viewport extends JPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (!this.isValid()){ 
+            timer.stop(); // method doesn't get called anymore
+            timer = null; // removes reference to the Viewport class
+            return; 
+        }
         Tile[][] tempMaze = new Tile[Maze.getDimensions().x()][Maze.getDimensions().y()];  
         int playerX = Maze.player.getPos().x();
         int playerY = Maze.player.getPos().y(); 

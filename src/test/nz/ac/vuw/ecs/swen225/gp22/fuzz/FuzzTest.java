@@ -36,15 +36,15 @@ public class FuzzTest {
                     KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT);
 
     /**
-     * Generates a list of 500 valid inputs.
+     * Generates a list of 10000 valid inputs.
      * Chap will not move back to the tile he was previously on.
      *
-     * @return list of 500 valid inputs.
+     * @return list of 10000 valid inputs.
      */
     private List<Integer> generateInputs() {
         int prev = -1;
         List<Integer> moves = new ArrayList<>();
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 10000; i++) {
             while (true) {
                 int random = r.nextInt(inputs.size());
                 int move = inputs.get(random);
@@ -94,7 +94,7 @@ public class FuzzTest {
                     }
                 });
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(3);
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             robot.keyRelease(i);
@@ -117,7 +117,6 @@ public class FuzzTest {
     public void fuzzTests() {
         try {
             assertTimeout(Duration.ofSeconds(60), () -> test1());
-            Thread.sleep(1000);
             assertTimeout(Duration.ofSeconds(60), () -> test2());
         } catch (Exception e) {
 
