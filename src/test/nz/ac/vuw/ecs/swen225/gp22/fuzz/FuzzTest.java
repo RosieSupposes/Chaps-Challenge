@@ -126,8 +126,8 @@ public class FuzzTest {
     @Test
     public void fuzzTests() {
         try {
-            assertTimeout(Duration.ofSeconds(60), () -> test1());
-            assertTimeout(Duration.ofSeconds(60), () -> test2());
+            assertTimeout(Duration.ofSeconds(60), this::test1);
+            assertTimeout(Duration.ofSeconds(60), this::test2);
         } catch (Exception ignored) {
 
         }
