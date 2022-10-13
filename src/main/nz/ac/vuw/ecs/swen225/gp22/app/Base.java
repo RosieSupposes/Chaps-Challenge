@@ -9,9 +9,9 @@ import nz.ac.vuw.ecs.swen225.gp22.persistency.Save;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Action;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Player;
 import nz.ac.vuw.ecs.swen225.gp22.recorder.Recorder;
-import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SidePanel;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.Viewport;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,12 +37,12 @@ public class Base extends JFrame {
 	private Timer gameTimer = new Timer(20, null);
 	private Recorder recorder;
 	private GameMenuBar currentMenuBar;
-	private JPanel currentPanel; //for setting keylistener on
+	private PhasePanel currentPanel; //for setting keylistener on
 	private final GameDialog pauseDialog;
 	private final GameDialog saveDialog;
 	private final GameDialog gameOverDialog;
 	private final GameDialog gameWinDialog;
-    private final int delay = 20;
+	private final int delay = 20;
 
 	private static int level = 1;
 
@@ -190,10 +190,10 @@ public class Base extends JFrame {
 		Load.resumeGame();
 		loadLevel();
 
-        recorder = new Recorder(level, timeMS);
-        //TODO when recorder has ability to start recording from middle of game, tell recorder
-        System.out.println("Load");
-    }
+		recorder = new Recorder(level, timeMS);
+		//TODO when recorder has ability to start recording from middle of game, tell recorder
+		System.out.println("Load");
+	}
 
 	/**
 	 * Loads new level, makes new recorder.
@@ -252,6 +252,7 @@ public class Base extends JFrame {
 
 	public void nextLevel(int lvl) {
 		System.out.println("Level won");
+
 		recorder.save();
 		GameDialog nextLevelDialog = new GameDialog(this, lvl);
 		nextLevelDialog.visibleFocus();
@@ -283,25 +284,26 @@ public class Base extends JFrame {
 		}
 	}
 
-    /**
-     * gets the game window.
-     *
-     * @return game window
-     */
-    public PhasePanel getGameWindow() {
-        assert Maze.player != null;
-        Viewport game = new Viewport();
-        SidePanel side = new SidePanel(timeSec, level);
-        return new PhasePanel(game, side);
-    }
+	/**
+	 * gets the game window.
+	 *
+	 * @return game window
+	 */
+	public PhasePanel getGameWindow() {
+		assert Maze.player != null;
+		Viewport game = new Viewport();
+		SidePanel side = new SidePanel(timeSec, level);
+		return new PhasePanel(game, side);
+	}
 
 	/**
 	 * Run and display menu
 	 */
 	public void menuScreen() {
+
 		runClosePhase();
 		setJMenuBar(null);
-
+		currentPanel.stopSound();
 //        ImagePanel testGame = new ImagePanel("TEST_game",Main.GAME_SIZE,new Dimension(0,0));
 //        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
 //        PhasePanel menu = new PhasePanel(testGame,testSide);
@@ -412,7 +414,7 @@ public class Base extends JFrame {
 	 */
 	public void loadLevel() {
 		assert Maze.player != null;
-
+		currentPanel.stopSound();
 		runClosePhase();
 
 		Viewport game = new Viewport();
@@ -442,16 +444,16 @@ public class Base extends JFrame {
 			if (timeSec <= 0 || Maze.isGameLost()) {
 				playerDied();
 			} else if (Maze.gameWon()) {
-				if(Maze.gameComplete()){
+				if (Maze.gameComplete()) {
 					playerWon();
-				}else{
+				} else {
 					assert Maze.getNextLevel() != -1;
 					nextLevel(Maze.getNextLevel());
 				}
 			}
 		});
 		gameTimer.start();
-			
+
 
 		currentPanel = level;
 		changeKeyListener(new Controller(this, false));

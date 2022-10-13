@@ -50,13 +50,26 @@ public class PhasePanel extends JPanel {
 
 	/**
 	 * If sidepanel has timer, update timer
+	 *
 	 * @param time
 	 */
 	public void updateTime(int time) {
-		if(this.sidePanel instanceof SidePanel sp){
+		if (this.sidePanel instanceof SidePanel sp) {
 			sp.setTime(time);
 			this.sidePanel = sp;
-		}else{
+		} else {
+			throw new ClassCastException("Panel must be Side Panel");
+		}
+	}
+
+	/**
+	 * Stops sound in game window
+	 */
+	public void stopSound() {
+		if (this.gamePanel instanceof Viewport vp) {
+			vp.stopSound();
+			this.gamePanel = vp;
+		} else {
 			throw new ClassCastException("Panel must be Side Panel");
 		}
 	}
