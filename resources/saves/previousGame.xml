@@ -37,7 +37,7 @@
     <tile ID="wall" x="3" y="4"/>
     <tile ID="wall" x="3" y="5"/>
     <tile ID="info" x="3" y="7">
-      <text>Marshmallow pads can launch you over walls, and deadly puddles of milk</text>
+      <text>Level2Info</text>
     </tile>
     <tile ID="wall" x="3" y="9"/>
     <tile ID="wall" x="3" y="10"/>
