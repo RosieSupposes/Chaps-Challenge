@@ -21,7 +21,7 @@ public class LoadTest {
     }
 
     /**
-     * Test to see if the getFile method loads the file with the correct name
+     * Test if the getFile method loads the file with the correct name
      */
     @Test
     public void getFile(){
@@ -31,7 +31,7 @@ public class LoadTest {
     }
 
     /**
-     *
+     * Test if the previousGamePresent method returns true when a previous game is present
      */
     @Test
     public void checkPreviousGamePresent(){
@@ -39,17 +39,30 @@ public class LoadTest {
         Save.saveGame();
         assert Load.previousGamePresent();
     }
+
+    /**
+     * Test if the previousGamePresent method returns false when a previous game is not present
+     */
     @Test
     public void checkPreviousGameNotPresent(){
        deletePreviousGame();
         assert Load.previousGamePresent() == false;
     }
+
+    /**
+     * Test if the previousGame method loads the correct level
+     */
     @Test
     public void loadPreviousGame(){
-        createPreviousGame();
+        createPreviousGame(1);
         Load.previousGame();
-        //TODO assert stuff
+        assert Base.getLevel() == 1;
+        assert Maze.entities.size() == 0;
     }
+
+    /**
+     * Test if the previousGame method loads level 1 when no previous game is present
+     */
     @Test
     public void loadPreviousGameNotPresent(){
         deletePreviousGame();
@@ -59,30 +72,51 @@ public class LoadTest {
         assert Maze.player.getPos().equals(new Maze.Point(8,7)): "Player position is not correct";
         assert Maze.getDimensions().equals(new Maze.Point(17,16)): "Maze dimensions are not correct";
     }
+
+    /**
+     * Is previousGameInfo correct
+     */
     @Test
     public void getPreviousGameInfo(){
-        createPreviousGame();
+        createPreviousGame(1);
         String info = Load.previousGameInfo();
         assert info.equals("Time: 60, Keys: 0"): "Previous game info is not correct";
+        assert Base.getLevel() == 1: "Level is not correct";
     }
+
+    /**
+     * previousGameInfo is default when no previous game is present
+     */
     @Test
     public void getPreviousGameInfoNotPresent(){
         deletePreviousGame();
         String info = Load.previousGameInfo();
         assert info.equals("Time: 0, Keys: 0"): "Previous game info is not correct";
     }
+
+    /**
+     * Test if the loadJar method creates a classloader
+     */
     @Test
     public void loadJar(){
         Load.loadLevel(2);
         assert Load.getClassLoader() != null;
     }
 
-    private void createPreviousGame(){
+    /**
+     * create a previous game file for tests
+     * @param level level to create
+     */
+    private void createPreviousGame(int level){
         if(!Load.previousGamePresent()){
-            Load.loadLevel(1);
+            Load.loadLevel(level);
             Save.saveGame();
         }
     }
+
+    /**
+     * delete the previousGame file used for tests
+     */
     private void deletePreviousGame(){
         try {
             Files.deleteIfExists(Load.getFile("saves/previousGame").toPath());

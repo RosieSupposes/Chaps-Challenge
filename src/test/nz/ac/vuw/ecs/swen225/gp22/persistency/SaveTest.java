@@ -13,12 +13,19 @@ import java.util.List;
 import java.util.Map;
 
 public class SaveTest {
+    /**
+     * Test to see if the save method can save a level
+     */
     @Test
     public void saveGame(){
         Load.loadLevel(1);
         Save.saveGame();
         assert Load.previousGamePresent();
     }
+
+    /**
+     * Test to see if the save method can save level 2 correctly
+     */
     @Test
     public void saveLevel2(){
         Load.loadLevel(2);
@@ -27,6 +34,10 @@ public class SaveTest {
         Load.previousGame();
         assert Base.getLevel() == 2;
     }
+
+    /**
+     * Test to see if the save method can save the inventory of the player
+     */
     @Test
     public void saveInventory(){
         Maze.player.addKey(ColorableTile.Color.Red);
@@ -40,6 +51,9 @@ public class SaveTest {
         assert test.element("inventory").element("key").attributeValue("color").equals("Red");
     }
 
+    /**
+     * Test to see if the addPoint method adds the correct attributes to the element
+     */
     @Test
     public void addPoint(){
         Document doc = DocumentHelper.createDocument();

@@ -25,6 +25,9 @@ public class ParserTest {
         assert Maze.player.hasKey(ColorableTile.Color.Yellow): "Player has no yellow key";
     }
 
+    /**
+     * Test to see if the parser throws error when the file is invalid
+     */
     @Test
     public void parseInvalidFile(){
         try {
