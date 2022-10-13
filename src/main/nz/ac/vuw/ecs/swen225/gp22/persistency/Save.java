@@ -57,8 +57,12 @@ public class Save {
                                       .addAttribute("count",String.valueOf(v))
                                       .addAttribute("color",k));
         }
+        if(Maze.entities.size() > 0){
+            Element entities = root.addElement("entities");
+            Maze.entities.forEach(e -> saveEntity(entities,e));
+        }
         Element tiles = root.addElement("tiles");
-        for(int x = 0; x < dimensions.y(); x++){
+        for(int x = 0; x < dimensions.x(); x++){
             for(int y = 0; y < dimensions.y(); y++) {
                 Maze.Point p = new Maze.Point(x,y);
                 Tile tile = Maze.getTile(p);
@@ -71,6 +75,7 @@ public class Save {
                 switch (tileID){
                     case "info" -> tileElement.addElement("text").addText(((InfoField)tile).getText());
                     case "door","key" -> tileElement.addElement("color").addText(((ColorableTile)tile).getColor().name());
+                    case "bounce-pad" -> tileElement.addElement("direction").addText(((BouncyPad)tile).getDir().name());
                 }
             }
         }
@@ -87,6 +92,14 @@ public class Save {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void saveEntity(Element entities, Entity e){
+        Element entity = entities.addElement("entity");
+        System.out.println(e.getClass().getSimpleName());
+        entity.addAttribute("ID",e.getClass().getSimpleName());
+        addPoint(entity,e.getPos());
+        entity.addAttribute("direction",e.getDir().name());
     }
 
     private static void addPoint(Element element, Maze.Point p){
