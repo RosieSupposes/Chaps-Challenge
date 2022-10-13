@@ -61,8 +61,8 @@ public class GameDialog extends JDialog {
 	/**
 	 * For error pop-ups.
 	 *
-	 * @param base
-	 * @param message
+	 * @param base    to set actions on
+	 * @param message error message to display
 	 */
 	public GameDialog(Base base, String message) {
 		this.base = base;
@@ -96,6 +96,8 @@ public class GameDialog extends JDialog {
 
 	/**
 	 * Add components to dialog.
+	 *
+	 * @param components list of components to add to window
 	 */
 	private void setUpComponents(List<JComponent> components) {
 		GridBagConstraints c = new GridBagConstraints();
@@ -116,7 +118,7 @@ public class GameDialog extends JDialog {
 	}
 
 	/**
-	 * Set pop-up as visible, in focus and reset it's bounds
+	 * Set pop-up as visible, in focus and reset its bounds
 	 * Start timer (only Save pop-up has timer).
 	 */
 	public void visibleFocus() {
@@ -231,6 +233,7 @@ public class GameDialog extends JDialog {
 	/**
 	 * Set up error pop up.
 	 *
+	 * @param message message for error display
 	 * @return list of components for to be added to pop-up
 	 */
 	private List<JComponent> setUpError(String message) {

@@ -21,7 +21,7 @@ public class PhasePanel extends JPanel {
 	List<JComponent> components = new ArrayList<>(); //all components in panel
 
 	/**
-	 * Panel to hold game square next to side panel
+	 * Panel to hold game square next to side panel.
 	 *
 	 * @param gamePanel the panel in the main square
 	 * @param sidePanel the panel on the side
@@ -38,7 +38,7 @@ public class PhasePanel extends JPanel {
 	}
 
 	/**
-	 * Sets up panel sizes and adds them to panel
+	 * Sets up panel sizes and adds them to panel.
 	 */
 	public void setUpPanels() {
 		gamePanel.setPreferredSize(GameConstants.GAME_SIZE);
@@ -63,7 +63,7 @@ public class PhasePanel extends JPanel {
 	}
 
 	/**
-	 * Stops sound in game window
+	 * Stops sound in game window.
 	 */
 	public void stopSound() {
 		if (this.gamePanel instanceof Viewport vp) {
@@ -73,7 +73,7 @@ public class PhasePanel extends JPanel {
 	}
 
 	/**
-	 * Get all components in window. 
+	 * Get all components in window.
 	 *
 	 * @return list of components
 	 */

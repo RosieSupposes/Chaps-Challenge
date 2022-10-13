@@ -18,7 +18,7 @@ public class GameButton extends JButton {
 	private final Dimension dim; //dimension of button
 
 	/**
-	 * Normal button
+	 * Normal button.
 	 *
 	 * @param name   Text on button
 	 * @param dim    Size of button
@@ -31,7 +31,7 @@ public class GameButton extends JButton {
 	}
 
 	/**
-	 * Button with image or icon
+	 * Button with image or icon.
 	 *
 	 * @param name     button name
 	 * @param dim      size of button
@@ -40,7 +40,7 @@ public class GameButton extends JButton {
 	 */
 	public GameButton(String name, Dimension dim, ActionListener action, String filename) {
 		super(name);
-        this.dim = dim;
+		this.dim = dim;
 		setUp(action);
 		image = getIcon(filename);
 	}
@@ -91,11 +91,6 @@ public class GameButton extends JButton {
 		this.addActionListener(actionListener);
 	}
 
-	/**
-	 * Repaints the button with image on it
-	 *
-	 * @param g the <code>Graphics</code> object to protect
-	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

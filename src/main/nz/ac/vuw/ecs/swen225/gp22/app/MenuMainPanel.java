@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel containing menu information
+ * Panel containing menu information.
  *
  * @author Molly Henry, 300562038
  * @version 1.3
@@ -19,7 +19,7 @@ public class MenuMainPanel extends JPanel {
 	private final Dimension fullButtonSize = new Dimension(halfButtonSize.width * 2 + buttonGap.width, halfButtonSize.height); //size of full button
 
 	/**
-	 * Creates menu panel, connecting base actions to buttons on panel
+	 * Creates menu panel, connecting base actions to buttons on panel.
 	 *
 	 * @param base current base
 	 */
@@ -88,7 +88,7 @@ public class MenuMainPanel extends JPanel {
 	}
 
 	/**
-	 * Buttons in row one of menu
+	 * Buttons in row one of menu.
 	 *
 	 * @param buttons panel to add buttons to
 	 * @param c       constraint parameter

@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 
 /**
- * Controller that connects key actions to actions
+ * Controller that connects key actions to actions.
  *
  * @author Molly Henry, 300562038
  * @version 1.4
@@ -15,7 +15,7 @@ public class Controller extends Keys {
 	private final Base b; //current Base, to call actions on
 
 	/**
-	 * Menu commands, exiting, replaying, making new levels
+	 * Menu commands, exiting, replaying, making new levels.
 	 *
 	 * @param b Base that actions happen
 	 */

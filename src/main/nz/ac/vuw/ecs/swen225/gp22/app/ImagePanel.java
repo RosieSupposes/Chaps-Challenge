@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Side panel for menu
+ * Side panel for menu.
  *
  * @author Molly Henry, 300562038
  * @version 1.2
@@ -47,11 +47,6 @@ public class ImagePanel extends JPanel {
 		}
 	}
 
-	/**
-	 * Paints image onto panel.
-	 *
-	 * @param g the <code>Graphics</code> object to protect
-	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

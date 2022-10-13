@@ -44,7 +44,6 @@ public class Base extends JFrame {
 	private final GameDialog gameWinDialog; //pop-up for game win
 	private final int delay = 20; //delay in timer
 	private static int level = 1; //current level
-	private boolean gameOver = false; //game over check
 	private GameDialog currentPopUp; //current pop-up
 
 	/**
@@ -128,9 +127,7 @@ public class Base extends JFrame {
 		if (Load.previousGamePresent()) {
 			Load.previousGame();
 			loadLevel();
-
 			recorder = new Recorder(level, timeMS);
-			//TODO when recorder has ability to start recording from middle of game, tell recorder
 		} else {
 			newGame(1);
 		}
@@ -140,7 +137,6 @@ public class Base extends JFrame {
 	 * Pauses game.
 	 */
 	public void pause() {
-		System.out.println("Pause");
 		closePopUp();
 		gameTimer.stop();
 		if (currentMenuBar == null) {
@@ -157,7 +153,6 @@ public class Base extends JFrame {
 	 * Un-pauses game.
 	 */
 	public void unPause() {
-		System.out.println("Un Pause");
 		closePopUp();
 		gameTimer.start();
 		if (currentMenuBar == null) {
@@ -173,7 +168,6 @@ public class Base extends JFrame {
 	 * Creates and runs re-player window.
 	 */
 	public void replayPhase() {
-		System.out.println("Replay");
 		try {
 			Player playerWindow = new Player(this);
 			runClosePhase();
@@ -181,7 +175,7 @@ public class Base extends JFrame {
 			add(BorderLayout.CENTER, playerWindow);
 			setMinimumSize(new Dimension(GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT + 150));
 			pack();
-			playerWindow.requestFocus(); //need to be after pack
+			playerWindow.requestFocus();
 
 			components.add(playerWindow);
 		} catch (RuntimeException ignored) {
@@ -194,10 +188,7 @@ public class Base extends JFrame {
 	public void loadGame() {
 		Load.resumeGame();
 		loadLevel();
-
 		recorder = new Recorder(level, timeMS);
-		//TODO when recorder has ability to start recording from middle of game, tell recorder
-		System.out.println("Load");
 	}
 
 	/**
@@ -221,7 +212,6 @@ public class Base extends JFrame {
 		closePopUp();
 		Save.saveGame();
 		recorder.save();
-		System.out.println("Save");
 		saveDialog.visibleFocus();
 	}
 
@@ -245,7 +235,6 @@ public class Base extends JFrame {
 	 */
 	public void playerDied() {
 		closePopUp();
-		System.out.println("Level lost");
 		recorder.save();
 		gameOverDialog.visibleFocus();
 		gameTimer.stop();
@@ -257,7 +246,6 @@ public class Base extends JFrame {
 	 */
 	public void playerWon() {
 		closePopUp();
-		System.out.println("Level won");
 		recorder.save();
 		gameWinDialog.visibleFocus();
 		currentPopUp = gameWinDialog;
@@ -284,7 +272,6 @@ public class Base extends JFrame {
 	 * Exit the game.
 	 */
 	public void exitGame() {
-		System.out.println("Exit");
 		runClosePhase();
 		System.exit(0);
 	}
@@ -295,9 +282,6 @@ public class Base extends JFrame {
 	 * @param dir direction player moves
 	 */
 	public void movePlayer(Entity.Direction dir) {
-		System.out.println("Move: " + dir);
-		Entity.Action action = null;
-
 		try {
 			Maze.player.moveAndTurn(dir);
 		} catch (IllegalArgumentException e) {
@@ -411,7 +395,7 @@ public class Base extends JFrame {
 	}
 
 	/**
-	 * Gets Domain action from String
+	 * Gets Domain action from String.
 	 *
 	 * @param actionType action from Recorder
 	 * @return Domain action
@@ -437,7 +421,6 @@ public class Base extends JFrame {
 			currentPanel.stopSound();
 		}
 		closePopUp();
-		gameOver = false;
 		runClosePhase();
 
 		Viewport game = new Viewport();
@@ -448,7 +431,7 @@ public class Base extends JFrame {
 		timeMS = 0;
 		gameTimer = new Timer(delay, unused -> {
 			assert SwingUtilities.isEventDispatchThread();
-			level.repaint(); 
+			level.repaint();
 			timeMS += delay;
 			if (timeMS % 1000 == 0) {
 				timeSec--;
@@ -462,11 +445,9 @@ public class Base extends JFrame {
 			List<Entity.Action> actions = Maze.getChangeMap();
 			transformActions(actions).forEach(a -> recorder.addAction(a, timeMS));
 			game.setAction(actions.stream().map(a -> a.interaction().type()).collect(Collectors.toList()));
-			//System.out.println(a -> a.interaction().type().collect(Collectors.toList()));
 
 			if (timeSec <= 0 || Maze.isGameLost()) {
 				playerDied();
-				gameOver = true;
 			} else if (Maze.gameWon()) {
 				if (Maze.gameComplete()) {
 					playerWon();
@@ -474,7 +455,6 @@ public class Base extends JFrame {
 					assert Maze.getNextLevel() != -1;
 					nextLevel(Maze.getNextLevel());
 				}
-				gameOver = true;
 			}
 		});
 		gameTimer.start();

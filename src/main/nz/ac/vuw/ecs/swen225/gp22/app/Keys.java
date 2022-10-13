@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * To map key events to actions
+ * To map key events to actions.
  *
  * @author Molly Henry
  * @version 1.2

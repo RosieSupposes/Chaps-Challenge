@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Menu bar for game
+ * Menu bar for game.
  *
  * @author Molly Henry, 300562038
  * @version 1.4
