@@ -100,9 +100,8 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        //if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
+        if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
 
-        //renderEnemies(playerX, playerY, g2D);
         Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
 
         // drawing the enemies
@@ -248,9 +247,10 @@ public class Viewport extends JPanel implements ActionListener {
      * @param g Graphics object needed to render images on the canvas.
      */
     public void getInfoField(InfoField iField, Graphics g){
-        int infoPos = (GameConstants.NUM_GAME_TILE*GameConstants.TILE_SIZE)/9;
+        int infoPos = GameConstants.TILE_SIZE;
         g.drawImage(Img.InfoPost.image, infoPos, 5*infoPos, this);
-        infofield.setText(iField.getText());
+        //infofield.setText(iField.getText());
+        infofield.setText("PLEASE WORK");
         infofield.setBounds(infoPos+ 10, (2*infoPos)+10, Img.InfoPost.image.getWidth()-100, Img.InfoPost.image.getHeight()-100);
         infofield.setFont(new Font("Verdana", Font.BOLD, 20));
         add(infofield);
