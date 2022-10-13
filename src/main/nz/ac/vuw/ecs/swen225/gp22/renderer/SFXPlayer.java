@@ -13,7 +13,7 @@ import javax.sound.sampled.LineListener;
 public class SFXPlayer implements LineListener {
     private Clip currentSound;
     private int currentSoundPriority;
-    private boolean isPlaying;
+    private boolean isPlaying = true;
 
     /**
      * Plays a wav file depending on the name of the sound being passed.
@@ -25,7 +25,7 @@ public class SFXPlayer implements LineListener {
         // stop the song with the smaller priority
         if (priorityLevel > currentSoundPriority){
             isPlaying = false;
-            if (currentSound != null){ currentSound.stop(); }
+            //if (currentSound != null){ currentSound.stop(); }
         }
 
         // play a new sound when the current one stops
@@ -37,9 +37,17 @@ public class SFXPlayer implements LineListener {
         }
 
         // play a new sound on top of the other
-        if (sfx.getClipName().equals("collectItem") || sfx.getClipName().equals("Unlock") ){ currentSoundPriority = 2; }
+        if (sfx.getClipName().equals("collectItem") || 
+        sfx.getClipName().equals("Unlock")){ 
+            currentSoundPriority = 3; 
+        }
+        
+        // play the background continuously
+        if (sfx.getClipName().equals("Background")){
+            //currentSound.loop(Clip.LOOP_CONTINUOUSLY);
+            currentSoundPriority = 2;
+        }
     }
-
 
     @Override
     public void update(LineEvent event) {

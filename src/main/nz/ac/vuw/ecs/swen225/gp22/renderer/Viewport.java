@@ -99,6 +99,7 @@ public class Viewport extends JPanel implements ActionListener {
         // display infofield if the player steps on it
         //if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
 
+        //renderEnemies(playerX, playerY, g2D);
         Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
 
         // drawing the enemies
@@ -127,9 +128,39 @@ public class Viewport extends JPanel implements ActionListener {
             //checkAction();
             
         }
-        catch(Exception e){ e.printStackTrace(); }
+        catch(Exception ex){ ex.printStackTrace(); }
 
     }
+
+    /**
+     * Plays a sound based on the action that takes place in the game.
+     * @param action Action performed.
+     */
+    public void checkAction(Entity.Action.Interaction.ActionType a){
+        switch (a){
+            case PickupKey -> playSFX("CollectItem", 1);
+            case PickupTreasure -> playSFX("CollectItem", 1); 
+            case UnlockDoor -> playSFX("Unlock", 1); 
+            case UnlockExit -> playSFX("Unlock", 1);
+            default -> playSFX("Background", 1);
+        }
+    }
+    
+    /**
+     * Plays a sound.
+     * 
+     * @param soundName The name of the sound.
+     * @param priorityLevel Which sound must be played over others.
+     */
+    public void playSFX(String soundName, int priorityLevel){
+        sfxPlayer.playSound(soundList.get(soundName), priorityLevel);
+    }
+
+    /***
+     * Stores the action that has happened in the game. 
+     * @param action Action performed.
+     */
+    public void setAction(List<Entity.Action.Interaction.ActionType> actions){ this.actions = actions; }
 
     /**
      * Updates the display every 100 ms.  
@@ -147,6 +178,7 @@ public class Viewport extends JPanel implements ActionListener {
 
         Maze.Point mazePoint = getFocusArea(playerX, playerY); 
         setCurrentMaze(mazePoint); // get the new 9x9 tiles to be displayed
+
         repaint();
     }
 
@@ -262,39 +294,26 @@ public class Viewport extends JPanel implements ActionListener {
         add(infofield);
     }
 
-    /**
-     * Plays a sound based on the action that takes place in the game.
-     * @param action Action performed.
-     */
-    public void checkAction(Entity.Action.Interaction.ActionType a){
-    // void checkAction(){
-        switch (a){
-            case PickupKey -> playSFX("CollectItem", 1);
-            case PickupTreasure -> playSFX("CollectItem", 1); 
-            //case "LoseGame": playSFX("LoseGame", 1);
-            //case "MainMenu": playSFX("MainMenu", 1);
-            case UnlockDoor -> playSFX("Unlock", 1); 
-            case UnlockExit -> playSFX("Unlock", 1);
-            //case "WinGame": playSFX("WinGame", 1);
-            //case "WinLevel": playSFX("WinLevel", 1);
-            default -> playSFX("Background", 1);
+    public void renderEnemies(int playerX, int playerY, Graphics g){
+        Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
+
+        // drawing the enemies
+        for(Entity e: Maze.entities){
+            EnemyEntity enemy = (EnemyEntity) e;
+            int enemyX = enemy.getPos().x();
+            int enemyY = enemy.getPos().y();
+
+            int rows = focusPoint.x() + GameConstants.NUM_GAME_TILE-1;
+            int cols = focusPoint.y() + GameConstants.NUM_GAME_TILE-1;
+
+            // check that the enemy is within the current the focus area
+            if (focusPoint.x() <= enemyX && rows >= enemyX
+            && focusPoint.y() <= enemyX && cols >= enemyY){
+                g.drawImage(EnemyEntity.imageMap.get(enemy.getDir()),
+                        (enemyX - focusPoint.x()) * GameConstants.TILE_SIZE,
+                        (enemyY - focusPoint.y()) * GameConstants.TILE_SIZE, this);
+            }
         }
     }
-
-    /**
-     * Plays a sound.
-     * 
-     * @param soundName The name of the sounds.
-     * @param priorityLevel Which sound must be played over others.
-     */
-    public void playSFX(String soundName, int priorityLevel){
-        sfxPlayer.playSound(soundList.get(soundName), priorityLevel);
-    }
-
-    /***
-     * Stores the action that has happened in the game. 
-     * @param action Action performed.
-     */
-    public void setAction(List<Entity.Action.Interaction.ActionType> actions){ this.actions = actions; }
 
 }

@@ -37,7 +37,7 @@ public class SFX {
      * @throws IOException
      * @throws LineUnavailableException
      */
-    public SFX(String name) throws LineUnavailableException, UnsupportedAudioFileException {
+    public SFX(String name) throws IOException, LineUnavailableException, UnsupportedAudioFileException {
         clipName = name;
 
         try {
@@ -47,7 +47,18 @@ public class SFX {
             clip = (Clip) AudioSystem.getLine(info);
             clip.open(audioIStream);
         }
-        catch (Exception e){ e.printStackTrace();}
+        catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Sound: Input/Output Error: " + e);
+        }
+        catch (LineUnavailableException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Sound: Line Unavailable Exception Error: " + e);
+        }
+        catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Sound: Unsupported Audio File: " + e);
+        }
     }
 
     /*** @return the SFX clip. */
