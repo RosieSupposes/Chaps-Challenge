@@ -1,10 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 /**
- * A basic enemy that INSERT BEHAVIOR HERE.
+ * A basic enemy that moves back and forth.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.3
+ * @version 1.7
  */
 public class GummyGuard extends EnemyEntity<GummyGuard>{
     /** Used for if the player walks into the enemy. */
@@ -15,7 +15,6 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
      * 
      * @param entityPos {@link Maze.Point Point} to set the position field to. ({@link Entity#entityPos see here})
      * @param facingDir {@link Direction} to set the direction field to. ({@link Entity#facingDir see here})
-     * @param speed How often the monster gets pinged. 
      */
     public GummyGuard(Maze.Point entityPos, Direction facingDir){
         super(entityPos, facingDir, 400);
@@ -27,26 +26,20 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
     }
 
     @Override
-    public Action ping(){
-        Action action = moveAndTurn(getDir());
-        switch(getDir()){
-            case Down: 
-                setDir(Direction.Left);
-                break;
-            case Left:
-                setDir(Direction.Up);
-                break;
-            case Right:
-                setDir(Direction.Down);
-                break;
-            case Up:
-                setDir(Direction.Right);
-                break;
-            default:
-                break;
-        }
+    public void ping(){
+        Direction oldDir = getDir();
+        Maze.Point oldPos = getPos();
+        moveAndTurn(getDir());
+        if(Maze.getTile(getPos().add(getDir())).isObstructive()) setDir(getDir().opposite());
         if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
-        return action;
+        action = new Action(id(), getPos().subtract(oldPos), oldDir, getDir(), new Action.Interaction(Action.Interaction.ActionType.Pinged, ColorableTile.Color.None));
+    }
+
+    @Override
+    public void unping(){
+        if(Maze.getTile(getPos().subtract(getDir())).isObstructive()) setDir(getDir().opposite());
+        move(getDir().opposite());;
+        if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
     }
 
     @Override

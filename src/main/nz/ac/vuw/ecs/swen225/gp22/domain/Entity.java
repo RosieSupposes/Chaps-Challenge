@@ -1,15 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
-import nz.ac.vuw.ecs.swen225.gp22.domain.ColorableTile.Color;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction;
-import nz.ac.vuw.ecs.swen225.gp22.domain.Entity.Action.Interaction.ActionType;
-
 /**
  * Template for entities in a level, including the player. 
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.9
+ * @version 1.15
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
@@ -17,31 +13,68 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * representing the change in position.
      */
     public enum Direction{
-        Up(0, -1),
-        Down(0, 1),
-        Left(-1, 0),
-        Right(1, 0);
+        Up(0, -1){
+            @Override
+            public Direction opposite(){ return Down; }
+        },
+        Down(0, 1){
+            @Override
+            public Direction opposite(){ return Up; }
+        },
+        Left(-1, 0){
+            @Override
+            public Direction opposite(){ return Right; }
+        },
+        Right(1, 0){
+            @Override
+            public Direction opposite(){ return Left; }
+        };
 
         /** Amount the position of the entity will change by if it takes a step. */
         Maze.Point posChange;
 
         /** Default constructor to set {@link #posChange}. */
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
+
+        /** @return The opposite direction. */
+        public Direction opposite(){ return null; }
     }
 
     /**
      * A record used to store an action taken. This will be 
      * used to revert actions when replaying a game.
      */
-    public record Action(Maze.Point pos, Direction dir, Interaction interaction){
+    public record Action(int id, Maze.Point moveVector, Direction oldDir, Direction newDir, Interaction interaction){
         public record Interaction(ActionType type, ColorableTile.Color color){
             /** Represents the entity interacting with a tile. */
             public enum ActionType{
                 None,
-                PickupKey,
-                PickupTreasure,
-                UnlockDoor,
-                UnlockExit;
+                PickupKey{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new Key(pos, undoColor));
+                        Maze.player.consumeKey(undoColor);
+                    }
+                },
+                PickupTreasure{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new Treasure(pos));
+                        Maze.addTreasure();
+                    }
+                },
+                UnlockDoor{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new LockedDoor(pos, undoColor));
+                        Maze.player.addKey(undoColor);
+                    }
+                },
+                UnlockExit{
+                    public void undo(Maze.Point pos, ColorableTile.Color undoColor){ 
+                        Maze.setTile(pos, new LockedExit(pos));
+                    }
+                },
+                Pinged;
+
+                public void undo(Maze.Point pos, ColorableTile.Color undoColor){ }
             }
         }
     }
@@ -52,6 +85,12 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /** The direction the entity is facing. */
     private Direction facingDir;
 
+    /** The action which the entity has taken, used for recorder. */
+    public Action action; 
+
+    /** Used to identify an entity during playback. */
+    private final int id;
+
     /**
      * Default constructor, sets the position and direction of the entity.
      * 
@@ -61,10 +100,24 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     public Entity(Maze.Point entityPos, Direction facingDir){
         setPos(entityPos);
         setDir(facingDir);
+        id = Maze.globalID;
+        Maze.globalID++;
     }
 
     /** Non-player entities will act based on how often this is called. */
-    abstract public Action ping();
+    abstract public void ping();
+
+    /** Undoes the effects of {@link #ping ping()}. */
+    abstract public void unping();
+
+    /** @return Whether or not this entity has done an action since the last call of {@link Maze#getChangeMap()}. */
+    public boolean hasAction(){ return action != null; }
+
+    public Action pollAction(){
+        Action storedAction = action;
+        action = null;
+        return storedAction;
+    }
 
     /**
      * Moves the entity in a given direction. 
@@ -82,6 +135,32 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     }
 
     /**
+     * Overloaded method for {@link #move move()}, takes in a point.
+     * 
+     * @param moveVector Amount to move by.
+     */
+    public void move(Maze.Point moveVector){
+        if(moveVector == null) throw new IllegalArgumentException("Given point is null");
+        Maze.Point newPos = entityPos.add(moveVector);
+        if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
+        if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
+        setPos(newPos);
+        assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
+        updateObservers(); 
+    }
+
+    /**
+     * Overloaded method for {@link #move move()}, that accepts two individual numbers 
+     * that represent X and Y, respectively.
+     * 
+     * @param addX The amount to change X by.
+     * @param addY The amount to change Y by.
+     */
+    public void move(int moveX, int moveY){
+        move(new Maze.Point(moveX, moveY));
+    }
+
+    /**
      * Overloaded method for {@link #move move()}, assumes
      * the chosen direction is the direction the entity is facing.
      */
@@ -95,11 +174,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      * 
      * @param dir The new {@link Direction direction} of the entity. 
      */
-    public Action moveAndTurn(Direction dir){
+    public void moveAndTurn(Direction dir){
         setDir(dir);
         move();
-
-        return new Action(entityPos, facingDir, new Interaction(ActionType.None, Color.None));
     }
 
     /** @return The {@link #entityPos position} of the entity. */
@@ -108,6 +185,9 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /** @return The {@link #facingDir direction} the entity is facing. */
     public Direction getDir(){ return facingDir; }
 
+    /** @return The ID of the entity. */
+    public int id(){ return id; }
+
     /**
      * Sets the {@link #entityPos position} of the entity.
      * 
@@ -115,6 +195,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
      */
     public void setPos(Maze.Point pos){ 
         if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
+        if(Maze.getTile(pos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         entityPos = pos; 
         updateObservers(); 
     }
