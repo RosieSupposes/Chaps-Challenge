@@ -79,7 +79,7 @@
 
         <tile ID="wall" x="0" y="7"/>
         <tile ID="info" x="3" y="7">
-            <text>Marshmallow pads can launch you over walls, and deadly puddles of milk</text>
+            <text>Level2Info</text>
         </tile>
         <tile ID="bounce-pad" x="4" y="7">
             <direction>Right</direction>
