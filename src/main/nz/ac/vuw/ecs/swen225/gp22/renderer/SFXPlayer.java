@@ -25,7 +25,6 @@ public class SFXPlayer implements LineListener {
         // stop the song with the smaller priority
         if (priorityLevel > currentSoundPriority){
             isPlaying = false;
-            //if (currentSound != null){ currentSound.stop(); }
         }
 
         // play a new sound when the current one stops
@@ -39,15 +38,11 @@ public class SFXPlayer implements LineListener {
         // play a new sound on top of the other
         if (sfx.getClipName().equals("collectItem") || 
         sfx.getClipName().equals("Unlock")){ 
-            currentSoundPriority = 3; 
-        }
-        
-        // play the background continuously
-        if (sfx.getClipName().equals("Background")){
-            //currentSound.loop(Clip.LOOP_CONTINUOUSLY);
-            currentSoundPriority = 2;
+            currentSoundPriority = 2; 
         }
     }
+
+    public void stopSFX(){ currentSound.stop(); }
 
     @Override
     public void update(LineEvent event) {

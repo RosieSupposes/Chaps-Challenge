@@ -47,6 +47,7 @@ public class Viewport extends JPanel implements ActionListener {
         timer.start();
         boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
         boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
+        
 
         //load wav files
         try{
@@ -55,6 +56,8 @@ public class Viewport extends JPanel implements ActionListener {
             }
         }
         catch(Exception e){ e.printStackTrace(); }
+        
+        playSFX("Background", 1);
     }
 
     /**
@@ -142,7 +145,6 @@ public class Viewport extends JPanel implements ActionListener {
             case PickupTreasure -> playSFX("CollectItem", 1); 
             case UnlockDoor -> playSFX("Unlock", 1); 
             case UnlockExit -> playSFX("Unlock", 1);
-            default -> playSFX("Background", 1);
         }
     }
     
@@ -155,6 +157,12 @@ public class Viewport extends JPanel implements ActionListener {
     public void playSFX(String soundName, int priorityLevel){
         sfxPlayer.playSound(soundList.get(soundName), priorityLevel);
     }
+
+
+    /***
+     * Stops the current sounds playing.
+     */
+    public void stopSound(){ sfxPlayer.stopSFX(); }
 
     /***
      * Stores the action that has happened in the game. 
