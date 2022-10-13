@@ -65,6 +65,8 @@ public class Viewport extends JPanel implements ActionListener {
         int playerX = Maze.player.getPos().x();
         int playerY = Maze.player.getPos().y();
 
+        Tile playerTile = Maze.getTile(new Maze.Point(playerX, playerY));
+
         if(playerX < focusX){ focusX = playerX; } // checking for the far left 
         else if(playerX > Maze.getDimensions().x() - focusX - 1){ focusX = playerX - boundariesX; } // checking for the far right
         
@@ -78,9 +80,7 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        if (Maze.getTile(new Maze.Point(playerX, playerY)) instanceof InfoField inField){
-            displayInfo(inField, g2D);
-        }
+        if (playerTile instanceof InfoField inField){ displayInfo(inField, g2D); }
 
     }
 
@@ -154,9 +154,20 @@ public class Viewport extends JPanel implements ActionListener {
                 default: throw new IllegalArgumentException("Invalid colour./n");
             }
         }
+        if (tile instanceof BouncyPad bp){ 
+            switch (bp.getDir()){
+                case Up: return Img.BouncyPadUp.image;
+                case Down: return Img.BouncyPadDown.image;
+                case Left: return Img.BouncyPadLeft.image; 
+                case Right: return Img.BouncyPadRight.image;
+                default: throw new IllegalArgumentException("Invalid direction./n");
+            }
+            
+        }
         if (tile instanceof InfoField){ return Img.InfoField.image; } 
         if (tile instanceof Exit){ return Img.Exit.image; } 
         if (tile instanceof LockedExit){ return Img.LockedExit.image; }
+        if (tile instanceof MilkPuddle){ return Img.MilkPuddle.image; }
         if (tile instanceof Treasure){ return Img.Treasure.image; }
         if (tile instanceof Wall){ return Img.Wall.image; }
 
@@ -190,7 +201,7 @@ public class Viewport extends JPanel implements ActionListener {
      */
     public void displayInfo(InfoField iField, Graphics g){
         int infoPos = (GameConstants.NUM_GAME_TILE*GameConstants.TILE_SIZE)/9;
-        g.drawImage(Img.InfoPost.image, infoPos, 2*infoPos, this);
+        g.drawImage(Img.InfoPost.image, infoPos, 5*infoPos, this);
         infofield.setText(iField.getText());
         infofield.setBounds(infoPos+ 10, (2*infoPos)+10, Img.InfoPost.image.getWidth()-100, Img.InfoPost.image.getHeight()-100);
         infofield.setFont(new Font("Verdana", Font.BOLD, 20));

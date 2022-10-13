@@ -1,10 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
 /**
- * A basic enemy that INSERT BEHAVIOR HERE.
+ * A basic enemy that moves back and forth.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.6
+ * @version 1.7
  */
 public class GummyGuard extends EnemyEntity<GummyGuard>{
     /** Used for if the player walks into the enemy. */
@@ -30,29 +30,16 @@ public class GummyGuard extends EnemyEntity<GummyGuard>{
         Direction oldDir = getDir();
         Maze.Point oldPos = getPos();
         moveAndTurn(getDir());
-        switch(getDir()){
-            case Down: 
-                setDir(Direction.Left);
-                break;
-            case Left:
-                setDir(Direction.Up);
-                break;
-            case Right:
-                setDir(Direction.Down);
-                break;
-            case Up:
-                setDir(Direction.Right);
-                break;
-            default:
-                break;
-        }
+        if(Maze.getTile(getPos().add(getDir())).isObstructive()) setDir(getDir().opposite());
         if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
         action = new Action(id(), getPos().subtract(oldPos), oldDir, getDir(), new Action.Interaction(Action.Interaction.ActionType.Pinged, ColorableTile.Color.None));
     }
 
     @Override
     public void unping(){
-        System.out.println("IM NOT SURE YET, WE WILL SEE");
+        if(Maze.getTile(getPos().subtract(getDir())).isObstructive()) setDir(getDir().opposite());
+        move(getDir().opposite());;
+        if(Maze.player.getPos().equals(getPos())) Maze.loseGame();
     }
 
     @Override

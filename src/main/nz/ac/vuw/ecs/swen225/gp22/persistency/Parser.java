@@ -121,6 +121,10 @@ public class Parser {
                 ColorableTile.Color c = ColorableTile.Color.valueOf(element.element("color").getText());
                 return TileDatabase.create(ID,p,c);
             }
+            case "bounce-pad" -> {
+                Entity.Direction direction = Entity.Direction.valueOf(element.elementText("direction"));
+                return TileDatabase.create(ID,p,direction);
+            }
             default -> {
                 return TileDatabase.create(ID,p);
             }
