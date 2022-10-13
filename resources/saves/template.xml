@@ -5,12 +5,12 @@
         <width>16</width>
         <height>16</height>
         <treasures>5</treasures>
-        <nextLevel>"level2"</nextLevel>
+        <nextLevel>1</nextLevel>
     </mapInfo>
     <saveInfo>
         <time>55</time>
         <keysCollected>0</keysCollected>
-        <level>1</level>
+        <level>0</level>
     </saveInfo>
     <player x="0" y="0" direction="Down">
         <inventory>
@@ -19,9 +19,9 @@
         </inventory>
     </player>
     <entities>
-        <entity ID="gummyGuard" x="5" y="5" direction="Right"/>
-        <entity ID="gummyGuard" x="5" y="6" direction="Right"/>
-        <entity ID="gummyGuard" x="5" y="7" direction="Right"/>
+        <entity ID="GummyGuard" x="5" y="5" direction="Right"/>
+        <entity ID="GummyGuard" x="5" y="6" direction="Right"/>
+        <entity ID="GummyGuard" x="5" y="7" direction="Right"/>
     </entities>
     <tiles>
         <tile ID="info" x="0" y="1">

@@ -25,7 +25,7 @@ public class Treasure extends Tile{
         super(tilePos, false);
 
         playerObserver = player -> {
-            if(player.getPos().equals(tilePos)){
+            if(Maze.getTile(tilePos) == this && player.getPos().equals(tilePos)){
                 Maze.collectTreasure();
                 Maze.resetTile(tilePos);
                 Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.PickupTreasure, ColorableTile.Color.None));

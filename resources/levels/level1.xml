@@ -4,7 +4,7 @@
         <width>17</width>
         <height>16</height>
         <treasures>11</treasures>
-        <nextLevel>"Level2"</nextLevel>
+        <nextLevel>2</nextLevel>
     </mapInfo>
     <player x="8" y="7" direction="Down"/>
     <tiles>

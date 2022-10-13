@@ -32,9 +32,9 @@ public class Maze{
 
     /** Represents how many more {@link Treasure} tiles are still on the map. */
     private static int treasuresLeft;
-
-    /** Stores the name of the next level to load. If empty or null then the {@link #gameComplete() game over flag} returns true. */
-    private static String nextLevel;
+    
+    /** Stores the number of the next level to load. If -1 {@link #gameComplete() game complete flag} returns true. */
+    private static int nextLevel;
 
     /** Stores {@link Entity.Action.Interaction Interaction} records to be claimed by entities. */
     public static Queue<Entity.Action.Interaction> unclaimedInteractions = new ArrayDeque<>();
@@ -51,10 +51,11 @@ public class Maze{
      * @param dimensions The size of the {@link #tileMap map}.
      * @param treasures The number of treasures on the {@link #tileMap map}.
      */
-    public static void generateMap(Point dimensions, int treasures){
+    public static void generateMap(Point dimensions, int treasures, int nextLevelP){
         if(dimensions == null || dimensions.x() <= 0 || dimensions.y() <= 0) throw new IllegalArgumentException("Invalid map dimensions.");
         if(treasures < 0) throw new IllegalArgumentException("Number of treasures cannot be below 0.");
 
+        nextLevel = nextLevelP;
         gameLost = false;
         globalID = 0;
         entities.clear();
@@ -62,13 +63,12 @@ public class Maze{
         tileMap = new Tile[dimensions.x()][dimensions.y()];
         for(int x = 0; x < dimensions.x(); x++){
             for(int y = 0; y < dimensions.y(); y++){
-                tileMap[x][y] = new Ground(new Point(x, y));
+                setTile(new Point(x, y), new Ground(new Point(x, y)));
             }
         }
 
         treasuresLeft = treasures;
         player = new Player(new Point(0, 0), Entity.Direction.Down);
-        nextLevel = "";
     }
 
     /** @return A {@link Point} representing the maps dimensions. */
@@ -96,7 +96,7 @@ public class Maze{
         if(tile == null) throw new IllegalArgumentException("Given tile does not exist.");
         if(!tile.getPos().equals(point)) throw new IllegalArgumentException("Tile position does not match the point it is being set to.");
         Tile oldTile = getTile(point);
-        oldTile.deleteTile();
+        if(oldTile != null) oldTile.deleteTile();
         tileMap[point.x()][point.y()] = tile;     
         assert Maze.getTile(point) != oldTile : "Tile has not been removed from the map."; 
     }
@@ -180,17 +180,33 @@ public class Maze{
     /** @return The number of treasures left to collect. */
     public static int getTreasuresLeft(){ return treasuresLeft; }
 
-    /** @return The name of the next level to load. */
-    public static String getNextLevel(){ return nextLevel; }
+    /** @return The number of the next level to load. */
+    public static int getNextLevel(){ return nextLevel; }
 
     /** @return Whether or not there are more levels to load. */
-    public static boolean gameComplete(){ return nextLevel == null || nextLevel.equals(""); }
+    public static boolean gameComplete(){ return nextLevel == -1; }
+
+    /** @return Whether or not the game has been won. */
+    public static boolean gameWon(){ return getTile(player.getPos()) instanceof Exit; }
 
     /** @return Whether or not the player has lost the game. */
     public static boolean isGameLost(){ return gameLost; }
 
     /** Flags the game as over. */
     public static void loseGame(){ gameLost = true; }
+
+    /** @return The current maze state in string form. Used for testing. */
+    public static String getStringState(){
+        String mazeState = "";
+        for(int y = 0; y < tileMap[0].length; y++){
+            for(int x = 0; x < tileMap.length; x++){
+                mazeState += getTile(new Point(x, y)).toString();
+            }
+            mazeState += "\n";
+        }
+
+        return mazeState;
+    }
 
     /** Represents a point on the {@link Maze#tileMap tilemap}. */
     public record Point(int x, int y){ 

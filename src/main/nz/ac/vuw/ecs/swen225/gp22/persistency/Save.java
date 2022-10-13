@@ -39,7 +39,7 @@ public class Save {
         mapInfo.addElement("width").addText(String.valueOf(dimensions.x()));
         mapInfo.addElement("height").addText(String.valueOf(dimensions.y()));
         mapInfo.addElement("treasures").addText(String.valueOf(Maze.getTreasuresLeft()));
-        mapInfo.addElement("nextLevel").addText(Maze.getNextLevel());
+        mapInfo.addElement("nextLevel").addText(String.valueOf(Maze.getNextLevel()));
 
         int keyCount = Maze.player.keyCount();
         Element saveInfo = root.addElement("saveInfo");
@@ -58,8 +58,8 @@ public class Save {
                                       .addAttribute("color",k));
         }
         Element tiles = root.addElement("tiles");
-        for(int x = 0; x < 16; x++){
-            for(int y = 0; y < 16; y++) {
+        for(int x = 0; x < dimensions.y(); x++){
+            for(int y = 0; y < dimensions.y(); y++) {
                 Maze.Point p = new Maze.Point(x,y);
                 Tile tile = Maze.getTile(p);
                 String tileID = TileDatabase.getID(tile);

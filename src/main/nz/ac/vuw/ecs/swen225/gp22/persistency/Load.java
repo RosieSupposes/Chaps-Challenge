@@ -1,12 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp22.persistency;
 
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
+import nz.ac.vuw.ecs.swen225.gp22.domain.Entity;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Maze;
 import nz.ac.vuw.ecs.swen225.gp22.domain.Tile;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 /**
@@ -17,8 +21,9 @@ import java.util.List;
  * @version 1.4
  */
 public class Load {
-    private static final String resourceDirectory = System.getProperty("user.dir")+"/resources/";
-    private static final String previousGame = "saves/previousGame";
+    private static final String resourceDirectory = System.getProperty("user.dir") + "/resources/";
+    private static final String previousGame = "saves/previousGame.xml";
+    private static URLClassLoader classLoader;
 
     /**
      * Load saved game from xml.
@@ -51,6 +56,8 @@ public class Load {
         Base.setTime(60);
         Base.setLevel(levelNum);
         loadGame(getFile("levels/level" + levelNum));
+        Base.setLevel(levelNum);
+        Base.setTime(60);
     }
 
     /**
@@ -67,12 +74,13 @@ public class Load {
      * @return an int representing how long the previous game was played for
      */
     public static void previousGame() {
-        if(!previousGamePresent()){
+        if(previousGamePresent()){
+            Parser parser = loadGame(getFile(previousGame));
+            Base.setTime(parser.getTime());
+            Base.setLevel(parser.getLevel());
+        } else {
             loadLevel(1);
         }
-        Parser parser = loadGame(getFile(previousGame));
-        Base.setTime(parser.getTime());
-        Base.setLevel(parser.getLevel());
     }
 
     /**
@@ -86,6 +94,10 @@ public class Load {
         return "Time: " + parser.getTime() + ", Keys: " + parser.getNumKeysCollected();
     }
 
+    public static URLClassLoader getClassLoader() {
+        return classLoader;
+    }
+
     /**
      * Parses a game from the provided file
      * @param file the file to parse and load the game from
@@ -95,6 +107,11 @@ public class Load {
         parser.parseMapInfo();
         parser.parsePlayer(Maze.player);
         List<Tile> tiles = parser.getTiles();
+        if (parser.entitiesPresent()) {
+            loadJar(parser.getLevel());
+            List<Entity> entities = parser.getEntities();
+            Maze.entities.addAll(entities);
+        }
         for (Tile t : tiles) {
             Maze.setTile(t.getPos(), t);
         }
@@ -109,6 +126,24 @@ public class Load {
      */
     private static File getFile(String file){
         return new File(resourceDirectory + file + ".xml");
+    }
+
+    /**
+     * Loads classes from a jar file
+     *
+     * @param levelNum level number to load associated jar for
+     */
+    private static void loadJar(int levelNum) {
+        File file = getFile("level/level" + levelNum + ".jar");
+        try {
+            URLClassLoader child = new URLClassLoader(
+                    new URL[]{file.toURI().toURL()},
+                    Load.class.getClassLoader()
+            );
+            classLoader = child;
+        } catch (IOException e) {
+            classLoader = null;
+        }
     }
 
 }

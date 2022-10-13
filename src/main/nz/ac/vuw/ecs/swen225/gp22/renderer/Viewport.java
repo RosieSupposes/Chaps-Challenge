@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import nz.ac.vuw.ecs.swen225.gp22.domain.*;
 import nz.ac.vuw.ecs.swen225.gp22.renderer.SFX.Sounds;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 
 /**
  * This class displays the maze, and all the entities active in the current level
@@ -29,9 +30,10 @@ public class Viewport extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     private Tile[][] currentMaze = new Tile[GameConstants.NUM_GAME_TILE][GameConstants.NUM_GAME_TILE]; // 9x9 maze displayed on screen
+
     private Timer timer;
-    private int boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
-    private int boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
+    private int boundariesX;
+    private int boundariesY;
     private JLabel infofield = new JLabel("");
     private SFXPlayer sfxPlayer = new SFXPlayer();
     private final HashMap<String, SFX> soundList = new HashMap<>();
@@ -43,6 +45,8 @@ public class Viewport extends JPanel implements ActionListener {
     public Viewport(){ 
         timer = new Timer(50, this);
         timer.start();
+        boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
+        boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
 
         //load wav files
         try{
@@ -93,9 +97,26 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        if (playerTile instanceof InfoField inField){
-            displayInfo(inField, g2D);
-            //playSFX("Background", 2); // check sound is working
+        if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
+
+        Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
+
+        // drawing the enemies
+        for(Entity e: Maze.entities){
+            EnemyEntity enemy = (EnemyEntity) e;
+            int enemyX = enemy.getPos().x();
+            int enemyY = enemy.getPos().y();
+
+            int rows = focusPoint.x() + GameConstants.NUM_GAME_TILE-1;
+            int cols = focusPoint.y() + GameConstants.NUM_GAME_TILE-1;
+
+            // check that the enemy is within the current the focus area
+            if (focusPoint.x() <= enemyX && rows >= enemyX
+            && focusPoint.y() <= enemyX && cols >= enemyY){
+                g2D.drawImage(EnemyEntity.imageMap.get(enemy.getDir()),
+                        (enemyX - focusPoint.x()) * GameConstants.TILE_SIZE,
+                        (enemyY - focusPoint.y()) * GameConstants.TILE_SIZE, this);
+            }
         }
 
         // play sounds based on the player's actions and game status
@@ -115,37 +136,50 @@ public class Viewport extends JPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        Tile[][] tempMaze = new Tile[Maze.getDimensions().x()][Maze.getDimensions().y()];  
+        if (!this.isValid()){ 
+            timer.stop(); // method doesn't get called anymore
+            timer = null; // removes reference to the Viewport class
+            return; 
+        }
+
         int playerX = Maze.player.getPos().x();
-        int playerY = Maze.player.getPos().y(); 
+        int playerY = Maze.player.getPos().y();
 
-        setFocusArea(playerX, playerY, tempMaze);
-
+        Maze.Point mazePoint = getFocusArea(playerX, playerY); 
+        setCurrentMaze(mazePoint); // get the new 9x9 tiles to be displayed
         repaint();
     }
 
     /**
-     * Renders a new maze that focuses on the tiles within 
-     * the vicinity of the player's current location on the canvas. 
-     * 
-     * @param x x coordinate of the tile.
-     * @param y y coordinate of the tile.
-     * @param tempMaze the maze to be updated.
+     * Renders a new Maze.Point that focuses on the tiles within
+     * the vicinity of the player's current location on the canvas.
+     *
+     * @param x x coordinate of the player.
+     * @param y y coordinate of the player.
      */
-    private void setFocusArea(int x, int y, Tile[][] tempMaze) {
-        int focusX = x - GameConstants.FOCUS_AREA; 
+    private Maze.Point getFocusArea(int x, int y){
+        int focusX = x - GameConstants.FOCUS_AREA;
         int focusY = y - GameConstants.FOCUS_AREA;
 
-        // check for if the tiles are less than the focusX and focusY
-        focusX = (focusX < 0) ? 0 : focusX;
-        focusY = (focusY < 0) ? 0 : focusY; 
+        // checking for boundary cases
+        focusX = Math.max(focusX, 0);
+        focusY = Math.max(focusY, 0);
 
-        focusX = (focusX > boundariesX) ? boundariesX : focusX;
-        focusY = (focusY > boundariesY) ? boundariesY : focusY; 
+        focusX = Math.min(focusX, boundariesX);
+        focusY = Math.min(focusY, boundariesY);
 
+        return new Maze.Point(focusX, focusY);
+    }
+
+    /**
+     * Displays a 9x9 maze that shows the tiles surrounding the Player.
+     *
+     * @param point A point to be displayed in the maze.
+     */
+    private void setCurrentMaze(Maze.Point point){
         for(int i = 0; i < GameConstants.NUM_GAME_TILE; i++) {
             for(int j = 0; j < GameConstants.NUM_GAME_TILE; j++) {
-                currentMaze[i][j] = Maze.getTile(new Maze.Point(i + focusX, j + focusY));
+                currentMaze[i][j] = Maze.getTile(new Maze.Point(i + point.x(), j + point.y()));
             }
         }
     }
@@ -174,9 +208,20 @@ public class Viewport extends JPanel implements ActionListener {
                 default: throw new IllegalArgumentException("Invalid colour./n");
             }
         }
+        if (tile instanceof BouncyPad bp){ 
+            switch (bp.getDir()){
+                case Up: return Img.BouncyPadUp.image;
+                case Down: return Img.BouncyPadDown.image;
+                case Left: return Img.BouncyPadLeft.image; 
+                case Right: return Img.BouncyPadRight.image;
+                default: throw new IllegalArgumentException("Invalid direction./n");
+            }
+            
+        }
         if (tile instanceof InfoField){ return Img.InfoField.image; } 
         if (tile instanceof Exit){ return Img.Exit.image; } 
         if (tile instanceof LockedExit){ return Img.LockedExit.image; }
+        if (tile instanceof MilkPuddle){ return Img.MilkPuddle.image; }
         if (tile instanceof Treasure){ return Img.Treasure.image; }
         if (tile instanceof Wall){ return Img.Wall.image; }
 
@@ -207,9 +252,9 @@ public class Viewport extends JPanel implements ActionListener {
      * 
      * @param g Graphics object needed to render images on the canvas.
      */
-    public void displayInfo(InfoField iField, Graphics g){
+    public void getInfoField(InfoField iField, Graphics g){
         int infoPos = (GameConstants.NUM_GAME_TILE*GameConstants.TILE_SIZE)/9;
-        g.drawImage(Img.InfoPost.image, infoPos, 2*infoPos, this);
+        g.drawImage(Img.InfoPost.image, infoPos, 5*infoPos, this);
         infofield.setText(iField.getText());
         //System.out.println(""+iField.getText());
         infofield.setBounds(infoPos+ 10, (2*infoPos)+10, Img.InfoPost.image.getWidth()-100, Img.InfoPost.image.getHeight()-100);

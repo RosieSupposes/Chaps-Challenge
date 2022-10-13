@@ -3,7 +3,9 @@ package nz.ac.vuw.ecs.swen225.gp22.recorder;
 import nz.ac.vuw.ecs.swen225.gp22.app.Base;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameButton;
 import nz.ac.vuw.ecs.swen225.gp22.app.GameDialog;
+import nz.ac.vuw.ecs.swen225.gp22.app.PhasePanel;
 import nz.ac.vuw.ecs.swen225.gp22.persistency.Load;
+import nz.ac.vuw.ecs.swen225.gp22.util.GameConstants;
 import org.dom4j.DocumentException;
 
 import javax.swing.*;
@@ -28,7 +30,7 @@ public class Player extends JPanel {
     private boolean isRewinding = false;
     private int speed = 1;
     private GameButton playPause;
-    private JPanel gamePanel;
+    private PhasePanel gamePanel;
     private GameButton speedBtn;
 
     private static final Dimension BUTTON_DIM = new Dimension(50, 30);
@@ -70,11 +72,11 @@ public class Player extends JPanel {
                 scrub(source.getValue());
             }
         });
-        scrubber.setBackground(Color.MAGENTA);
+        scrubber.setBackground(GameConstants.BG_COLOR);
         scrubber.setUI(new BasicSliderUI(scrubber) {
             @Override
             public void paintThumb(Graphics g) {
-                g.setColor(Color.MAGENTA);
+                g.setColor(GameConstants.BG_COLOR_LIGHTER);
                 g.fillOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
                 g.setColor(Color.GRAY);
                 g.drawOval(thumbRect.x, thumbRect.y, thumbRect.height - 2, thumbRect.height - 2);
@@ -125,7 +127,7 @@ public class Player extends JPanel {
         add(speedBtn);
 
         setPreferredSize(new Dimension(800, 520));
-        setBackground(Color.MAGENTA);
+        setBackground(GameConstants.BG_COLOR);
     }
 
     /**
@@ -196,12 +198,14 @@ public class Player extends JPanel {
             // scrub forward
             for (int i = currentAction; i < position; i++) {
                 gameStates.get(i).apply(base);
+                gamePanel.updateTime(60 - gameStates.get(i).getTime()/1000);
                 gamePanel.repaint();
             }
         } else if (position < currentAction) {
             // scrub backward
             for (int i = currentAction - 1; i >= position; i--) {
                 gameStates.get(i).undo(base);
+                gamePanel.updateTime(60 - gameStates.get(i).getTime()/1000);
                 gamePanel.repaint();
             }
         }
@@ -231,7 +235,7 @@ public class Player extends JPanel {
         isPlaying = true;
         isRewinding = false;
         new Thread(() -> {
-            for (int i = currentAction; i < gameStates.size(); i++) {
+            for (int i = currentAction; i <= gameStates.size(); i++) {
                 if (!isPlaying && !isRewinding) break;
                 if (progress(i, isPlaying)) break;
             }
