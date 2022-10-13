@@ -9,7 +9,7 @@ import javax.swing.*;
  * @version 1.2
  */
 public class Main {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Base::new);
-    }
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(Base::new);
+	}
 }

@@ -13,26 +13,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Tests for Save class
+ * Tests for Save class.
+ *
  * @author Gideon Wilkins, 300576057
  * @version 1.3
  */
 public class SaveTest {
     /**
-     * Test to see if the save method can save a level
+     * Test to see if the save method can save a level.
      */
     @Test
-    public void saveGame(){
+    public void saveGame() {
         Load.loadLevel(1);
         Save.saveGame();
         assert Load.previousGamePresent();
     }
 
     /**
-     * Test to see if the save method can save level 2 correctly
+     * Test to see if the save method can save level 2 correctly.
      */
     @Test
-    public void saveLevel2(){
+    public void saveLevel2() {
         Load.loadLevel(2);
         Save.saveGame();
         assert Load.previousGamePresent();
@@ -41,10 +42,10 @@ public class SaveTest {
     }
 
     /**
-     * Test to see if the save method can save the inventory of the player
+     * Test to see if the save method can save the inventory of the player.
      */
     @Test
-    public void saveInventory(){
+    public void saveInventory() {
         Maze.player.addKey(ColorableTile.Color.Red);
         Maze.player.addKey(ColorableTile.Color.Blue);
         Maze.player.addKey(ColorableTile.Color.Yellow);
@@ -57,13 +58,13 @@ public class SaveTest {
     }
 
     /**
-     * Test to see if the addPoint method adds the correct attributes to the element
+     * Test to see if the addPoint method adds the correct attributes to the element.
      */
     @Test
-    public void addPoint(){
+    public void addPoint() {
         Document doc = DocumentHelper.createDocument();
         Element test = doc.addElement("test");
-        Save.addPoint(test,new Maze.Point(1,2));
+        Save.addPoint(test, new Maze.Point(1, 2));
         assert test.attribute("x") != null;
         assert test.attribute("y") != null;
         assert test.attributeValue("x").equals("1");

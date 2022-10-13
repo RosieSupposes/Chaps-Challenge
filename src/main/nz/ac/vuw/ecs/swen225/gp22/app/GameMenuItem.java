@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 public class GameMenuItem extends JMenuItem {
 
 	/**
-	 * Menu item with icon
+	 * Menu item with icon.
 	 *
 	 * @param name       name of item
 	 * @param actionList action for item
@@ -32,9 +32,9 @@ public class GameMenuItem extends JMenuItem {
 	}
 
 	/**
-     * Menu item with name and action.
-     *
-	 * @param name name for item
+	 * Menu item with name and action.
+	 *
+	 * @param name       name for item
 	 * @param actionList action for item
 	 */
 	public GameMenuItem(String name, ActionListener actionList) {
@@ -42,11 +42,11 @@ public class GameMenuItem extends JMenuItem {
 		setUp(actionList);
 	}
 
-    /**
-     * Set up menu item.
-     *
-     * @param actionList item action
-     */
+	/**
+	 * Set up menu item.
+	 *
+	 * @param actionList item action
+	 */
 	private void setUp(ActionListener actionList) {
 		this.addActionListener(actionList);
 		this.setBackground(GameConstants.BUTTON_COLOR);
@@ -54,21 +54,21 @@ public class GameMenuItem extends JMenuItem {
 		this.setHorizontalAlignment(SwingConstants.LEFT);
 	}
 
-    /**
-     * Change current action listener for new one.
-     *
-     * @param action new action for item
-     */
+	/**
+	 * Change current action listener for new one.
+	 *
+	 * @param action new action for item
+	 */
 	public void changeActionListener(ActionListener action) {
 		this.removeActionListener(this.getActionListeners()[0]);
 		this.addActionListener(action);
 	}
 
-    /**
-     * Change icon on item.
-     *
-     * @param imageIcon new icon for item
-     */
+	/**
+	 * Change icon on item.
+	 *
+	 * @param imageIcon new icon for item
+	 */
 	public void changeIcon(ImageIcon imageIcon) {
 		this.setIcon(imageIcon);
 	}

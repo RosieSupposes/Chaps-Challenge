@@ -21,7 +21,7 @@ public class GameState {
     /**
      * Create a new game state.
      *
-     * @param id the id of the game state
+     * @param id   the id of the game state
      * @param time the time of the game state
      */
     protected GameState(int id, int time) {
@@ -33,8 +33,8 @@ public class GameState {
     /**
      * Add an action to the game state.
      *
-     * @param id the id of the action
-     * @param time the time of the action
+     * @param id      the id of the action
+     * @param time    the time of the action
      * @param actions the actions to add
      */
     protected GameState(int id, int time, List<Action> actions) {
@@ -86,8 +86,8 @@ public class GameState {
      */
     public Element toxml() {
         Element element = DocumentHelper.createElement("state")
-                .addAttribute("id", String.valueOf(id))
-                .addAttribute("time", String.valueOf(time));
+            .addAttribute("id", String.valueOf(id))
+            .addAttribute("time", String.valueOf(time));
         actions.forEach(action -> element.add(action.toxml()));
         return element;
     }

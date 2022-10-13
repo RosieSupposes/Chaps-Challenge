@@ -19,44 +19,56 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * This class is used to aid my development of this module. I use custom annotations to mark 
+ * This class is used to aid my development of this module. I use custom annotations to mark
  * certain parts of code that are still being worked on, or need to be changed to a notable
  * degree. These annotations will be printed out when running the main method in this file,
- * to make tracking these markers easier. 
- * 
- * This file also acts as a testing ground for features that have not yet been 
+ * to make tracking these markers easier.
+ * <p>
+ * This file also acts as a testing ground for features that have not yet been
  * fully implemented and thus do not benefit from a unit test.
- * 
- * @author Abdulrahman Asfari, 300475089 
+ *
+ * @author Abdulrahman Asfari, 300475089
  * @version 1.2
  */
-public class DevMarkers{
-    /** Determines whether or not custom annotations will be printed at runtime. */
+public class DevMarkers {
+    /**
+     * Determines whether or not custom annotations will be printed at runtime.
+     */
     public static boolean markersEnabled = true;
 
-    /** List of custom annotations to check for. */
+    /**
+     * List of custom annotations to check for.
+     */
     private static final List<Class<? extends Annotation>> annotations = Arrays.asList(
-        DevMarkers.NeedsPrecons.class, 
-        DevMarkers.NeedsPostcons.class, 
-        DevMarkers.WIPList.class
+            DevMarkers.NeedsPrecons.class,
+            DevMarkers.NeedsPostcons.class,
+            DevMarkers.WIPList.class
     );
 
-    /** Descriptions of non-WIP annotations. Follows the order of annotations. */
+    /**
+     * Descriptions of non-WIP annotations. Follows the order of annotations.
+     */
     private static final List<String> annotationNotes = Arrays.asList(
-        "This element needs to enforce preconditions.",
-        "This element needs to enforce postconditions."
+            "This element needs to enforce preconditions.",
+            "This element needs to enforce postconditions."
     );
 
-    /** Used when an element needs to enforce preconditions. */
+    /**
+     * Used when an element needs to enforce preconditions.
+     */
     @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface NeedsPrecons{ }
-    
-    /** Used when an element needs to enforce postconditions. */
+    public @interface NeedsPrecons {
+    }
+
+    /**
+     * Used when an element needs to enforce postconditions.
+     */
     @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface NeedsPostcons{ }
-    
+    public @interface NeedsPostcons {
+    }
+
     /**
      * A custom repeatable annotation where extra info can be provided
      * about the work that needs to be done.
@@ -64,42 +76,48 @@ public class DevMarkers{
     @Repeatable(DevMarkers.WIPList.class)
     @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface WIP{ String value() default "This element is in development."; }
+    public @interface WIP {
+        String value() default "This element is in development.";
+    }
 
-    /** Allows WIP to be repeatable. */
+    /**
+     * Allows WIP to be repeatable.
+     */
     @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
-    protected @interface WIPList{ DevMarkers.WIP[] value(); }
+    protected @interface WIPList {
+        DevMarkers.WIP[] value();
+    }
 
-    /** 
+    /**
      * Used to test interactions between objects whilst creating
      * the implementation for certain classes. Also prints out any
-     * custom annotations if markersEnabled is true. 
+     * custom annotations if markersEnabled is true.
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("----------------------------------------------------------------------------------------------");
         System.out.println("Domain Development Branch Testing | Not for marking");
         System.out.println("----------------------------------------------------------------------------------------------");
 
         // Prints custom annotations.
-        if(markersEnabled) findPackageClasses("nz.ac.vuw.ecs.swen225.gp22.domain").forEach(clazz -> {
+        if (markersEnabled) findPackageClasses("nz.ac.vuw.ecs.swen225.gp22.domain").forEach(clazz -> {
             printAnnotationMessage(clazz, "Class - " + clazz.getSimpleName() + ": ");
 
-            for(Constructor<?> constructor: clazz.getConstructors()){
+            for (Constructor<?> constructor : clazz.getConstructors()) {
                 String params = "";
-                for(Class<?> param: constructor.getParameterTypes()) params += param.getSimpleName() + ", ";
-                if(params.length() > 1) params = params.substring(0, params.length() - 2);
+                for (Class<?> param : constructor.getParameterTypes()) params += param.getSimpleName() + ", ";
+                if (params.length() > 1) params = params.substring(0, params.length() - 2);
                 printAnnotationMessage(constructor, "Constructor - " + clazz.getSimpleName() + "(" + params + "): ");
             }
 
-            for(Method method: clazz.getDeclaredMethods()){
+            for (Method method : clazz.getDeclaredMethods()) {
                 String params = "";
-                for(Class<?> param: method.getParameterTypes()) params += param.getSimpleName() + ", ";
-                if(params.length() > 1) params = params.substring(0, params.length() - 2);
+                for (Class<?> param : method.getParameterTypes()) params += param.getSimpleName() + ", ";
+                if (params.length() > 1) params = params.substring(0, params.length() - 2);
                 printAnnotationMessage(method, "Method - " + clazz.getSimpleName() + "." + method.getName() + "(" + params + "): ");
             }
 
-            for(Field field: clazz.getDeclaredFields()){
+            for (Field field : clazz.getDeclaredFields()) {
                 printAnnotationMessage(field, "Field - " + clazz.getSimpleName() + "." + field.getName() + ": ");
             }
 
@@ -111,51 +129,51 @@ public class DevMarkers{
     /**
      * Checks if an element has any custom annotations and if so,
      * prints them out with the correct prefix.
-     * 
-     * @param o The element being queried.
+     *
+     * @param o      The element being queried.
      * @param prefix Element prefix to indicate what the element is.
      */
-    private static void printAnnotationMessage(AnnotatedElement o, String prefix){
-        for(Class<? extends Annotation> annotationClass: annotations){
+    private static void printAnnotationMessage(AnnotatedElement o, String prefix) {
+        for (Class<? extends Annotation> annotationClass : annotations) {
             Annotation annotation;
-            if((annotation = o.getAnnotation(annotationClass)) != null){
-                if(annotationClass == WIPList.class){
-                    for(WIP item: ((WIPList) annotation).value()) System.out.println(prefix + item.value());
-                }
-                else System.out.println(prefix + annotationNotes.get(annotations.indexOf(annotationClass)));
+            if ((annotation = o.getAnnotation(annotationClass)) != null) {
+                if (annotationClass == WIPList.class) {
+                    for (WIP item : ((WIPList) annotation).value()) System.out.println(prefix + item.value());
+                } else System.out.println(prefix + annotationNotes.get(annotations.indexOf(annotationClass)));
             }
         }
     }
 
     /**
-     * Finds all classes in a given package. This uses 
+     * Finds all classes in a given package. This uses
      * the system class loader and turns it into a stream which
      * can then find all the classes.
-     * 
-     * Used: https://www.baeldung.com/java-find-all-classes-in-package  
-     * 
+     * <p>
+     * Used: https://www.baeldung.com/java-find-all-classes-in-package
+     *
      * @param packageName Name of package to find classes in.
      * @return Set of classes in package.
      */
-    public static Set<Class<?>> findPackageClasses(String packageName){
+    public static Set<Class<?>> findPackageClasses(String packageName) {
         InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]", "/"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         return reader.lines().filter(line -> line.endsWith(".class")).map(line -> getClass(line, packageName)).collect(Collectors.toSet());
     }
 
     /**
-     * Finds a class using it's name and package.  
-     *   
-     * Used: https://www.baeldung.com/java-find-all-classes-in-package  
-     *   
-     * @param className Name of class.
+     * Finds a class using it's name and package.
+     * <p>
+     * Used: https://www.baeldung.com/java-find-all-classes-in-package
+     *
+     * @param className   Name of class.
      * @param packageName Package class is in.
      * @return Class object.
      */
-    private static Class<?> getClass(String className, String packageName){
-        try{
+    private static Class<?> getClass(String className, String packageName) {
+        try {
             return Class.forName(packageName + "." + className.substring(0, className.lastIndexOf('.')));
-        }catch(ClassNotFoundException e){ }
+        } catch (ClassNotFoundException e) {
+        }
         return null;
     }
 }
