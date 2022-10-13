@@ -41,7 +41,7 @@ public class DevMarkers{
         DevMarkers.WIPList.class
     );
 
-    /** Descriptions of non-WIP annotations. Follows the order of {@link #annotations}. */
+    /** Descriptions of non-WIP annotations. Follows the order of annotations. */
     private static final List<String> annotationNotes = Arrays.asList(
         "This element needs to enforce preconditions.",
         "This element needs to enforce postconditions."
@@ -66,7 +66,7 @@ public class DevMarkers{
     @Retention(RetentionPolicy.RUNTIME)
     public @interface WIP{ String value() default "This element is in development."; }
 
-    /** Allows {@link WIP} to be repeatable. */
+    /** Allows WIP to be repeatable. */
     @Target({ElementType.TYPE, ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
     protected @interface WIPList{ DevMarkers.WIP[] value(); }
@@ -74,7 +74,7 @@ public class DevMarkers{
     /** 
      * Used to test interactions between objects whilst creating
      * the implementation for certain classes. Also prints out any
-     * custom annotations if {@link #markersEnabled} is true. 
+     * custom annotations if markersEnabled is true. 
      */
     public static void main(String[] args){
         System.out.println("----------------------------------------------------------------------------------------------");
@@ -132,7 +132,7 @@ public class DevMarkers{
      * the system class loader and turns it into a stream which
      * can then find all the classes.
      * 
-     * Used: {@link https://www.baeldung.com/java-find-all-classes-in-package}  
+     * Used: https://www.baeldung.com/java-find-all-classes-in-package  
      * 
      * @param packageName Name of package to find classes in.
      * @return Set of classes in package.
@@ -146,7 +146,7 @@ public class DevMarkers{
     /**
      * Finds a class using it's name and package.  
      *   
-     * Used: {@link https://www.baeldung.com/java-find-all-classes-in-package}  
+     * Used: https://www.baeldung.com/java-find-all-classes-in-package  
      *   
      * @param className Name of class.
      * @param packageName Package class is in.

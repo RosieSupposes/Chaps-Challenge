@@ -20,8 +20,8 @@ public class LockedDoor extends ColorableTile{
      * observer makes sure that when they are on this tile, it is reset and the 
      * key is consumed from the player's inventory. 
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
-     * @param color {@link Color} to set the color field to. ({@link ColorableTile#color see here})
+     * @param tilePos Point to set the position field to. 
+     * @param color Color to set the color field to. 
      */
     public LockedDoor(Maze.Point tilePos, Color color){
         super(tilePos, true, color);

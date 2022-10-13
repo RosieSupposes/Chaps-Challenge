@@ -5,11 +5,11 @@ package nz.ac.vuw.ecs.swen225.gp22.domain;
  * Any entities are observable.
  * 
  * @author Abdulrahman Asfari, 300475089
- * @version 1.15
+ * @version 1.17
  */
 public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /**
-     * Enum with values for each direction, which each have a {@link Maze.Point point}
+     * Enum with values for each direction, which each have a point
      * representing the change in position.
      */
     public enum Direction{
@@ -33,11 +33,11 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         /** Amount the position of the entity will change by if it takes a step. */
         Maze.Point posChange;
 
-        /** Default constructor to set {@link #posChange}. */
+        /** Default constructor to set posChange. */
         Direction(int x, int y){ posChange = new Maze.Point(x, y); }
 
         /** @return The opposite direction. */
-        public Direction opposite(){ return null; }
+        public abstract Direction opposite();
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         }
     }
 
-    /** Position of the entity in regards to the {@link Maze#tileMap tilemap}. */
+    /** Position of the entity in regards to the tilemap. */
     private Maze.Point entityPos;
 
     /** The direction the entity is facing. */
@@ -91,11 +91,17 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /** Used to identify an entity during playback. */
     private final int id;
 
+    /** 
+     * Makes sure updateObservers() isn't called in setPos() when
+     * a move method is being called.
+     */
+    private boolean inMove = false;
+
     /**
      * Default constructor, sets the position and direction of the entity.
      * 
-     * @param entityPos {@link Maze.Point Point} to set the position field to. ({@link #entityPos see here})
-     * @param facingDir {@link Direction} to set the direction field to. ({@link #facingDir see here})
+     * @param entityPos Point to set the position field to. 
+     * @param facingDir Direction to set the direction field to. 
      */
     public Entity(Maze.Point entityPos, Direction facingDir){
         setPos(entityPos);
@@ -110,7 +116,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     /** Undoes the effects of {@link #ping ping()}. */
     abstract public void unping();
 
-    /** @return Whether or not this entity has done an action since the last call of {@link Maze#getChangeMap()}. */
+    /** @return Whether or not this entity has done an action since the last call of getChangeMap(). */
     public boolean hasAction(){ return action != null; }
 
     public Action pollAction(){
@@ -129,13 +135,15 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Maze.Point newPos = entityPos.add(direction);
         if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
+        inMove = true;
         setPos(newPos);
+        inMove = false;
         assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
         updateObservers(); 
     }
 
     /**
-     * Overloaded method for {@link #move move()}, takes in a point.
+     * Overloaded method for move(), takes in a point.
      * 
      * @param moveVector Amount to move by.
      */
@@ -144,13 +152,15 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
         Maze.Point newPos = entityPos.add(moveVector);
         if(Maze.getTile(newPos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         if(!newPos.isValid()) throw new IllegalArgumentException("Entity is trying to move onto a nonexistent tile.");
+        inMove = true;
         setPos(newPos);
+        inMove = false;
         assert entityPos.isValid() && newPos.equals(entityPos) : "Moving the player resulted in the incorrect position.";
         updateObservers(); 
     }
 
     /**
-     * Overloaded method for {@link #move move()}, that accepts two individual numbers 
+     * Overloaded method for move(), that accepts two individual numbers 
      * that represent X and Y, respectively.
      * 
      * @param addX The amount to change X by.
@@ -161,7 +171,7 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     }
 
     /**
-     * Overloaded method for {@link #move move()}, assumes
+     * Overloaded method for move(), assumes
      * the chosen direction is the direction the entity is facing.
      */
     public void move(){ 
@@ -169,41 +179,40 @@ public abstract class Entity<S extends Observable<S>> extends Observable<S>{
     }
 
     /**
-     * Combines methods {@link #setDir setDir()} and {@link #move move()}.
-     * Also returns an {@link Action} record for the app module to use.
+     * Combines methods setDir() and move().
      * 
-     * @param dir The new {@link Direction direction} of the entity. 
+     * @param dir The new direction of the entity. 
      */
     public void moveAndTurn(Direction dir){
         setDir(dir);
         move();
     }
 
-    /** @return The {@link #entityPos position} of the entity. */
+    /** @return The position of the entity. */
     public Maze.Point getPos(){ return entityPos; }
 
-    /** @return The {@link #facingDir direction} the entity is facing. */
+    /** @return The direction the entity is facing. */
     public Direction getDir(){ return facingDir; }
 
     /** @return The ID of the entity. */
     public int id(){ return id; }
 
     /**
-     * Sets the {@link #entityPos position} of the entity.
+     * Sets the position of the entity.
      * 
-     * @param pos {@link Maze.Point Point} that represents the entity's new position.
+     * @param pos Point that represents the entity's new position.
      */
     public void setPos(Maze.Point pos){ 
         if(pos == null || !pos.isValid()) throw new IllegalArgumentException("Invalid point given.");
         if(Maze.getTile(pos).isObstructive()) throw new IllegalArgumentException("Entity cannot move onto this tile.");
         entityPos = pos; 
-        updateObservers(); 
+        if(!inMove) updateObservers(); 
     }
 
     /**
-     * Sets the {@link #facingDir direction} the entity is facing.
+     * Sets the direction the entity is facing.
      * 
-     * @param dir The new {@link Direction direction} of the entity. 
+     * @param dir The new direction of the entity. 
      */
     public void setDir(Direction dir){ 
         if(dir == null) throw new IllegalArgumentException("Given direction is null");

@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class Load {
     private static final String resourceDirectory = System.getProperty("user.dir") + "/resources/";
-    private static final String previousGame = "saves/previousGame.xml";
+    private static final String previousGame = "saves/previousGame";
     private static URLClassLoader classLoader;
 
     /**
@@ -38,13 +38,7 @@ public class Load {
         fileChooser.showOpenDialog(null);
 
         // only load if a file was selected
-        if (fileChooser.getSelectedFile() != null) {
-            Parser parser = loadGame(fileChooser.getSelectedFile());
-            Base.setTime(parser.getTime());
-            Base.setLevel(parser.getLevel());
-        } else {
-            loadLevel(1);
-        }
+        continueGame(fileChooser.getSelectedFile(), fileChooser.getSelectedFile() != null);
     }
 
     /**
@@ -71,16 +65,9 @@ public class Load {
      * If there is no previous game present loads level1
      * returns the time passed in the previous game
      *
-     * @return an int representing how long the previous game was played for
      */
     public static void previousGame() {
-        if(previousGamePresent()){
-            Parser parser = loadGame(getFile(previousGame));
-            Base.setTime(parser.getTime());
-            Base.setLevel(parser.getLevel());
-        } else {
-            loadLevel(1);
-        }
+        continueGame(getFile(previousGame), previousGamePresent());
     }
 
     /**
@@ -89,13 +76,38 @@ public class Load {
      * @return a string containing information about the previous game, time passed & keys collected
      */
     public static String previousGameInfo(){
-        if(!previousGamePresent()) return "Time: 0, Keys Collected: 0";
+        if(!previousGamePresent()) return "Time: 0, Keys: 0";
         Parser parser = new Parser(getFile(previousGame));
         return "Time: " + parser.getTime() + ", Keys: " + parser.getNumKeysCollected();
     }
 
     public static URLClassLoader getClassLoader() {
         return classLoader;
+    }
+
+    /**
+     *
+     * @param file  file to load game from if condition is true
+     * @param condition if true load game from file
+     */
+    public static void continueGame(File file, boolean condition){
+        if (condition) {
+            Parser parser = loadGame(file);
+            Base.setTime(parser.getTime());
+            Base.setLevel(parser.getLevel());
+        } else {
+            loadLevel(1);
+        }
+    }
+
+    /**
+     * Loads and returns a file using the provided file name
+     *
+     * @param file fileName to find
+     * @return The File that was found associated with the provided name,
+     */
+    public static File getFile(String file){
+        return new File(resourceDirectory + file + ".xml");
     }
 
     /**
@@ -118,15 +130,6 @@ public class Load {
         return parser;
     }
 
-    /**
-     * Loads and returns a file using the provided file name
-     *
-     * @param file fileName to find
-     * @return The File that was found associated with the provided name,
-     */
-    private static File getFile(String file){
-        return new File(resourceDirectory + file + ".xml");
-    }
 
     /**
      * Loads classes from a jar file

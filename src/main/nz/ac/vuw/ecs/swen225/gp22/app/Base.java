@@ -45,6 +45,8 @@ public class Base extends JFrame {
 	private final int delay = 20;
 
 	private static int level = 1;
+	private boolean gameOver = false;
+	private GameDialog currentPopUp;
 
 	/**
 	 * Begin program here. Run menu phase.
@@ -134,21 +136,38 @@ public class Base extends JFrame {
 			newGame(1);
 		}
 	}
+    /**
+     * pauses game.
+     */
+    public void pause() {
+        System.out.println("Pause");
+		closePopUp();
+        gameTimer.stop();
+        if (currentMenuBar == null) {
+            return;
+        }
+        currentMenuBar.setPause();
 
-	/**
-	 * pauses game.
-	 */
-	public void pause() {
-		System.out.println("Pause");
-		gameTimer.stop();
-		if (currentMenuBar == null) {
-			return;
-		}
-		currentMenuBar.setPause();
+        changeKeyListener(new Controller(this, true));
+        pauseDialog.visibleFocus();
+		currentPopUp = pauseDialog;
+    }
 
-		changeKeyListener(new Controller(this, true));
-		pauseDialog.visibleFocus();
-	}
+    /**
+     * un-pauses game.
+     */
+    public void unPause() {
+        System.out.println("Un Pause");
+		closePopUp();
+        gameTimer.start();
+        if (currentMenuBar == null) {
+            return;
+        }
+        currentMenuBar.setUnPause();
+        pauseDialog.setVisible(false);
+		currentPopUp = null;
+        changeKeyListener(new Controller(this, false));
+    }
 
 	/**
 	 * un-pauses game.
@@ -194,19 +213,30 @@ public class Base extends JFrame {
 		//TODO when recorder has ability to start recording from middle of game, tell recorder
 		System.out.println("Load");
 	}
+    /**
+     * Loads new level, makes new recorder.
+     *
+     * @param lvl level number to load
+     */
+    public void newGame(int lvl) {
 
-	/**
-	 * Loads new level, makes new recorder.
-	 *
-	 * @param lvl level number to load
-	 */
-	public void newGame(int lvl) {
-		System.out.println("New level" + lvl);
-		level = lvl;
-		Load.loadLevel(lvl);
-		loadLevel();
-		recorder = new Recorder(lvl, timeMS);
-	}
+        System.out.println("New level" + lvl);
+        level = lvl;
+        Load.loadLevel(lvl);
+        loadLevel();
+        recorder = new Recorder(lvl, timeMS);
+    }
+
+    /**
+     * Save the current game.
+     */
+    public void saveGame() {
+		closePopUp();
+        Save.saveGame();
+        recorder.save();
+        System.out.println("Save");
+        saveDialog.visibleFocus();
+    }
 
 	/**
 	 * Save the current game.
@@ -226,19 +256,33 @@ public class Base extends JFrame {
 		this.exitGame();
 	}
 
+    /**
+     * Saves recorder, pops up game over screen.
+     */
+    public void playerDied() {
+		closePopUp();
+        System.out.println("Level lost");
+        recorder.save();
+        gameOverDialog.visibleFocus();
+        gameTimer.stop();
+		changeKeyListener(null);
+    }
 	public void resetFocus() {
 		currentPanel.requestFocus();
 	}
 
-	/**
-	 * Saves recorder, pops up game over screen.
-	 */
-	public void playerDied() {
-		System.out.println("Level lost");
-		recorder.save();
-		gameOverDialog.visibleFocus();
-		gameTimer.stop();
-	}
+    /**
+     * Saves recorder, pops up game won screen.
+     */
+    public void playerWon() {
+		closePopUp();
+        System.out.println("Level won");
+        recorder.save();
+        gameWinDialog.visibleFocus();
+		currentPopUp = gameWinDialog;
+        gameTimer.stop();
+		changeKeyListener(null);
+    }
 
 	/**
 	 * Saves recorder, pops up game won screen.
@@ -251,11 +295,14 @@ public class Base extends JFrame {
 	}
 
 	public void nextLevel(int lvl) {
+		closePopUp();
 		System.out.println("Level won");
 
 		recorder.save();
 		GameDialog nextLevelDialog = new GameDialog(this, lvl);
 		nextLevelDialog.visibleFocus();
+		currentPopUp = nextLevelDialog;
+		changeKeyListener(null);
 		gameTimer.stop();
 	}
 
@@ -419,6 +466,8 @@ public class Base extends JFrame {
 		if (currentPanel != null) {
 			currentPanel.stopSound();
 		}
+		closePopUp();
+		gameOver = false;
 		runClosePhase();
 
 		Viewport game = new Viewport();
@@ -447,6 +496,7 @@ public class Base extends JFrame {
 
 			if (timeSec <= 0 || Maze.isGameLost()) {
 				playerDied();
+				gameOver = true;
 			} else if (Maze.gameWon()) {
 				if (Maze.gameComplete()) {
 					playerWon();
@@ -454,6 +504,7 @@ public class Base extends JFrame {
 					assert Maze.getNextLevel() != -1;
 					nextLevel(Maze.getNextLevel());
 				}
+				gameOver = true;
 			}
 		});
 		gameTimer.start();
@@ -495,18 +546,24 @@ public class Base extends JFrame {
 		return actionRecords;
 	}
 
-	/**
-	 * Removes current key listener, adds new one.
-	 * Use to ensure there is only one key listener being
-	 * used at any given time
-	 *
-	 * @param keyListener new keylistener to use
-	 */
-	public void changeKeyListener(KeyListener keyListener) {
-		if (currentPanel.getKeyListeners().length > 0) {
-			currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);
+    /**
+     * Removes current key listener, adds new one.
+     * Use to ensure there is only one key listener being
+     * used at any given time
+     *
+     * @param keyListener new keylistener to use
+     */
+    public void changeKeyListener(KeyListener keyListener) {
+        if (currentPanel.getKeyListeners().length > 0) {
+            currentPanel.removeKeyListener(currentPanel.getKeyListeners()[0]);
+        }
+        currentPanel.addKeyListener(keyListener);
+        currentPanel.setFocusable(true);
+    }
+
+	private void closePopUp(){
+		if(currentPopUp!=null){
+			currentPopUp.setVisible(false);
 		}
-		currentPanel.addKeyListener(keyListener);
-		currentPanel.setFocusable(true);
 	}
 }
