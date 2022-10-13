@@ -135,7 +135,6 @@ public class Player extends JPanel {
      */
     private void updateSpeed() {
         speed = speed == MAX_SPEED ? 1 : speed + 1;
-        System.out.println(this.speed);
         speedBtn.changeIcon("speed" + this.speed);
     }
 

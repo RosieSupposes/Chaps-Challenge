@@ -142,7 +142,6 @@ public class Parser {
         try {
             return getClass(ID).getConstructor(Maze.Point.class, Entity.Direction.class).newInstance(position, direction);
         } catch (Exception e) {
-            System.out.println("class not found" + e);
             return null;
         }
     }
@@ -234,7 +233,6 @@ public class Parser {
                 loadEnemyEntityImages(entityClass);
                 return entityClass;
             } catch (ClassNotFoundException e) {
-                System.out.println("class not found" + e);
                 return null;
             }
         }
@@ -256,7 +254,6 @@ public class Parser {
                     EnemyEntity.imageMap.put(direction, image);
                 }
             } catch (Exception e) {
-                System.out.println("no image" + e);
             }
         }
     }

@@ -54,7 +54,6 @@ public class Base extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		menuScreen();
-		System.out.println(this.getSize());
 
 		pauseDialog = new GameDialog(this, GameDialog.PopUp.Pause);
 		saveDialog = new GameDialog(this, GameDialog.PopUp.Save);
@@ -198,7 +197,6 @@ public class Base extends JFrame {
 	 */
 	public void newGame(int lvl) {
 
-		System.out.println("New level" + lvl);
 		level = lvl;
 		Load.loadLevel(lvl);
 		loadLevel();
