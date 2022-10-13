@@ -9,7 +9,7 @@
     <player x="8" y="7" direction="Down"/>
     <tiles>
         <tile ID="info" x="8" y="6">
-            <text>helpful stuff, you can't walk through walls, keys open doors</text>
+            <text>Level1Info</text>
         </tile>
         <tile ID="door" x="6" y="4">
             <color>Green</color>
