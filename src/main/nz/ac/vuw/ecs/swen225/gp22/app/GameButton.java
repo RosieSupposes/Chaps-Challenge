@@ -40,8 +40,8 @@ public class GameButton extends JButton {
 	 */
 	public GameButton(String name, Dimension dim, ActionListener action, String filename) {
 		super(name);
+        this.dim = dim;
 		setUp(action);
-		this.dim = dim;
 		image = getIcon(filename);
 	}
 

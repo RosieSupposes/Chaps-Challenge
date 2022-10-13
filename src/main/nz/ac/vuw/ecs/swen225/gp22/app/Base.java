@@ -37,7 +37,7 @@ public class Base extends JFrame {
 	private Timer gameTimer = new Timer(20, null); //timer loop for game
 	private Recorder recorder; //recorder player
 	private GameMenuBar currentMenuBar; //menu bar for game
-	private JPanel currentPanel; //for setting key-listener on
+	private PhasePanel currentPanel; //for setting key-listener on
 	private final GameDialog pauseDialog; //pop-up for pause
 	private final GameDialog saveDialog; //pop-up for save
 	private final GameDialog gameOverDialog; //pop-up for game over
