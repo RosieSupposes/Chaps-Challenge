@@ -65,7 +65,7 @@ public class FuzzTest {
 
     /**
      * Inputs random inputs for Level 1 of Chap's Challenge.
-     * Level 1 has an input delay of 5ms and 10000 inputs.
+     * Level 1 has an input delay of 5ms and 8000 inputs.
      */
     public void test1() {
         inputDelay = 5;
@@ -73,7 +73,7 @@ public class FuzzTest {
             SwingUtilities.invokeLater(() -> (base = new Base()).newGame(1));
         } catch (Error e) {
         }
-        runTest(generateInputs(10000));
+        runTest(generateInputs(8000));
     }
 
     /**
