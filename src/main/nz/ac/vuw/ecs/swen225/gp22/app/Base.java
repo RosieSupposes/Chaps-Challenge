@@ -184,7 +184,7 @@ public class Base extends JFrame {
 			playerWindow.requestFocus(); //need to be after pack
 
 			components.add(playerWindow);
-		} catch (Exception ignored) {
+		} catch (RuntimeException ignored) {
 		}
 	}
 
