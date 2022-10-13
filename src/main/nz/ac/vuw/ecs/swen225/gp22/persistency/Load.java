@@ -29,8 +29,8 @@ public class Load {
      * Load saved game from xml.
      * Open fileChooser.
      */
-    public static void resumeGame(){
-        JFileChooser fileChooser = new JFileChooser(resourceDirectory+"/saves");
+    public static void resumeGame() {
+        JFileChooser fileChooser = new JFileChooser(resourceDirectory + "/saves");
         fileChooser.setDialogTitle("Select a game to load");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Game File (xml)", "xml");
@@ -46,7 +46,7 @@ public class Load {
      *
      * @param levelNum level to load.
      */
-    public static void loadLevel(int levelNum){
+    public static void loadLevel(int levelNum) {
         Base.setTime(60);
         Base.setLevel(levelNum);
         loadGame(getFile("levels/level" + levelNum));
@@ -56,33 +56,36 @@ public class Load {
 
     /**
      * Determine if there is a previous unfinished level to load.
+     *
      * @return true if there is an unfinished level false otherwise.
      */
-    public static boolean previousGamePresent(){return getFile(previousGame).isFile();}
+    public static boolean previousGamePresent() {
+        return getFile(previousGame).isFile();
+    }
 
     /**
      * Loads the previous game if present.
-     * If there is no previous game present loads level1
-     * returns the time passed in the previous game
-     *
+     * If there is no previous game present loads level1.
+     * returns the time passed in the previous game.
      */
     public static void previousGame() {
         continueGame(getFile(previousGame), previousGamePresent());
     }
 
     /**
-     * Parses information about the previous game
+     * Parses information about the previous game.
      *
      * @return a string containing information about the previous game, time passed & keys collected
      */
-    public static String previousGameInfo(){
-        if(!previousGamePresent()) return "Time: 0, Keys: 0";
+    public static String previousGameInfo() {
+        if (!previousGamePresent()) return "Time: 0, Keys: 0";
         Parser parser = new Parser(getFile(previousGame));
         return "Time: " + parser.getTime() + ", Keys: " + parser.getNumKeysCollected();
     }
 
     /**
-     * returns the current URLClassLoader
+     * returns the current URLClassLoader.
+     *
      * @return the current URLClassLoader
      */
     public static URLClassLoader getClassLoader() {
@@ -90,11 +93,12 @@ public class Load {
     }
 
     /**
+     * Loads a game from a file if condition is true otherwise loads level 1.
      *
-     * @param file  file to load game from if condition is true
+     * @param file      file to load game from if condition is true
      * @param condition if true load game from file
      */
-    public static void continueGame(File file, boolean condition){
+    public static void continueGame(File file, boolean condition) {
         if (condition) {
             Parser parser = loadGame(file);
             Base.setTime(parser.getTime());
@@ -105,20 +109,21 @@ public class Load {
     }
 
     /**
-     * Loads and returns a file using the provided file name
+     * Loads and returns a file using the provided file name.
      *
      * @param file fileName to find
      * @return The File that was found associated with the provided name,
      */
-    public static File getFile(String file){
+    public static File getFile(String file) {
         return new File(resourceDirectory + file + ".xml");
     }
 
     /**
-     * Parses a game from the provided file
+     * Parses a game from the provided file.
+     *
      * @param file the file to parse and load the game from
      */
-    private static Parser loadGame(File file){
+    private static Parser loadGame(File file) {
         Parser parser = new Parser(file);
         parser.parseMapInfo();
         parser.parsePlayer(Maze.player);
@@ -136,7 +141,7 @@ public class Load {
 
 
     /**
-     * Loads classes from a jar file
+     * Loads classes from a jar file.
      *
      * @param levelNum level number to load associated jar for
      */
