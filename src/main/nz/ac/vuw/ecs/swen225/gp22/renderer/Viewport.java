@@ -147,6 +147,7 @@ public class Viewport extends JPanel implements ActionListener {
                 default: throw new IllegalArgumentException("Invalid colour./n");
             }
         }
+        if (tile instanceof BouncyPad){ return Img.BouncyPad.image; }
         if (tile instanceof InfoField){ return Img.InfoField.image; } 
         if (tile instanceof Exit){ return Img.Exit.image; } 
         if (tile instanceof LockedExit){ return Img.LockedExit.image; }
