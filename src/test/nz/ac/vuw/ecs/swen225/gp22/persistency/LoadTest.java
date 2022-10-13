@@ -7,6 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Tests for Load class
+ * @author Gideon Wilkins, 300576057
+ * @version 1.4
+ */
 public class LoadTest {
     /**
      * Test to see if the load method can load a level correctly

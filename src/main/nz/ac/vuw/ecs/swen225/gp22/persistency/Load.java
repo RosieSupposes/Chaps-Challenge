@@ -81,6 +81,10 @@ public class Load {
         return "Time: " + parser.getTime() + ", Keys: " + parser.getNumKeysCollected();
     }
 
+    /**
+     * returns the current URLClassLoader
+     * @return the current URLClassLoader
+     */
     public static URLClassLoader getClassLoader() {
         return classLoader;
     }

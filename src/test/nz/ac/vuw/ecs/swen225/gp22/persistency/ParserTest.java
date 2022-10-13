@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+/**
+ * Tests for parser class
+ * @author Gideon Wilkins, 300576057
+ * @version 1.3
+ */
 public class ParserTest {
     /**
      * Test to see if the parser can parse the players inventory correctly

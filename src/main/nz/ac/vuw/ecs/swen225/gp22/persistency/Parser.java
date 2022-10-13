@@ -104,16 +104,29 @@ public class Parser {
         }
     }
 
+    /**
+     * check if there are entities in this save file
+     * @return true if there are entities in this save file
+     */
     public boolean entitiesPresent(){
         Element entities = document.getRootElement().element("entities");
         return entities != null && !entities.elements().isEmpty();
     }
 
+    /**
+     * Parse the entities from the file
+     * @return list of entities
+     */
     public List<Entity> getEntities() {
         List<Element> nodes = document.getRootElement().element("entities").elements();
         return nodes.stream().map(this::parseEntity).filter(e -> e instanceof Entity).map(e -> (Entity) e).toList();
     }
 
+    /**
+     * Parse the given element into an entity
+     * @param entity element to parse
+     * @return the entity
+     */
     private Object parseEntity(Element entity) {
         Maze.Point position = getPoint(entity);
         Entity.Direction direction = Entity.Direction.valueOf(entity.attributeValue("direction"));

@@ -88,6 +88,11 @@ public class Save {
         }
     }
 
+    /**
+     * Save entities to xml element
+     * @param entities Element to add the inventory to.
+     * @param e Entity to save
+     */
     private static void saveEntity(Element entities, Entity e){
         Element entity = entities.addElement("entity");
         entity.addAttribute("ID",e.getClass().getSimpleName());
@@ -95,7 +100,10 @@ public class Save {
         entity.addAttribute("direction",e.getDir().name());
     }
 
-
+    /**
+     * Save inventory to xml element
+     * @param player Element to add the inventory to.
+     */
     public static void saveInventory(Element player){
         Element inventory = player.addElement("inventory");
         Map<String,Long> keyMap = Maze.player.getAllKeys().stream()
@@ -106,8 +114,12 @@ public class Save {
                         .addAttribute("color",k));
     }
 
+    /**
+     * Add a x and y as attributes to an xml element
+     * @param element Element to add the attributes to.
+     * @param p Point to get the x and y from.
+     */
     public static void addPoint(Element element, Maze.Point p){
-
         element.addAttribute("x", String.valueOf(p.x())).addAttribute("y", String.valueOf(p.y()));
     }
 
