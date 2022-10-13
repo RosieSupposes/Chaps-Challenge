@@ -268,6 +268,7 @@ public class Base extends JFrame {
 		GameDialog nextLevelDialog = new GameDialog(this, lvl);
 		nextLevelDialog.visibleFocus();
 		currentPopUp = nextLevelDialog;
+		changeKeyListener(null);
 		gameTimer.stop();
 	}
 
