@@ -16,37 +16,47 @@ import java.net.URL;
  * @version 1.2
  */
 public class ImagePanel extends JPanel {
-    BufferedImage image;
-    int width;
-    int height;
+	BufferedImage image; //image on panel
+	int width; //width of panel
+	int height; //height of panel
 
-    int offsetX;
-    int offsetY;
+	int offsetX; //image x offset for panel
+	int offsetY; //image y offset for panel
 
-    /**
-     * Side panel for menu
-     */
-    public ImagePanel(String filename, Dimension dim, double scale) {
-        this.setBackground(GameConstants.BG_COLOR);
+	/**
+	 * Side panel for menu.
+	 *
+	 * @param filename of image
+	 * @param dim      size of panel
+	 * @param scale    scale of image
+	 */
+	public ImagePanel(String filename, Dimension dim, double scale) {
+		this.setBackground(GameConstants.BG_COLOR);
 
-        width = (int) (scale * dim.width);
-        height = (int) (scale * dim.height);
+		width = (int) (scale * dim.width);
+		height = (int) (scale * dim.height);
 
-        this.offsetX = (dim.width-width)/2;
-        this.offsetY = (dim.height-height)/2;
+		this.offsetX = (dim.width - width) / 2;
+		this.offsetY = (dim.height - height) / 2;
 
-        URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
-        try {
-            image = ImageIO.read(imagePath);
-        } catch (IOException e) {
-            throw new Error(e);
-        }
-    }
+		URL imagePath = this.getClass().getResource("/UI/" + filename + ".png");
+		try {
+			image = ImageIO.read(imagePath);
+		} catch (IOException e) {
+			throw new Error(e);
+		}
+	}
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2D = (Graphics2D) g.create();
-        g2D.drawImage(image,offsetX,offsetY,width,height,this);
-        g2D.dispose();
-    }
+	/**
+	 * Paints image onto panel.
+	 *
+	 * @param g the <code>Graphics</code> object to protect
+	 */
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2D = (Graphics2D) g.create();
+		g2D.drawImage(image, offsetX, offsetY, width, height, this);
+		g2D.dispose();
+	}
 }
