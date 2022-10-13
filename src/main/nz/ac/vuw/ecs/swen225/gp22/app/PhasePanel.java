@@ -69,8 +69,6 @@ public class PhasePanel extends JPanel {
 		if (this.gamePanel instanceof Viewport vp) {
 			vp.stopSound();
 			this.gamePanel = vp;
-		} else {
-			throw new ClassCastException("Panel must be Side Panel");
 		}
 	}
 
