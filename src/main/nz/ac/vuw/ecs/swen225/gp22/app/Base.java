@@ -437,8 +437,9 @@ public class Base extends JFrame {
 			List<Entity.Action> actions = Maze.getChangeMap();
 			transformActions(actions).forEach(a -> recorder.addAction(a, timeMS));
 			game.setAction(actions.stream().map(a -> a.interaction().type()).collect(Collectors.toList()));
+			//System.out.println(a -> a.interaction().type().collect(Collectors.toList()));
 
-        if (timeSec <= 0 || Maze.isGameLost()) {
+			if (timeSec <= 0 || Maze.isGameLost()) {
 				playerDied();
 			} else if (Maze.gameWon()) {
 				if(Maze.gameComplete()){
@@ -447,7 +448,7 @@ public class Base extends JFrame {
 					assert Maze.getNextLevel() != -1;
 					nextLevel(Maze.getNextLevel());
 				}
-                        }
+			}
 		});
 		gameTimer.start();
 			

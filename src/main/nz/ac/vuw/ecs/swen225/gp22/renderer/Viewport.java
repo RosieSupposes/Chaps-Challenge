@@ -97,7 +97,7 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
+        //if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
 
         Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
 
