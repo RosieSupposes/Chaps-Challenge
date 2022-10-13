@@ -26,6 +26,7 @@ public class Viewport extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     private Tile[][] currentMaze = new Tile[GameConstants.NUM_GAME_TILE][GameConstants.NUM_GAME_TILE]; // 9x9 maze displayed on screen
+
     private Timer timer;
     private int boundariesX;
     private int boundariesY;
@@ -80,10 +81,28 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        if (playerTile instanceof InfoField inField){ displayInfo(inField, g2D); }
+        if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
 
+        Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
+
+        // drawing the enemies
+        for(Entity e: Maze.entities){
+            EnemyEntity enemy = (EnemyEntity) e;
+            int enemyX = enemy.getPos().x();
+            int enemyY = enemy.getPos().y();
+
+            int rows = focusPoint.x() + GameConstants.NUM_GAME_TILE-1;
+            int cols = focusPoint.y() + GameConstants.NUM_GAME_TILE-1;
+
+            // check that the enemy is within the current the focus area
+            if (focusPoint.x() <= enemyX && rows >= enemyX
+            && focusPoint.y() <= enemyX && cols >= enemyY){
+                g2D.drawImage(EnemyEntity.imageMap.get(enemy.getDir()),
+                        (enemyX - focusPoint.x()) * GameConstants.TILE_SIZE,
+                        (enemyY - focusPoint.y()) * GameConstants.TILE_SIZE, this);
+            }
+        }
     }
-
 
     /**
      * Updates the display every 100 ms.  
@@ -95,37 +114,45 @@ public class Viewport extends JPanel implements ActionListener {
             timer = null; // removes reference to the Viewport class
             return; 
         }
-        Tile[][] tempMaze = new Tile[Maze.getDimensions().x()][Maze.getDimensions().y()];  
+
         int playerX = Maze.player.getPos().x();
-        int playerY = Maze.player.getPos().y(); 
+        int playerY = Maze.player.getPos().y();
 
-        setFocusArea(playerX, playerY, tempMaze);
-
+        Maze.Point mazePoint = getFocusArea(playerX, playerY); 
+        setCurrentMaze(mazePoint); // get the new 9x9 tiles to be displayed
         repaint();
     }
 
     /**
-     * Renders a new maze that focuses on the tiles within 
-     * the vicinity of the player's current location on the canvas. 
-     * 
-     * @param x x coordinate of the tile.
-     * @param y y coordinate of the tile.
-     * @param tempMaze the maze to be updated.
+     * Renders a new Maze.Point that focuses on the tiles within
+     * the vicinity of the player's current location on the canvas.
+     *
+     * @param x x coordinate of the player.
+     * @param y y coordinate of the player.
      */
-    private void setFocusArea(int x, int y, Tile[][] tempMaze) {
-        int focusX = x - GameConstants.FOCUS_AREA; 
+    private Maze.Point getFocusArea(int x, int y){
+        int focusX = x - GameConstants.FOCUS_AREA;
         int focusY = y - GameConstants.FOCUS_AREA;
 
-        // check for if the tiles are less than the focusX and focusY
-        focusX = (focusX < 0) ? 0 : focusX;
-        focusY = (focusY < 0) ? 0 : focusY; 
+        // checking for boundary cases
+        focusX = Math.max(focusX, 0);
+        focusY = Math.max(focusY, 0);
 
-        focusX = (focusX > boundariesX) ? boundariesX : focusX;
-        focusY = (focusY > boundariesY) ? boundariesY : focusY; 
+        focusX = Math.min(focusX, boundariesX);
+        focusY = Math.min(focusY, boundariesY);
 
+        return new Maze.Point(focusX, focusY);
+    }
+
+    /**
+     * Displays a 9x9 maze that shows the tiles surrounding the Player.
+     *
+     * @param point A point to be displayed in the maze.
+     */
+    private void setCurrentMaze(Maze.Point point){
         for(int i = 0; i < GameConstants.NUM_GAME_TILE; i++) {
             for(int j = 0; j < GameConstants.NUM_GAME_TILE; j++) {
-                currentMaze[i][j] = Maze.getTile(new Maze.Point(i + focusX, j + focusY));
+                currentMaze[i][j] = Maze.getTile(new Maze.Point(i + point.x(), j + point.y()));
             }
         }
     }
@@ -199,7 +226,7 @@ public class Viewport extends JPanel implements ActionListener {
      * 
      * @param g Graphics object needed to render images on the canvas.
      */
-    public void displayInfo(InfoField iField, Graphics g){
+    public void getInfoField(InfoField iField, Graphics g){
         int infoPos = (GameConstants.NUM_GAME_TILE*GameConstants.TILE_SIZE)/9;
         g.drawImage(Img.InfoPost.image, infoPos, 5*infoPos, this);
         infofield.setText(iField.getText());

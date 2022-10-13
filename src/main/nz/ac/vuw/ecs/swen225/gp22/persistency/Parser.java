@@ -6,25 +6,30 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 /**
  * Used to parse XML files.
  *
  * @author Gideon Wilkins, 300576057
- * @version 1.4
+ * @version 1.5
  */
 public class Parser {
     Document document;
+    HashMap<String,Class<?>> classMap;
     /**
-     * Read given xml file and store in a document
+     * Read given xml file and store in a document.
      *
      * @param file file to parse
      */
     public Parser(File file){
         try {
             document = new SAXReader().read(file);
+            classMap = new HashMap<>();
         } catch (DocumentException e){
             throw new IllegalArgumentException("Invalid Game File");
         }
@@ -59,6 +64,12 @@ public class Parser {
     public int getNumKeysCollected(){
         return intFromElement(document.getRootElement().element("saveInfo"),"keysCollected");
     }
+
+    /**
+     * Get the level that is stored in the save file.
+     *
+     * @return the level number of the saved game
+     */
     public int getLevel(){
         return intFromAttribute(document.getRootElement(),"level");
     }
@@ -90,6 +101,28 @@ public class Parser {
             for (int i = 0; i < intFromAttribute(item,"count"); i++){
                 player.addKey(color);
             }
+        }
+    }
+
+    public boolean entitiesPresent(){
+        Element entities = document.getRootElement().element("entities");
+        return entities != null && !entities.elements().isEmpty();
+    }
+
+    public List<Entity> getEntities() {
+        List<Element> nodes = document.getRootElement().element("entities").elements();
+        return nodes.stream().map(this::parseEntity).filter(e -> e instanceof Entity).map(e -> (Entity) e).toList();
+    }
+
+    private Object parseEntity(Element entity) {
+        Maze.Point position = getPoint(entity);
+        Entity.Direction direction = Entity.Direction.valueOf(entity.attributeValue("direction"));
+        String ID = entity.attributeValue("ID");
+        try {
+            return getClass(ID).getConstructor(Maze.Point.class, Entity.Direction.class).newInstance(position, direction);
+        } catch (Exception e) {
+            System.out.println("class not found"+e);
+            return null;
         }
     }
 
@@ -163,4 +196,43 @@ public class Parser {
         return Integer.parseInt(element.attributeValue(attributeName));
     }
 
+    /**
+     * Get the Class object for the given ID and store it in the classMap if it is not already there.
+     * Also loads images for the class.
+     *
+     * @param ID ID of the class to get
+     * @return Class object for the given ID
+     */
+    private Class<?> getClass(String ID){
+        if(classMap.get(ID) == null) {
+            try {
+                Class entityClass = Load.getClassLoader().loadClass("nz.ac.vuw.ecs.swen225.gp22.entities." + ID);
+                classMap.put(ID, entityClass);
+                loadEnemyEntityImages(entityClass);
+                return entityClass;
+            } catch (ClassNotFoundException e) {
+                System.out.println("class not found" + e);
+                return null;
+            }
+        }
+        return classMap.get(ID);
+    }
+
+    /**
+     * Loads the images for the given subclass of EnemyEntity.
+     * Loads the image for each direction and stores it in the imageMap.
+     *
+     * @param entityClass the entity class to load images for
+     */
+    private void loadEnemyEntityImages(Class<?> entityClass){
+        if(EnemyEntity.class.isAssignableFrom(entityClass)){
+            try {
+                for(Entity.Direction direction : Entity.Direction.values()){
+                    URL imagePath = entityClass.getClassLoader().getResource("resources/imgs/Enemy"+direction.name()+".png");
+                    BufferedImage image = ImageIO.read(imagePath);
+                    EnemyEntity.imageMap.put(direction,image);
+                }
+            } catch (Exception e) {System.out.println("no image" + e);}
+        }
+    }
 }

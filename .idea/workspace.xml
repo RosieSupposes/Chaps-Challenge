@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e2fc2d67-1530-4be8-ac19-26629596d111" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/Base.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/Base.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/GameMenuItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/ImagePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/ImagePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/MenuMainPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/MenuMainPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/PhasePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/app/PhasePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/GameConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/util/GameConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/SidePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/SidePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/Viewport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/nz/ac/vuw/ecs/swen225/gp22/renderer/Viewport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/levels/level2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/resources/levels/level2.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +43,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
@@ -101,6 +92,7 @@
       <option name="presentableId" value="Default" />
       <updated>1664515475545</updated>
       <workItem from="1664515476893" duration="583000" />
+      <workItem from="1665622325708" duration="577000" />
     </task>
     <servers />
   </component>
