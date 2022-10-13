@@ -19,8 +19,8 @@ public class Key extends ColorableTile{
      * that when they are on this tile, it is reset and a key is added 
      * to the player inventory. 
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
-     * @param color {@link Color} to set the color field to. ({@link ColorableTile#color see here})
+     * @param tilePos Point to set the position field to. 
+     * @param color Color to set the color field to. 
      */
     public Key(Maze.Point tilePos, Color color){
         super(tilePos, false, color);

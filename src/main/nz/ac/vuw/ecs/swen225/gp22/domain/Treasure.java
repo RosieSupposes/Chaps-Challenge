@@ -19,7 +19,7 @@ public class Treasure extends Tile{
      * that when they are on this tile, it is reset and the treasure counter
      * is updated.  
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param tilePos Point to set the position field to.
      */
     public Treasure(Maze.Point tilePos){
         super(tilePos, false);

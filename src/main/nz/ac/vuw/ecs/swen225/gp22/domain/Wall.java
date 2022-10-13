@@ -12,7 +12,7 @@ public class Wall extends Tile{
      * Default constructor, sets the position of the tile,
      * and obstructiveness to true.
      * 
-     * @param tilePos {@link Maze.Point Point} to set the position field to. ({@link Tile#tilePos see here})
+     * @param tilePos Point to set the position field to.
      */
     public Wall(Maze.Point tilePos){
         super(tilePos, true);
