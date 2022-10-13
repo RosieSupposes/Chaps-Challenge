@@ -24,7 +24,7 @@ public enum Img {
     // images to be displayed for level 2 of Chap's Challenge
     BouncyPadDown, BouncyPadLeft, BouncyPadRight, BouncyPadUp, Level2Info, MilkPuddle;
 
-    public final BufferedImage image;
+    public final BufferedImage image; // the image to be returned and displayed
 
     /**
      * Img constructor to load an image.

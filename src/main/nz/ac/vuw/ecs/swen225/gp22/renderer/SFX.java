@@ -18,7 +18,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * @version 1.1
  */
 public class SFX {
-    AudioInputStream audioIStream;
+    AudioInputStream audioIStream; // an audio input stream for a wav file
     private Clip clip;
     private String clipName = "";
 
