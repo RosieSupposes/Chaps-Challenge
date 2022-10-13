@@ -1,12 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp22.domain;
 
+import nz.ac.vuw.ecs.swen225.gp22.domain.*;
+
 /**
  * A basic enemy that moves back and forth.
  * 
  * @author Abdulrahman Asfari, 300475089
  * @version 1.7
  */
-public class GummyGuard extends EnemyEntity<GummyGuard>{
+public class GummyGuard extends EnemyEntity<GummyGuard> {
     /** Used for if the player walks into the enemy. */
     private final Observer<Player> playerObserver;
 
