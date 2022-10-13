@@ -147,7 +147,7 @@ public class Viewport extends JPanel implements ActionListener {
                 default: throw new IllegalArgumentException("Invalid colour./n");
             }
         }
-        if (tile instanceof BouncyPad){ return Img.BouncyPad.image; }
+        if (tile instanceof BouncyPad){ return Img.BouncyPadUp.image; }//getBouncyPadImg(); }
         if (tile instanceof InfoField){ return Img.InfoField.image; } 
         if (tile instanceof Exit){ return Img.Exit.image; } 
         if (tile instanceof LockedExit){ return Img.LockedExit.image; }
@@ -156,6 +156,24 @@ public class Viewport extends JPanel implements ActionListener {
         if (tile instanceof Wall){ return Img.Wall.image; }
 
         return Img.FreeTile.image;
+    }
+
+    /**
+     * Returns a BufferedImage of a BouncyPad along with an arrow
+     * pointing to where the player will be launched to. 
+     * 
+     * @param dir The direction the player will be launched to.
+     * @return The image of the BouncyPad.
+     */
+    public BufferedImage getBouncyPadImg(Entity.Direction dir){
+        // check for the facingDir of player then return image accordingly
+        switch (dir){
+            case Up: return Img.BouncyPadUp.image;
+            case Down: return Img.BouncyPadDown.image;
+            case Left: return Img.BouncyPadLeft.image; 
+            case Right: return Img.BouncyPadRight.image;
+            default: throw new IllegalArgumentException("Invalid direction./n");
+        }
     }
 
     /**
