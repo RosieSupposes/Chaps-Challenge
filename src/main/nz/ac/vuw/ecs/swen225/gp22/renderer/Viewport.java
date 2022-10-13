@@ -85,19 +85,22 @@ public class Viewport extends JPanel implements ActionListener {
 
         Tile playerTile = Maze.getTile(new Maze.Point(playerX, playerY));
 
+        // checking for the far left
         if (playerX < focusX) {
             focusX = playerX;
-        } // checking for the far left
+        }
+        // checking for the far right
         else if (playerX > Maze.getDimensions().x() - focusX - 1) {
             focusX = playerX - boundariesX;
-        } // checking for the far right
-
+        }
+        // checking for the top
         if (playerY < focusY) {
             focusY = playerY;
-        } // checking for the top
+        }
+        // checking for bottom
         else if (playerY > Maze.getDimensions().y() - focusY - 1) {
             focusY = playerY - boundariesY;
-        } // checking for bottom
+        }
 
         focusX *= GameConstants.TILE_SIZE;
         focusY *= GameConstants.TILE_SIZE;
