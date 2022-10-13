@@ -17,12 +17,18 @@ import java.awt.event.KeyEvent;
  * Class for Fuzz Testing.
  *
  * @author Gavin Lim, 300585341
- * @version 1.5
+ * @version 1.6
  */
 public class FuzzTest {
 
+    //Random used for generating inputs.
     static final Random r = new Random();
+
+    //Base for loading games.
     private static Base base;
+
+    //Delay of inputs for Fuzz Test.
+    private int inputDelay = 5;
 
     // List of possible inputs.
     private final List<Integer> inputs = List.of(KeyEvent.VK_UP,
@@ -36,15 +42,14 @@ public class FuzzTest {
                     KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT);
 
     /**
-     * Generates a list of 10000 valid inputs.
-     * Chap will not move back to the tile he was previously on.
-     *
-     * @return list of 10000 valid inputs.
+     * Generates a list of inputs of size numOfInputs
+     * @param numOfInputs - numberOfInputs
+     * @return - list of inputs
      */
-    private List<Integer> generateInputs() {
+    private List<Integer> generateInputs(int numOfInputs) {
         int prev = -1;
         List<Integer> moves = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < numOfInputs; i++) {
             while (true) {
                 int random = r.nextInt(inputs.size());
                 int move = inputs.get(random);
@@ -60,33 +65,37 @@ public class FuzzTest {
 
     /**
      * Inputs random inputs for Level 1 of Chap's Challenge.
+     * Level 1 has an input delay of 5ms and 10000 inputs.
      */
     public void test1() {
+        inputDelay = 5;
         try {
             SwingUtilities.invokeLater(() -> (base = new Base()).newGame(1));
         } catch (Error e) {
         }
-        runTest();
+        runTest(generateInputs(10000));
     }
 
     /**
      * Inputs random inputs for Level 2 of Chap's Challenge.
+     * Level 2 has an input delay of 100ms and 500 inputs.
      */
     public void test2() {
+        inputDelay = 100;
         try {
             SwingUtilities.invokeLater(() -> base.newGame(2));
         } catch (Error e) {
         }
-        runTest();
+        runTest(generateInputs(500));
     }
 
     /**
-     * Runs the test on current Base.
+     * Runs test inputs on current Base/Level.
+     * @param generatedInputs - List of inputs for test.
      */
-    private void runTest() {
+    private void runTest(List<Integer> generatedInputs) {
         try {
             Robot robot = new Robot();
-            List<Integer> generatedInputs = generateInputs();
             for (int i : generatedInputs) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
@@ -94,7 +103,7 @@ public class FuzzTest {
                     }
                 });
                 try {
-                    Thread.sleep(3);
+                    Thread.sleep(inputDelay);
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             robot.keyRelease(i);
