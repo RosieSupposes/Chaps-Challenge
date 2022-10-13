@@ -49,13 +49,7 @@ public class Save {
         addPoint(player,Maze.player.getPos());
         player.addAttribute("direction",Maze.player.getDir().name());
         if(keyCount > 0){
-            Element inventory = player.addElement("inventory");
-            Map<String,Long> keyMap = Maze.player.getAllKeys().stream()
-                                                 .collect(Collectors.groupingBy(ColorableTile.Color::name,Collectors.counting()));
-            keyMap.forEach(
-                    (k,v) -> inventory.addElement("key")
-                                      .addAttribute("count",String.valueOf(v))
-                                      .addAttribute("color",k));
+            saveInventory(player);
         }
         if(Maze.entities.size() > 0){
             Element entities = root.addElement("entities");
@@ -96,13 +90,24 @@ public class Save {
 
     private static void saveEntity(Element entities, Entity e){
         Element entity = entities.addElement("entity");
-        System.out.println(e.getClass().getSimpleName());
         entity.addAttribute("ID",e.getClass().getSimpleName());
         addPoint(entity,e.getPos());
         entity.addAttribute("direction",e.getDir().name());
     }
 
-    private static void addPoint(Element element, Maze.Point p){
+
+    public static void saveInventory(Element player){
+        Element inventory = player.addElement("inventory");
+        Map<String,Long> keyMap = Maze.player.getAllKeys().stream()
+                .collect(Collectors.groupingBy(ColorableTile.Color::name,Collectors.counting()));
+        keyMap.forEach(
+                (k,v) -> inventory.addElement("key")
+                        .addAttribute("count",String.valueOf(v))
+                        .addAttribute("color",k));
+    }
+
+    public static void addPoint(Element element, Maze.Point p){
+
         element.addAttribute("x", String.valueOf(p.x())).addAttribute("y", String.valueOf(p.y()));
     }
 

@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e2fc2d67-1530-4be8-ac19-26629596d111" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/resources/levels/level2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/resources/levels/level2.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/saves/previousGame.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/saves/previousGame.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/LoadTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/LoadTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/ParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/ParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/SaveTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency/SaveTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +47,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
+    "last_opened_file_path": "C:/Users/GGPC/Desktop/ECS Resources/Swen225/GroupProject/chaps-challenge/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -52,7 +57,7 @@
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.Persistency">
     <configuration name="DevMarkers" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="nz.ac.vuw.ecs.swen225.gp22.domain.DevMarkers" />
       <module name="chaps-challenge" />
@@ -77,9 +82,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Persistency" type="JUnit" factoryName="JUnit">
+      <module name="chaps-challenge" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/nz/ac/vuw/ecs/swen225/gp22/persistency" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="Application.DevMarkers" />
+      <item itemvalue="JUnit.Persistency" />
       <item itemvalue="JUnit.Fuzz" />
     </list>
   </component>
@@ -109,5 +125,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/chaps_challenge$Main.ic" NAME="Main Coverage Results" MODIFIED="1665647824066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/chaps_challenge$Persistency.ic" NAME="Persistency Coverage Results" MODIFIED="1665647880808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
