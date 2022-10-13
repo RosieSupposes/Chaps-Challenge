@@ -50,7 +50,7 @@ public class TileDatabase{
         try{
             return c.newInstance(tileParams);
         }catch(Exception e){
-            // Should not be reachable because of preconditions. IS THIS RIGHT EXCEPTION???
+            // Should not be reachable because of preconditions. 
             throw new IllegalStateException("Failure creating tile object.");
         }
     }

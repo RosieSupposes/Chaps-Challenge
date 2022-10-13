@@ -26,7 +26,7 @@ public class Key extends ColorableTile{
         super(tilePos, false, color);
         
         playerObserver = player -> {
-            if(player.getPos().equals(tilePos)){
+            if(Maze.getTile(tilePos) == this && player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
                 Maze.player.addKey(color);
                 Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.PickupKey, color));

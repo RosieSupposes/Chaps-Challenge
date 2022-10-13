@@ -63,7 +63,7 @@ public class Maze{
         tileMap = new Tile[dimensions.x()][dimensions.y()];
         for(int x = 0; x < dimensions.x(); x++){
             for(int y = 0; y < dimensions.y(); y++){
-                tileMap[x][y] = new Ground(new Point(x, y));
+                setTile(new Point(x, y), new Ground(new Point(x, y)));
             }
         }
 
@@ -96,7 +96,7 @@ public class Maze{
         if(tile == null) throw new IllegalArgumentException("Given tile does not exist.");
         if(!tile.getPos().equals(point)) throw new IllegalArgumentException("Tile position does not match the point it is being set to.");
         Tile oldTile = getTile(point);
-        oldTile.deleteTile();
+        if(oldTile != null) oldTile.deleteTile();
         tileMap[point.x()][point.y()] = tile;     
         assert Maze.getTile(point) != oldTile : "Tile has not been removed from the map."; 
     }
@@ -194,6 +194,19 @@ public class Maze{
 
     /** Flags the game as over. */
     public static void loseGame(){ gameLost = true; }
+
+    /** @return The current maze state in string form. Used for testing. */
+    public static String getStringState(){
+        String mazeState = "";
+        for(int y = 0; y < tileMap[0].length; y++){
+            for(int x = 0; x < tileMap.length; x++){
+                mazeState += getTile(new Point(x, y)).toString();
+            }
+            mazeState += "\n";
+        }
+
+        return mazeState;
+    }
 
     /** Represents a point on the {@link Maze#tileMap tilemap}. */
     public record Point(int x, int y){ 

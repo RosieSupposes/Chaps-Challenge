@@ -28,7 +28,7 @@ public class LockedDoor extends ColorableTile{
         
         playerObserver = player -> {
             setObstructive(!player.hasKey(color));
-            if(player.getPos().equals(tilePos)){
+            if(Maze.getTile(tilePos) == this && player.getPos().equals(tilePos)){
                 Maze.resetTile(tilePos);
                 Maze.player.consumeKey(color);
                 Maze.unclaimedInteractions.offer(new Interaction(Interaction.ActionType.UnlockDoor, color));
