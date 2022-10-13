@@ -47,7 +47,6 @@ public class Viewport extends JPanel implements ActionListener {
         timer.start();
         boundariesX = Maze.getDimensions().x() - GameConstants.NUM_GAME_TILE;
         boundariesY = Maze.getDimensions().y() - GameConstants.NUM_GAME_TILE;
-        
 
         //load wav files
         try{
@@ -69,7 +68,7 @@ public class Viewport extends JPanel implements ActionListener {
     public void paint(Graphics g){
         super.paint(g);
         Graphics2D g2D = (Graphics2D)g.create();
-
+        
         for (int x = 0; x < GameConstants.NUM_GAME_TILE; x++){
             for (int y = 0; y < GameConstants.NUM_GAME_TILE; y++){
                 // draw the tiles
@@ -125,9 +124,9 @@ public class Viewport extends JPanel implements ActionListener {
 
         // play sounds based on the player's actions and game status
         try{ 
-            for (Entity.Action.Interaction.ActionType a : actions){
-                checkAction(a); 
-            }
+            // for (Entity.Action.Interaction.ActionType a : actions){
+            //     checkAction(a); 
+            // }
             //checkAction();
             
         }
@@ -168,7 +167,12 @@ public class Viewport extends JPanel implements ActionListener {
      * Stores the action that has happened in the game. 
      * @param action Action performed.
      */
-    public void setAction(List<Entity.Action.Interaction.ActionType> actions){ this.actions = actions; }
+    public void setAction(List<Entity.Action.Interaction.ActionType> actions){ 
+        this.actions = actions; 
+        for (Entity.Action.Interaction.ActionType a : actions){
+            checkAction(a); 
+        }
+    }
 
     /**
      * Updates the display every 100 ms.  
