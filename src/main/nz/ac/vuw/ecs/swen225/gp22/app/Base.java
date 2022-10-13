@@ -303,7 +303,9 @@ public class Base extends JFrame {
 
 		runClosePhase();
 		setJMenuBar(null);
-		currentPanel.stopSound();
+		if (currentPanel != null) {
+			currentPanel.stopSound();
+		}
 //        ImagePanel testGame = new ImagePanel("TEST_game",Main.GAME_SIZE,new Dimension(0,0));
 //        ImagePanel testSide = new ImagePanel("TEST_side",Main.SIDE_SIZE,new Dimension(0,0));
 //        PhasePanel menu = new PhasePanel(testGame,testSide);
@@ -414,13 +416,15 @@ public class Base extends JFrame {
 	 */
 	public void loadLevel() {
 		assert Maze.player != null;
-		currentPanel.stopSound();
+		if (currentPanel != null) {
+			currentPanel.stopSound();
+		}
 		runClosePhase();
 
 		Viewport game = new Viewport();
 		SidePanel side = new SidePanel(timeSec, level);
 		side.setTime(timeSec);
-		final JPanel level = new PhasePanel(game, side);
+		final PhasePanel level = new PhasePanel(game, side);
 
 		timeMS = 0;
 		gameTimer = new Timer(delay, unused -> {
