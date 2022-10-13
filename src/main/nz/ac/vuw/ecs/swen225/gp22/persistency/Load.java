@@ -75,7 +75,7 @@ public class Load {
     /**
      * Parses information about the previous game.
      *
-     * @return a string containing information about the previous game, time passed & keys collected
+     * @return a string containing information about the previous game, time passed and keys collected
      */
     public static String previousGameInfo() {
         if (!previousGamePresent()) return "Time: 0, Keys: 0";
