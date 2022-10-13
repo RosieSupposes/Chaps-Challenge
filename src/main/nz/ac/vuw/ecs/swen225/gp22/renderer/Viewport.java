@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp22.renderer;
 
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -100,7 +99,11 @@ public class Viewport extends JPanel implements ActionListener {
         g2D.drawImage(getEntityImg(Maze.player.getDir()), focusX, focusY, this);
 
         // display infofield if the player steps on it
-        if (playerTile instanceof InfoField inField){ getInfoField(inField, g2D); }
+        if (playerTile instanceof InfoField inField){ 
+            // getInfoField(inField, g2D);
+            int infoPos = GameConstants.TILE_SIZE;
+            g2D.drawImage(Img.valueOf(inField.getText()).image, infoPos, 5*infoPos, this);
+        }
 
         Maze.Point focusPoint = getFocusArea(playerX, playerY); // the point that the maze should be centered on
 
@@ -121,7 +124,6 @@ public class Viewport extends JPanel implements ActionListener {
                         (enemyY - focusPoint.y()) * GameConstants.TILE_SIZE, this);
             }
         }
-
     }
 
     /**
@@ -239,22 +241,7 @@ public class Viewport extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * When the player is stepping on the InfoField, 
-     * the information about the game that the player 
-     * needs to do in order to complete a level will be displayed.
-     * 
-     * @param g Graphics object needed to render images on the canvas.
-     */
-    public void getInfoField(InfoField iField, Graphics g){
-        int infoPos = GameConstants.TILE_SIZE;
-        g.drawImage(Img.InfoPost.image, infoPos, 5*infoPos, this);
-        //infofield.setText(iField.getText());
-        infofield.setText("PLEASE WORK");
-        infofield.setBounds(infoPos+ 10, (2*infoPos)+10, Img.InfoPost.image.getWidth()-100, Img.InfoPost.image.getHeight()-100);
-        infofield.setFont(new Font("Verdana", Font.BOLD, 20));
-        add(infofield);
-    }
+
 
     /***
      * Stores the action that has happened in the game. 

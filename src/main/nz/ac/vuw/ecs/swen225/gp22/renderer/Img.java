@@ -15,13 +15,13 @@ import javax.imageio.ImageIO;
 public enum Img {
     // images to be displayed for level 1 of Chap's Challenge
     Title, BlueKey, BlueLockedDoor, GreenKey, GreenLockedDoor, RedKey, RedLockedDoor, YellowKey, YellowLockedDoor,
-    FreeTile, Exit, LockedExit, InfoField, InfoPost, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall, 
+    FreeTile, Exit, LockedExit, InfoField, Level1Info, PlayerDown, PlayerLeft, PlayerRight, PlayerUp, Treasure, Wall, 
     
     // images to be displayed for the inventory
     BlueKeyNB, GreenKeyNB, RedKeyNB, YellowKeyNB,
 
     // images to be displayed for level 2 of Chap's Challenge
-    BouncyPadDown, BouncyPadLeft, BouncyPadRight, BouncyPadUp, MilkPuddle;
+    BouncyPadDown, BouncyPadLeft, BouncyPadRight, BouncyPadUp, Level2Info, MilkPuddle;
 
     public final BufferedImage image;
 
