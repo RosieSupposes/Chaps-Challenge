@@ -10,6 +10,7 @@ import org.dom4j.io.XMLWriter;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,8 +78,8 @@ public class Save {
         String filename = System.getProperty("user.dir") + "/resources/saves/"
                 + LocalDateTime.now().toString().replace(":", "-") + ".chaps.xml";
         try {
-            FileWriter out = new FileWriter(filename);
-            FileWriter previousOut = new FileWriter(System.getProperty("user.dir") + "/resources/saves/previousGame.xml");
+            FileWriter out = new FileWriter(filename, StandardCharsets.UTF_8);
+            FileWriter previousOut = new FileWriter(System.getProperty("user.dir") + "/resources/saves/previousGame.xml", StandardCharsets.UTF_8);
             (new XMLWriter(out, OutputFormat.createPrettyPrint())).write(doc);
             (new XMLWriter(previousOut, OutputFormat.createPrettyPrint())).write(doc);
             out.close();
