@@ -12,7 +12,7 @@ Our program has been tested on the ECS machines using Intellij and is known to w
 
 **Set up**
 1. Launch Intellij  
-2. Select `File > Open` and then locate our project folder  
+2. Select `File > Open` or `Projects > Open` and then locate our project folder  
 3. You can try run the program now (See below)  
 4. Addtional setup could include  
     a) Right clicking the resource folder and selecting `Mark directory as > Resources Root`  
@@ -21,8 +21,9 @@ Our program has been tested on the ECS machines using Intellij and is known to w
     d) Add the `resources/levels/level2.jar` to the dependencies. Right click the jar and select `Add as Library...` then hit OK on the popup  
 
 **Running the game**
-1. Select the `Main` run option from the top right dropdown in Intellij
-2. Click the play arrow next to the drop down to run the game.
+1. Check that the `Main` run option in the top right dropdown in Intellij is selected. ![Screenshot of Main selected in the dropdown](https://cdn.discordapp.com/attachments/863945726492540979/1030387855467495475/unknown.png)
+2. Click the green play arrow next to the drop down to run the game.
+
 
 **If the above fails**
 1. Select `Run Current File` in the same drop down
