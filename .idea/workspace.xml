@@ -57,7 +57,7 @@
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.Persistency">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="DevMarkers" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="nz.ac.vuw.ecs.swen225.gp22.domain.DevMarkers" />
       <module name="chaps-challenge" />
