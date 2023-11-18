@@ -1,9 +1,14 @@
 # Chaps-challenge
 
-1. [Setup and Run](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#setting-up-and-running-the-game)
-2. [About](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#about)
-3. [Warnings](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#warnings)
-4. [Gource](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#gource)
+1. [History and Overview of the project](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#history-and-overview-of-the-project)
+2. [Setup and Run](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#setting-up-and-running-the-game)
+3. [About](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#about)
+4. [Warnings](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#warnings)
+5. [Gource](https://gitlab.ecs.vuw.ac.nz/course-work/swen225/2022/project1/t3/chaps-challenge#gource)
+
+## History and Overview of the project
+
+This was a group project assigned to me as a second year student. Our task was to make Chip's Challenge replica with our own twist. My contribution was to the App module, where I developed the UI and interaction controls throughout the entire program. The original repo used was in our university's Gitlab so when copied to my GitHub not all our commits and issues transferred. 
 
 ## Setting up and running the game
 
